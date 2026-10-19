@@ -71,7 +71,7 @@
 @169 = ~Empty the stash? Your collected bags come back filled with the items they can hold; everything else drops on the ground. Do this before uninstalling Party Stash.~ // empty_confirm
 @170 = ~Ctrl + left click: empty the stash into your bags and onto the ground (before uninstalling)~ // bag_tip
 @171 = ~This is your stash~ // help_stash_title
-@172 = ~Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\nRight-click: description. Mouse wheel: scroll~ // help_stash
+@172 = ~Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\nRight-click: description. Mouse wheel: scroll\nTabs: filter the stash by category (wheel or arrows to see them all)~ // help_stash
 @173 = ~This is your character's inventory~ // help_pack_title
 @174 = ~Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack\nThe chest in the last slot: your stash; the game counts its items as carried (quests).~ // help_pack
 @175 = ~Space: store the whole backpack.\nQuest items stay in the backpack; bags ask first.~ // help_storeall

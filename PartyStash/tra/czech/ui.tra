@@ -71,7 +71,7 @@
 @169 = ~Vyprázdnit truhlu? Sebrané vaky se vrátí naplněné předměty, které pojmou; vše ostatní spadne na zem. Udělejte to před odinstalováním Party Stash.~ // empty_confirm
 @170 = ~Ctrl + levé kliknutí: vysypat truhlu do vaků a na zem (před odinstalováním)~ // bag_tip
 @171 = ~Toto je vaše truhla~ // help_stash_title
-@172 = ~Kliknutí: vzít předmět (dvojklik: vzít a nasadit)\nCtrl + kliknutí: označit k prodeji (Prodat označené u obchodníka)\nPravé kliknutí: popis. Kolečko myši: posun~ // help_stash
+@172 = ~Kliknutí: vzít předmět (dvojklik: vzít a nasadit)\nCtrl + kliknutí: označit k prodeji (Prodat označené u obchodníka)\nPravé kliknutí: popis. Kolečko myši: posun\nKarty: filtrování truhly podle kategorie (kolečko nebo šipky pro zobrazení všech)~ // help_stash
 @173 = ~Toto je inventář vaší postavy~ // help_pack_title
 @174 = ~Shift + dvojklik nebo přetažení na truhlu: uložit předmět\nMezerník nebo Uložit vše: uložit celý batoh\nTruhla v posledním místě: vaše truhla; hra počítá její předměty jako nesené (úkoly).~ // help_pack
 @175 = ~Mezerník: uložit celý batoh.\nÚkolové předměty zůstávají v batohu; vaky se ptají na potvrzení.~ // help_storeall

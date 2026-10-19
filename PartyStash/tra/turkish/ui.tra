@@ -71,7 +71,7 @@
 @169 = ~Sandık boşaltılsın mı? Toplanan çantalarınız alabildikleri eşyalarla dolu olarak geri gelir; geri kalan her şey yere düşer. Bunu Party Stash'i kaldırmadan önce yapın.~ // empty_confirm
 @170 = ~Ctrl + sol tık: sandığı çantalarınıza ve yere boşalt (kaldırmadan önce)~ // bag_tip
 @171 = ~Bu sizin sandığınız~ // help_stash_title
-@172 = ~Tıklama: eşya al (çift tıklama: al ve kuşan)\nCtrl + tıklama: satış için işaretle (tüccarda İşaretlileri sat)\nSağ tık: açıklama. Fare tekerleği: kaydır~ // help_stash
+@172 = ~Tıklama: eşya al (çift tıklama: al ve kuşan)\nCtrl + tıklama: satış için işaretle (tüccarda İşaretlileri sat)\nSağ tık: açıklama. Fare tekerleği: kaydır\nSekmeler: sandığı kategoriye göre süz (hepsini görmek için tekerlek veya oklar)~ // help_stash
 @173 = ~Bu karakterinizin envanteri~ // help_pack_title
 @174 = ~Shift + çift tıklama veya sandığa sürükleme: eşyayı sakla\nBoşluk veya Hepsini koy: tüm sırt çantasını sakla\nSon yuvadaki sandık: sandığınız; oyun içindeki eşyaları taşınıyor sayar (görevler).~ // help_pack
 @175 = ~Boşluk: tüm sırt çantasını sakla.\nGörev eşyaları sırt çantasında kalır; çantalar onay ister.~ // help_storeall

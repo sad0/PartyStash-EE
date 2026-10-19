@@ -2646,21 +2646,23 @@ menu
 		area 548 134 416 130
 		text lua "PStash_HelpText('pack')"
 		text style "normal"
+		text point 12
 		text align center center
 	}
 	label
 	{
 		enabled "PStash_HelpIs('bag')"
-		area 540 286 432 150
+		area 540 286 432 170
 		rectangle 0
 		rectangle opacity 235
 	}
 	button
 	{
 		enabled "PStash_HelpIs('bag')"
-		area 548 290 416 142
+		area 548 290 416 162
 		text lua "PStash_HelpText('stash')"
 		text style "normal"
+		text point 12
 		text align center center
 	}
 	label

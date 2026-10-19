@@ -71,7 +71,7 @@
 @169 = ~Svuotare il baule? Le borse collezionate tornano piene degli oggetti che possono contenere; tutto il resto cade a terra. Da fare prima di disinstallare Party Stash.~ // empty_confirm
 @170 = ~Ctrl + clic sinistro: svuota il baule nelle borse e a terra (prima di disinstallare)~ // bag_tip
 @171 = ~Questo è il tuo baule~ // help_stash_title
-@172 = ~Clic: prendi un oggetto (doppio clic: prendi ed equipaggia)\nCtrl + clic: segnalo per la vendita (Vendi segnati da un mercante)\nClic destro: descrizione. Rotellina: scorri~ // help_stash
+@172 = ~Clic: prendi un oggetto (doppio clic: prendi ed equipaggia)\nCtrl + clic: segnalo per la vendita (Vendi segnati da un mercante)\nClic destro: descrizione. Rotellina: scorri\nSchede: filtra il baule per categoria (rotellina o frecce per vederle tutte)~ // help_stash
 @173 = ~Questo è l'inventario del tuo personaggio~ // help_pack_title
 @174 = ~Maiusc + doppio clic, o trascina sul baule: riponi un oggetto\nSpazio o Riponi tutto: riponi tutto lo zaino\nIl baule nell'ultimo slot: il tuo baule; il gioco considera i suoi oggetti come portati (missioni).~ // help_pack
 @175 = ~Spazio: riponi tutto lo zaino.\nGli oggetti di missione restano nello zaino; le borse chiedono conferma.~ // help_storeall

@@ -71,7 +71,7 @@
 @169 = ~Vider le coffre ? Vos sacs collectionnés reviennent remplis des objets qu'ils peuvent contenir ; tout le reste tombe au sol. À faire avant de désinstaller Party Stash.~ // empty_confirm
 @170 = ~Ctrl + clic gauche : vider le coffre dans vos sacs et au sol (avant de désinstaller)~ // bag_tip
 @171 = ~Voici votre coffre~ // help_stash_title
-@172 = ~Clic : prendre un objet (double-clic : prendre et équiper)\nCtrl + clic : le cocher pour la vente (Vendre cochés chez un marchand)\nClic droit : description. Molette : défiler~ // help_stash
+@172 = ~Clic : prendre un objet (double-clic : prendre et équiper)\nCtrl + clic : le cocher pour la vente (Vendre cochés chez un marchand)\nClic droit : description. Molette : défiler\nOnglets : filtrer le coffre par catégorie (molette ou flèches pour tous les voir)~ // help_stash
 @173 = ~Voici l'inventaire de votre personnage~ // help_pack_title
 @174 = ~Maj + double-clic, ou glisser sur le coffre : ranger un objet\nEspace ou Tout ranger : ranger tout le sac à dos\nLe coffre dans la dernière case : votre coffre ; le jeu compte ses objets comme portés (quêtes).~ // help_pack
 @175 = ~Espace : ranger tout le sac à dos.\nLes objets de quête restent dans le sac ; les sacs demandent confirmation.~ // help_storeall

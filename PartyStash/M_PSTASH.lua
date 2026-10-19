@@ -47,7 +47,7 @@ P.EN = {
 	stash_slot_tip = 'Your party\'s stash: the game counts its items as carried (quests).',
 	help_stash_title = 'This is your stash',
 	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\n'
-		.. 'Right-click: description. Mouse wheel: scroll',
+		.. 'Right-click: description. Mouse wheel: scroll\nTabs: filter the stash by category (wheel or arrows to see them all)',
 	help_pack_title = "This is your character's inventory",
 	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack\n'
 		.. 'The chest in the last slot: your stash; the game counts its items as carried (quests).',

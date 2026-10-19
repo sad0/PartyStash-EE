@@ -71,7 +71,7 @@
 @169 = ~Die Truhe leeren? Eure gesammelten Beutel kommen gefüllt mit den Gegenständen zurück, die sie aufnehmen können; alles andere fällt auf den Boden. Vor der Deinstallation von Party Stash tun.~ // empty_confirm
 @170 = ~Strg + Linksklick: Truhe in eure Beutel und auf den Boden leeren (vor der Deinstallation)~ // bag_tip
 @171 = ~Das ist eure Truhe~ // help_stash_title
-@172 = ~Klick: Gegenstand nehmen (Doppelklick: nehmen und ausrüsten)\nStrg + Klick: zum Verkauf markieren (Markierte verk. beim Händler)\nRechtsklick: Beschreibung. Mausrad: scrollen~ // help_stash
+@172 = ~Klick: Gegenstand nehmen (Doppelklick: nehmen und ausrüsten)\nStrg + Klick: zum Verkauf markieren (Markierte verk. beim Händler)\nRechtsklick: Beschreibung. Mausrad: scrollen\nReiter: die Truhe nach Kategorie filtern (Mausrad oder Pfeile für alle)~ // help_stash
 @173 = ~Das ist das Inventar eures Charakters~ // help_pack_title
 @174 = ~Umschalt + Doppelklick oder auf die Truhe ziehen: Gegenstand einlagern\nLeertaste oder Alles einl.: ganzen Rucksack einlagern\nDie Truhe im letzten Platz: eure Truhe; das Spiel zählt ihre Gegenstände als getragen (Quests).~ // help_pack
 @175 = ~Leertaste: ganzen Rucksack einlagern.\nQuestgegenstände bleiben im Rucksack; Beutel fragen nach.~ // help_storeall

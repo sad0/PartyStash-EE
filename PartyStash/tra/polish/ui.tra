@@ -71,7 +71,7 @@
 @169 = ~Opróżnić skrzynię? Zebrane torby wracają wypełnione przedmiotami, które mogą pomieścić; cała reszta spada na ziemię. Zrób to przed odinstalowaniem Party Stash.~ // empty_confirm
 @170 = ~Ctrl + lewy przycisk: opróżnij skrzynię do toreb i na ziemię (przed odinstalowaniem)~ // bag_tip
 @171 = ~To twoja skrzynia~ // help_stash_title
-@172 = ~Kliknięcie: wyjmij przedmiot (podwójne: wyjmij i załóż)\nCtrl + kliknięcie: zaznacz do sprzedaży (Sprzedaj zazn. u kupca)\nPrawy przycisk: opis. Kółko myszy: przewijanie~ // help_stash
+@172 = ~Kliknięcie: wyjmij przedmiot (podwójne: wyjmij i załóż)\nCtrl + kliknięcie: zaznacz do sprzedaży (Sprzedaj zazn. u kupca)\nPrawy przycisk: opis. Kółko myszy: przewijanie\nKarty: filtrowanie skrzyni według kategorii (kółko lub strzałki, by zobaczyć wszystkie)~ // help_stash
 @173 = ~To ekwipunek twojej postaci~ // help_pack_title
 @174 = ~Shift + podwójne kliknięcie lub przeciągnięcie na skrzynię: schowaj przedmiot\nSpacja lub Schowaj wszystko: schowaj cały plecak\nSkrzynia w ostatnim miejscu: twoja skrzynia; gra liczy jej przedmioty jako noszone (zadania).~ // help_pack
 @175 = ~Spacja: schowaj cały plecak.\nPrzedmioty fabularne zostają w plecaku; torby wymagają potwierdzenia.~ // help_storeall

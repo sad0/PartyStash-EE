@@ -71,7 +71,7 @@
 @169 = ~Kiüríted a ládát? A gyűjtött zsákjaid visszakerülnek, megtöltve a beléjük férő tárgyakkal; minden más a földre esik. Ezt a Party Stash eltávolítása előtt tedd meg.~ // empty_confirm
 @170 = ~Ctrl + bal kattintás: a láda kiürítése a zsákokba és a földre (eltávolítás előtt)~ // bag_tip
 @171 = ~Ez a ládád~ // help_stash_title
-@172 = ~Kattintás: tárgy kivétele (dupla: kivétel és felvétel)\nCtrl + kattintás: megjelölés eladásra (Jelöltek eladása a kereskedőnél)\nJobb kattintás: leírás. Egérgörgő: görgetés~ // help_stash
+@172 = ~Kattintás: tárgy kivétele (dupla: kivétel és felvétel)\nCtrl + kattintás: megjelölés eladásra (Jelöltek eladása a kereskedőnél)\nJobb kattintás: leírás. Egérgörgő: görgetés\nFülek: a láda szűrése kategória szerint (görgő vagy nyilak az összeshez)~ // help_stash
 @173 = ~Ez a karaktered felszerelése~ // help_pack_title
 @174 = ~Shift + dupla kattintás, vagy ráhúzás a ládára: tárgy elrakása\nSzóköz vagy Mindet elrak: az egész hátizsák elrakása\nA láda az utolsó helyen: a ládád; a játék a tárgyait viseltnek tekinti (küldetések).~ // help_pack
 @175 = ~Szóköz: az egész hátizsák elrakása.\nA küldetéstárgyak a hátizsákban maradnak; a zsákok megerősítést kérnek.~ // help_storeall

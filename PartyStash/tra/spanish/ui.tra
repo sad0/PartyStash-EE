@@ -71,7 +71,7 @@
 @169 = ~¿Vaciar el baúl? Tus bolsas coleccionadas vuelven llenas con los objetos que pueden contener; todo lo demás cae al suelo. Hazlo antes de desinstalar Party Stash.~ // empty_confirm
 @170 = ~Ctrl + clic izquierdo: vaciar el baúl en tus bolsas y en el suelo (antes de desinstalar)~ // bag_tip
 @171 = ~Este es tu baúl~ // help_stash_title
-@172 = ~Clic: coger un objeto (doble clic: coger y equipar)\nCtrl + clic: marcarlo para vender (Vender marcados en un mercader)\nClic derecho: descripción. Rueda: desplazar~ // help_stash
+@172 = ~Clic: coger un objeto (doble clic: coger y equipar)\nCtrl + clic: marcarlo para vender (Vender marcados en un mercader)\nClic derecho: descripción. Rueda: desplazar\nPestañas: filtrar el baúl por categoría (rueda o flechas para verlas todas)~ // help_stash
 @173 = ~Este es el inventario de tu personaje~ // help_pack_title
 @174 = ~Mayús + doble clic, o arrastrar al baúl: guardar un objeto\nEspacio o Guardar todo: guardar toda la mochila\nEl baúl de la última ranura: tu baúl; el juego cuenta sus objetos como llevados (misiones).~ // help_pack
 @175 = ~Espacio: guardar toda la mochila.\nLos objetos de misión se quedan en la mochila; las bolsas piden confirmación.~ // help_storeall
