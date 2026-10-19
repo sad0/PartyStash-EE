@@ -2,7 +2,7 @@
 
 *[Version française plus bas](#français)*
 
-One infinite stash shared by the whole party, Pillars of Eternity style, built into a redesigned inventory page.
+One infinite stash shared by the whole party, **Pillars of Eternity** style, built into a redesigned inventory page.
 A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb13/EEex).
 
 ![Inventory, Baldur's Gate 1 look](docs/inventory_bg1.png)
@@ -20,7 +20,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
   class and level…), plus Date, Quality, Type, Price and Value/weight.
 - **Colour hints**: red = unusable by the shown character, blue = unidentified, **+** = an upgrade for him (or a
   scroll a party mage can still learn).
-- **Sell marked**: Ctrl + click items in the stash, then sell them all at once from any merchant, straight from the
+- **Sell marked**: **Ctrl + click** items in the stash, then sell them all at once from any merchant, straight from the
   stash, with the total shown on the button.
 - **Bags**: put a gem bag, scroll case, potion case… in the stash. It is emptied into the stash and kept in the Bags
   tab, and the stash items it can hold weigh nothing. A Bag of Holding makes the whole stash weightless.
@@ -37,33 +37,33 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 
 ## Requirements
 
-- **Baldur's Gate: Enhanced Edition** (with or without Siege of Dragonspear), **Baldur's Gate II: Enhanced Edition**
-  (EET should work but is untested), game version **v2.7.x** (the mod calls the game engine directly; on another version the stash disables
+- **Baldur's Gate: Enhanced Edition** (with or without **Siege of Dragonspear**), **Baldur's Gate II: Enhanced Edition**
+  (**EET** should work but is untested), game version **v2.7.x** (the mod calls the game engine directly; on another version the stash disables
   itself instead of crashing).
 - **[EEex](https://github.com/Bubb13/EEex)**, installed first.
-- A mod that replaces the inventory screen (LeUI, Dragonspear UI++…) will conflict with the new inventory page.
+- A mod that replaces the inventory screen (**LeUI**, **Dragonspear UI++**…) will conflict with the new inventory page.
 
 ## Installation
 
-1. Install EEex.
+1. Install **EEex**.
 2. Extract the archive into your game folder (where `chitin.key` is): you get a `PartyStash` folder and
    `setup-PartyStash.exe`.
 3. Run `setup-PartyStash.exe`, pick your language, then:
    - **Party Stash**: choose the Baldur's Gate 1 or Baldur's Gate II look;
    - **Sorted loot**: optional.
-4. Launch the game through `InfinityLoader.exe` (EEex).
+4. Launch the game through `InfinityLoader.exe` (**EEex**).
 
 ## Controls (inventory page)
 
 | Action | Control |
 |---|---|
 | Take an item from the stash | Click it (double-click: take and equip) |
-| Store a backpack item | Shift + double-click it, or drop it on the stash grid |
+| Store a backpack item | **Shift + double-click** it, or drop it on the stash grid |
 | Store the whole backpack | **Store all** button, or **Space** |
 | Mark / unmark for sale | **Ctrl + click** a stash item, then **Sell Marked** at a merchant |
 | Item description | Right-click |
 | Scroll the grid, the tabs, the ground | Mouse wheel, arrows |
-| Store a bag | Shift + double-click it, or Store all (asks first) |
+| Store a bag | **Shift + double-click** it, or Store all (asks first) |
 | **Empty the stash** (before uninstalling) | **Ctrl + left click** on the big bag next to the weight |
 
 ## Uninstalling
@@ -75,9 +75,9 @@ until the mod is reinstalled.
 
 ## Notes
 
-- Moving from Baldur's Gate to Siege of Dragonspear: the stash is carried over as long as the game is not closed
+- Moving from Baldur's Gate to **Siege of Dragonspear**: the stash is carried over as long as the game is not closed
   between the end of BG1 and the start of SoD.
-- **EET** (Enhanced Edition Trilogy): it should work (it installs like on BG2:EE) but has not been tested yet. Feedback welcome.
+- **EET** (Enhanced Edition Trilogy): it should work (it installs like on **BG2:EE**) but has not been tested yet. Feedback welcome.
 - Translations other than English and French were made by the author: corrections are welcome (`PartyStash/tra/`).
 
 ## License
@@ -88,7 +88,7 @@ until the mod is reinstalled.
 
 ## Français
 
-Un coffre infini partagé par tout le groupe, façon Pillars of Eternity, intégré à une page d'inventaire repensée.
+Un coffre infini partagé par tout le groupe, façon **Pillars of Eternity**, intégré à une page d'inventaire repensée.
 Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.com/Bubb13/EEex).
 
 ### Fonctionnalités
@@ -102,7 +102,7 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
   parchemins par classe et niveau…), plus Date, Qualité, Type, Prix et Valeur/poids.
 - **Couleurs** : rouge = inutilisable par le perso affiché, bleu = non identifié, **+** = une amélioration pour lui
   (ou un parchemin qu'un mage du groupe peut encore apprendre).
-- **Vendre cochés** : Ctrl + clic sur des objets du coffre, puis vente groupée chez n'importe quel marchand,
+- **Vendre cochés** : **Ctrl + clic** sur des objets du coffre, puis vente groupée chez n'importe quel marchand,
   directement depuis le coffre, avec le total affiché sur le bouton.
 - **Sacs** : rangez un sac à gemmes, un étui à parchemins, une boîte à potions… dans le coffre. Il y est vidé et
   gardé dans l'onglet Sacs, et les objets du coffre qu'il peut contenir ne pèsent plus rien. Un Sac de contenance
@@ -116,28 +116,28 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 
 ### Prérequis
 
-- **BG:EE** (avec ou sans Siege of Dragonspear) ou **BG2:EE**, version **v2.7.x**. EET devrait marcher mais n'est pas encore testé.
+- **BG:EE** (avec ou sans **Siege of Dragonspear**) ou **BG2:EE**, version **v2.7.x**. **EET** devrait marcher mais n'est pas encore testé.
 - **[EEex](https://github.com/Bubb13/EEex)**, installé avant.
-- Un mod qui remplace l'écran d'inventaire (LeUI, Dragonspear UI++…) entre en conflit avec la nouvelle page.
+- Un mod qui remplace l'écran d'inventaire (**LeUI**, **Dragonspear UI++**…) entre en conflit avec la nouvelle page.
 
 ### Installation
 
-1. Installez EEex.
+1. Installez **EEex**.
 2. Décompressez l'archive dans le dossier du jeu (là où se trouve `chitin.key`).
 3. Lancez `setup-PartyStash.exe`, choisissez la langue, puis le look (BG1 ou BG2) et, si vous voulez, Butin trié.
-4. Lancez le jeu avec `InfinityLoader.exe` (EEex).
+4. Lancez le jeu avec `InfinityLoader.exe` (**EEex**).
 
 ### Commandes (page d'inventaire)
 
 | Action | Commande |
 |---|---|
 | Prendre un objet du coffre | Clic (double-clic : prendre et équiper) |
-| Ranger un objet du sac à dos | Maj + double-clic, ou le déposer sur la grille du coffre |
+| Ranger un objet du sac à dos | **Maj + double-clic**, ou le déposer sur la grille du coffre |
 | Tout ranger | Bouton **Tout ranger**, ou **Espace** |
 | Cocher / décocher pour la vente | **Ctrl + clic** sur un objet du coffre, puis **Vendre cochés** chez un marchand |
 | Description | Clic droit |
 | Faire défiler la grille, les onglets, le sol | Molette, flèches |
-| Ranger un sac | Maj + double-clic, ou Tout ranger (avec confirmation) |
+| Ranger un sac | **Maj + double-clic**, ou Tout ranger (avec confirmation) |
 | **Vider le coffre** (avant de désinstaller) | **Ctrl + clic gauche** sur le gros sac à côté du poids |
 
 ### Désinstallation
