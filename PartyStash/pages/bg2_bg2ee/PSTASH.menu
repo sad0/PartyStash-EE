@@ -1,0 +1,2792 @@
+menu
+{
+	name "PSTASH_TICK"
+	ignoreesc
+	-- Its enabled check runs every frame: overflow, bag unlocks, shared weight.
+	label
+	{
+		area 0 0 0 0
+		enabled "PStash_Tick()"
+	}
+}
+
+menu
+{
+	name 'INVENTORY'
+	align center center
+	ignoreEsc
+	size 1120 710
+	onOpen
+	"
+		Infinity_ActivateInventory()
+		pushSidebars()
+		doubleClickEventScheduled = nil
+
+		for i = 1, Infinity_GetMaxGroundPage()+1 do
+			fakeItemList[i] = 1
+		end
+		currentFakePage = Infinity_GetCurrentGroundPage()
+		currentMaxFakePages = Infinity_GetMaxGroundPage()
+		PStash_OnInventoryOpen()
+	"
+	onClose
+	"
+		Infinity_PopMenu('CHARACTER_COLOR')
+		Infinity_PopMenu('ITEM_DESCRIPTION')
+		Infinity_PopMenu('ITEM_IDENTIFY')
+		popSidebars()
+
+		fakeItemList = {}
+		PStash_OnInventoryClose()
+	"
+	label
+	{
+		area 0 0 1120 710
+		mosaic INVPSTSH
+	}
+	button
+	{
+		area 299 177 128 160
+		paperdoll 1
+		actiondrag "Infinity_SwapWithAppearance()"
+	}
+	label
+	{
+		area 108 55 186 32
+		text lua "characters[id].name"
+		text style "label"
+	}
+	label
+	{
+		area 82 6 700 44
+		text "INVENTORY_TITLE"
+		text style "title"
+	}
+	label
+	{
+		area 29 201 200 30
+		text "QUICK_WEAPONS_LABEL"
+		text style "label"
+	}
+	label
+	{
+		area 29 306 162 30
+		text "QUICK_ITEMS_LABEL"
+		text style "label"
+	}
+	label
+	{
+		area 83 98 150 28
+		text "QUIVER_LABEL"
+		text style "label"
+	}
+	label
+	{
+		area 993 52 46 30
+		text "GROUND_LABEL"
+		text style "label"
+		align left center
+	}
+	label
+	{
+		area 1025 52 38 30
+		text lua "PStash_GroundPage()"
+		text style "label"
+		align right center
+	}
+	label
+	{
+		area 844 647 104 24
+		text lua "characters[id].gold"
+		text style "label"
+	}
+	label
+	{
+		area 302 55 210 32
+		text lua "characters[id].class"
+		text style "label"
+	}
+	label
+	{
+		area 790 10 300 32
+		text lua "PStash_InvMessage()"
+		text style "label"
+		text align right center
+	}
+	slot {name "slot_inv_1"		area 26 243 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.weapon0"		}
+	slot {name "slot_inv_2"		area 78 243 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.weapon1"		}
+	slot {name "slot_inv_3"		area 130 243 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.weapon2"		}
+	slot {name "slot_inv_4"		area 182 243 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.weapon3"		}
+	slot {name "slot_inv_5"		area 26 347 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.personal0"	}
+	slot {name "slot_inv_6"		area 78 347 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.personal1"	}
+	slot {name "slot_inv_7"		area 130 347 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.personal2"	}
+	slot {name "slot_inv_11"		area 242 98 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.armor"		}
+	slot {name "slot_inv_12"		area 294 98 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.gauntlets"	}
+	slot {name "slot_inv_13"		area 346 98 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.helmet"		}
+	slot {name "slot_inv_14"		area 398 98 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.amulet"		}
+	slot {name "slot_inv_15"		area 78 138 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.quiver0"		}
+	slot {name "slot_inv_16"		area 130 138 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.quiver1"		}
+	slot {name "slot_inv_17"		area 182 138 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.quiver2"		}
+	slot {name "slot_inv_21"		area 393 361 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.belt"		}
+	slot {name "slot_inv_22"		area 218 302 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ringleft"	}
+	slot {name "slot_inv_23"		area 462 302 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ringright"	}
+	slot {name "slot_inv_24"		area 282 361 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.cloak"		}
+	slot {name "slot_inv_25"		area 338 361 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.boots"		}
+	slot {name "slot_inv_26"		area 461 244 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.shield"		}
+	slot {name "slot_inv_30"		area 540 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group0"		}
+	slot {name "slot_inv_31"		area 594 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group1"		}
+	slot {name "slot_inv_32"		area 648 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group2"		}
+	slot {name "slot_inv_33"		area 702 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group3"		}
+	slot {name "slot_inv_34"		area 756 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group4"		}
+	slot {name "slot_inv_35"		area 810 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group5"		}
+	slot {name "slot_inv_36"		area 864 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group6"		}
+	slot {name "slot_inv_37"		area 918 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group7"		}
+	slot {name "slot_inv_38"		area 540 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group8"		}
+	slot {name "slot_inv_39"		area 594 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group9"		}
+	slot {name "slot_inv_40"		area 648 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group10"		}
+	slot {name "slot_inv_41"		area 702 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group11"		}
+	slot {name "slot_inv_42"		area 756 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group12"		}
+	slot {name "slot_inv_43"		area 810 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group13"		}
+	slot {name "slot_inv_44"		area 864 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group14"		}
+	slot {name "slot_inv_45"		area 918 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group15"		}
+	slot {name "slot_inv_68"		area 1001 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground0"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_69"		area 1001 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground1"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_70"		area 1001 238 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground2"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_71"		area 1001 292 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground3"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_72"		area 1001 346 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground4"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_73"		area 1001 400 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground5"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_74"		area 1001 454 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground6"	actionScroll "scrollGroundItems()"	}
+	slot {name "slot_inv_75"		area 1001 508 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground7"	actionScroll "scrollGroundItems()"	}
+	button
+	{
+		area 463 96 52 52
+		bam INVBUT
+		colordisplay 1
+		action
+		"
+			Infinity_PushMenu('CHARACTER_COLOR', 0, 0)
+		"
+	}
+	button
+	{
+		area 1039 604 40 57
+		bam GUIBTACT
+		frame 42
+		action "PStash_GroundScroll(1)"
+	}
+	button
+	{
+		area 995 604 40 57
+		bam GUIBTACT
+		frame 44
+		action "PStash_GroundScroll(-1)"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 130 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(0, 'name')"
+		icon lua "PStash_GroundProp(0, 'icon')"
+		tint lua "PStash_GroundProp(0, 'tint')"
+		count lua "PStash_GroundProp(0, 'count')"
+		usages lua "PStash_GroundProp(0, 'usages')"
+		action "PStash_GroundClick(0)"
+		actionAlt "PStash_GroundDesc(0)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 184 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(1, 'name')"
+		icon lua "PStash_GroundProp(1, 'icon')"
+		tint lua "PStash_GroundProp(1, 'tint')"
+		count lua "PStash_GroundProp(1, 'count')"
+		usages lua "PStash_GroundProp(1, 'usages')"
+		action "PStash_GroundClick(1)"
+		actionAlt "PStash_GroundDesc(1)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 238 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(2, 'name')"
+		icon lua "PStash_GroundProp(2, 'icon')"
+		tint lua "PStash_GroundProp(2, 'tint')"
+		count lua "PStash_GroundProp(2, 'count')"
+		usages lua "PStash_GroundProp(2, 'usages')"
+		action "PStash_GroundClick(2)"
+		actionAlt "PStash_GroundDesc(2)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 292 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(3, 'name')"
+		icon lua "PStash_GroundProp(3, 'icon')"
+		tint lua "PStash_GroundProp(3, 'tint')"
+		count lua "PStash_GroundProp(3, 'count')"
+		usages lua "PStash_GroundProp(3, 'usages')"
+		action "PStash_GroundClick(3)"
+		actionAlt "PStash_GroundDesc(3)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 346 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(4, 'name')"
+		icon lua "PStash_GroundProp(4, 'icon')"
+		tint lua "PStash_GroundProp(4, 'tint')"
+		count lua "PStash_GroundProp(4, 'count')"
+		usages lua "PStash_GroundProp(4, 'usages')"
+		action "PStash_GroundClick(4)"
+		actionAlt "PStash_GroundDesc(4)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 400 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(5, 'name')"
+		icon lua "PStash_GroundProp(5, 'icon')"
+		tint lua "PStash_GroundProp(5, 'tint')"
+		count lua "PStash_GroundProp(5, 'count')"
+		usages lua "PStash_GroundProp(5, 'usages')"
+		action "PStash_GroundClick(5)"
+		actionAlt "PStash_GroundDesc(5)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 454 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(6, 'name')"
+		icon lua "PStash_GroundProp(6, 'icon')"
+		tint lua "PStash_GroundProp(6, 'tint')"
+		count lua "PStash_GroundProp(6, 'count')"
+		usages lua "PStash_GroundProp(6, 'usages')"
+		action "PStash_GroundClick(6)"
+		actionAlt "PStash_GroundDesc(6)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 1001 508 52 52
+		bam STONSLOT
+		tooltip lua "PStash_GroundProp(7, 'name')"
+		icon lua "PStash_GroundProp(7, 'icon')"
+		tint lua "PStash_GroundProp(7, 'tint')"
+		count lua "PStash_GroundProp(7, 'count')"
+		usages lua "PStash_GroundProp(7, 'usages')"
+		action "PStash_GroundClick(7)"
+		actionAlt "PStash_GroundDesc(7)"
+		actionScroll "PStash_GroundWheel()"
+	}
+	button
+	{
+		area 544 -8 68 100
+		bam CONTBACK
+		frame lua "PStash_BagFrame()"
+		tooltip lua "PStash_WeightTooltip()"
+		action "PStash_BagClick()"
+	}
+	label
+	{
+		enabled "PStash_NotOverloaded()"
+		area 618 52 200 30
+		text lua "PStash_WeightText()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_Overloaded()"
+		area 618 52 200 30
+		text lua "PStash_WeightText()"
+		text style "gold"
+		text color P
+		text align left center
+	}
+	button
+	{
+		area 822 52 140 30
+		text lua "PStash_SortText()"
+		text style "label"
+		text align right center
+		action "PStash_CycleSort()"
+	}
+	button
+	{
+		area 540 90 62 34
+		text lua "PStash_TabText(1)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(1)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		area 602 90 61 34
+		text lua "PStash_TabText(2)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(2)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		area 663 90 62 34
+		text lua "PStash_TabText(3)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(3)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		area 725 90 62 34
+		text lua "PStash_TabText(4)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(4)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		area 787 90 62 34
+		text lua "PStash_TabText(5)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(5)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		area 849 90 61 34
+		text lua "PStash_TabText(6)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(6)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		area 910 90 62 34
+		text lua "PStash_TabText(7)"
+		text style "label"
+		text point 10
+		text align center center
+		action "PStash_SetTab(7)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		enabled "PStash_TabCanScroll(-1)"
+		area 521 90 18 34
+		text lua "'<'"
+		text style "title"
+		text align center center
+		action "PStash_TabScroll(-1)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		enabled "PStash_TabCanScroll(1)"
+		area 972 90 18 34
+		text lua "'>'"
+		text style "title"
+		text align center center
+		action "PStash_TabScroll(1)"
+		actionScroll "PStash_TabWheel()"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(0)"
+		tint lua "PStash_CellTint(0)"
+		count lua "PStash_CellCount(0)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(1)"
+		tint lua "PStash_CellTint(1)"
+		count lua "PStash_CellCount(1)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(2)"
+		tint lua "PStash_CellTint(2)"
+		count lua "PStash_CellCount(2)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(3)"
+		tint lua "PStash_CellTint(3)"
+		count lua "PStash_CellCount(3)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(4)"
+		tint lua "PStash_CellTint(4)"
+		count lua "PStash_CellCount(4)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(5)"
+		tint lua "PStash_CellTint(5)"
+		count lua "PStash_CellCount(5)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(6)"
+		tint lua "PStash_CellTint(6)"
+		count lua "PStash_CellCount(6)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(7)"
+		tint lua "PStash_CellTint(7)"
+		count lua "PStash_CellCount(7)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(8)"
+		tint lua "PStash_CellTint(8)"
+		count lua "PStash_CellCount(8)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(9)"
+		tint lua "PStash_CellTint(9)"
+		count lua "PStash_CellCount(9)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(10)"
+		tint lua "PStash_CellTint(10)"
+		count lua "PStash_CellCount(10)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(11)"
+		tint lua "PStash_CellTint(11)"
+		count lua "PStash_CellCount(11)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(12)"
+		tint lua "PStash_CellTint(12)"
+		count lua "PStash_CellCount(12)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(13)"
+		tint lua "PStash_CellTint(13)"
+		count lua "PStash_CellCount(13)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(14)"
+		tint lua "PStash_CellTint(14)"
+		count lua "PStash_CellCount(14)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(15)"
+		tint lua "PStash_CellTint(15)"
+		count lua "PStash_CellCount(15)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(16)"
+		tint lua "PStash_CellTint(16)"
+		count lua "PStash_CellCount(16)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(17)"
+		tint lua "PStash_CellTint(17)"
+		count lua "PStash_CellCount(17)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(18)"
+		tint lua "PStash_CellTint(18)"
+		count lua "PStash_CellCount(18)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(19)"
+		tint lua "PStash_CellTint(19)"
+		count lua "PStash_CellCount(19)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(20)"
+		tint lua "PStash_CellTint(20)"
+		count lua "PStash_CellCount(20)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(21)"
+		tint lua "PStash_CellTint(21)"
+		count lua "PStash_CellCount(21)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(22)"
+		tint lua "PStash_CellTint(22)"
+		count lua "PStash_CellCount(22)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(23)"
+		tint lua "PStash_CellTint(23)"
+		count lua "PStash_CellCount(23)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(24)"
+		tint lua "PStash_CellTint(24)"
+		count lua "PStash_CellCount(24)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(25)"
+		tint lua "PStash_CellTint(25)"
+		count lua "PStash_CellCount(25)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(26)"
+		tint lua "PStash_CellTint(26)"
+		count lua "PStash_CellCount(26)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(27)"
+		tint lua "PStash_CellTint(27)"
+		count lua "PStash_CellCount(27)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(28)"
+		tint lua "PStash_CellTint(28)"
+		count lua "PStash_CellCount(28)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(29)"
+		tint lua "PStash_CellTint(29)"
+		count lua "PStash_CellCount(29)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(30)"
+		tint lua "PStash_CellTint(30)"
+		count lua "PStash_CellCount(30)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(31)"
+		tint lua "PStash_CellTint(31)"
+		count lua "PStash_CellCount(31)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(32)"
+		tint lua "PStash_CellTint(32)"
+		count lua "PStash_CellCount(32)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(33)"
+		tint lua "PStash_CellTint(33)"
+		count lua "PStash_CellCount(33)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(34)"
+		tint lua "PStash_CellTint(34)"
+		count lua "PStash_CellCount(34)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(35)"
+		tint lua "PStash_CellTint(35)"
+		count lua "PStash_CellCount(35)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(36)"
+		tint lua "PStash_CellTint(36)"
+		count lua "PStash_CellCount(36)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(37)"
+		tint lua "PStash_CellTint(37)"
+		count lua "PStash_CellCount(37)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(38)"
+		tint lua "PStash_CellTint(38)"
+		count lua "PStash_CellCount(38)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(39)"
+		tint lua "PStash_CellTint(39)"
+		count lua "PStash_CellCount(39)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(40)"
+		tint lua "PStash_CellTint(40)"
+		count lua "PStash_CellCount(40)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(41)"
+		tint lua "PStash_CellTint(41)"
+		count lua "PStash_CellCount(41)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(42)"
+		tint lua "PStash_CellTint(42)"
+		count lua "PStash_CellCount(42)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(43)"
+		tint lua "PStash_CellTint(43)"
+		count lua "PStash_CellCount(43)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(44)"
+		tint lua "PStash_CellTint(44)"
+		count lua "PStash_CellCount(44)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(45)"
+		tint lua "PStash_CellTint(45)"
+		count lua "PStash_CellCount(45)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(46)"
+		tint lua "PStash_CellTint(46)"
+		count lua "PStash_CellCount(46)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(47)"
+		tint lua "PStash_CellTint(47)"
+		count lua "PStash_CellCount(47)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 540 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(48)"
+		tint lua "PStash_CellTint(48)"
+		count lua "PStash_CellCount(48)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 594 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(49)"
+		tint lua "PStash_CellTint(49)"
+		count lua "PStash_CellCount(49)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 648 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(50)"
+		tint lua "PStash_CellTint(50)"
+		count lua "PStash_CellCount(50)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 702 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(51)"
+		tint lua "PStash_CellTint(51)"
+		count lua "PStash_CellCount(51)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 756 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(52)"
+		tint lua "PStash_CellTint(52)"
+		count lua "PStash_CellCount(52)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 810 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(53)"
+		tint lua "PStash_CellTint(53)"
+		count lua "PStash_CellCount(53)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 864 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(54)"
+		tint lua "PStash_CellTint(54)"
+		count lua "PStash_CellCount(54)"
+	}
+	button
+	{
+		enabled "PStash_Holding()"
+		area 918 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(55)"
+		tint lua "PStash_CellTint(55)"
+		count lua "PStash_CellCount(55)"
+	}
+	slot {name "slot_inv_45"	area 540 252 432 378	slotinfo "PStash_OverlaySlot()"	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 252 432 378
+		actionScroll "PStash_Scroll()"
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(0)"
+		tint lua "PStash_CellTint(0)"
+		count lua "PStash_CellCount(0)"
+		tooltip lua "PStash_CellName(0)"
+		action "PStash_CellClick(0)"
+		actionSimpleDrag "PStash_CellClick(0)"
+		actionAlt "PStash_CellDesc(0)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(0)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(0) and not PStash_Holding()"
+		area 543 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(0) and not PStash_Holding()"
+		area 576 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(1)"
+		tint lua "PStash_CellTint(1)"
+		count lua "PStash_CellCount(1)"
+		tooltip lua "PStash_CellName(1)"
+		action "PStash_CellClick(1)"
+		actionSimpleDrag "PStash_CellClick(1)"
+		actionAlt "PStash_CellDesc(1)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(1)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(1) and not PStash_Holding()"
+		area 597 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(1) and not PStash_Holding()"
+		area 630 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(2)"
+		tint lua "PStash_CellTint(2)"
+		count lua "PStash_CellCount(2)"
+		tooltip lua "PStash_CellName(2)"
+		action "PStash_CellClick(2)"
+		actionSimpleDrag "PStash_CellClick(2)"
+		actionAlt "PStash_CellDesc(2)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(2)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(2) and not PStash_Holding()"
+		area 651 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(2) and not PStash_Holding()"
+		area 684 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(3)"
+		tint lua "PStash_CellTint(3)"
+		count lua "PStash_CellCount(3)"
+		tooltip lua "PStash_CellName(3)"
+		action "PStash_CellClick(3)"
+		actionSimpleDrag "PStash_CellClick(3)"
+		actionAlt "PStash_CellDesc(3)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(3)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(3) and not PStash_Holding()"
+		area 705 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(3) and not PStash_Holding()"
+		area 738 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(4)"
+		tint lua "PStash_CellTint(4)"
+		count lua "PStash_CellCount(4)"
+		tooltip lua "PStash_CellName(4)"
+		action "PStash_CellClick(4)"
+		actionSimpleDrag "PStash_CellClick(4)"
+		actionAlt "PStash_CellDesc(4)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(4)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(4) and not PStash_Holding()"
+		area 759 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(4) and not PStash_Holding()"
+		area 792 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(5)"
+		tint lua "PStash_CellTint(5)"
+		count lua "PStash_CellCount(5)"
+		tooltip lua "PStash_CellName(5)"
+		action "PStash_CellClick(5)"
+		actionSimpleDrag "PStash_CellClick(5)"
+		actionAlt "PStash_CellDesc(5)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(5)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(5) and not PStash_Holding()"
+		area 813 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(5) and not PStash_Holding()"
+		area 846 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(6)"
+		tint lua "PStash_CellTint(6)"
+		count lua "PStash_CellCount(6)"
+		tooltip lua "PStash_CellName(6)"
+		action "PStash_CellClick(6)"
+		actionSimpleDrag "PStash_CellClick(6)"
+		actionAlt "PStash_CellDesc(6)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(6)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(6) and not PStash_Holding()"
+		area 867 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(6) and not PStash_Holding()"
+		area 900 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 252 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(7)"
+		tint lua "PStash_CellTint(7)"
+		count lua "PStash_CellCount(7)"
+		tooltip lua "PStash_CellName(7)"
+		action "PStash_CellClick(7)"
+		actionSimpleDrag "PStash_CellClick(7)"
+		actionAlt "PStash_CellDesc(7)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(7)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(7) and not PStash_Holding()"
+		area 921 255 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(7) and not PStash_Holding()"
+		area 954 254 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(8)"
+		tint lua "PStash_CellTint(8)"
+		count lua "PStash_CellCount(8)"
+		tooltip lua "PStash_CellName(8)"
+		action "PStash_CellClick(8)"
+		actionSimpleDrag "PStash_CellClick(8)"
+		actionAlt "PStash_CellDesc(8)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(8)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(8) and not PStash_Holding()"
+		area 543 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(8) and not PStash_Holding()"
+		area 576 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(9)"
+		tint lua "PStash_CellTint(9)"
+		count lua "PStash_CellCount(9)"
+		tooltip lua "PStash_CellName(9)"
+		action "PStash_CellClick(9)"
+		actionSimpleDrag "PStash_CellClick(9)"
+		actionAlt "PStash_CellDesc(9)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(9)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(9) and not PStash_Holding()"
+		area 597 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(9) and not PStash_Holding()"
+		area 630 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(10)"
+		tint lua "PStash_CellTint(10)"
+		count lua "PStash_CellCount(10)"
+		tooltip lua "PStash_CellName(10)"
+		action "PStash_CellClick(10)"
+		actionSimpleDrag "PStash_CellClick(10)"
+		actionAlt "PStash_CellDesc(10)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(10)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(10) and not PStash_Holding()"
+		area 651 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(10) and not PStash_Holding()"
+		area 684 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(11)"
+		tint lua "PStash_CellTint(11)"
+		count lua "PStash_CellCount(11)"
+		tooltip lua "PStash_CellName(11)"
+		action "PStash_CellClick(11)"
+		actionSimpleDrag "PStash_CellClick(11)"
+		actionAlt "PStash_CellDesc(11)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(11)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(11) and not PStash_Holding()"
+		area 705 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(11) and not PStash_Holding()"
+		area 738 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(12)"
+		tint lua "PStash_CellTint(12)"
+		count lua "PStash_CellCount(12)"
+		tooltip lua "PStash_CellName(12)"
+		action "PStash_CellClick(12)"
+		actionSimpleDrag "PStash_CellClick(12)"
+		actionAlt "PStash_CellDesc(12)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(12)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(12) and not PStash_Holding()"
+		area 759 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(12) and not PStash_Holding()"
+		area 792 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(13)"
+		tint lua "PStash_CellTint(13)"
+		count lua "PStash_CellCount(13)"
+		tooltip lua "PStash_CellName(13)"
+		action "PStash_CellClick(13)"
+		actionSimpleDrag "PStash_CellClick(13)"
+		actionAlt "PStash_CellDesc(13)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(13)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(13) and not PStash_Holding()"
+		area 813 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(13) and not PStash_Holding()"
+		area 846 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(14)"
+		tint lua "PStash_CellTint(14)"
+		count lua "PStash_CellCount(14)"
+		tooltip lua "PStash_CellName(14)"
+		action "PStash_CellClick(14)"
+		actionSimpleDrag "PStash_CellClick(14)"
+		actionAlt "PStash_CellDesc(14)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(14)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(14) and not PStash_Holding()"
+		area 867 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(14) and not PStash_Holding()"
+		area 900 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 306 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(15)"
+		tint lua "PStash_CellTint(15)"
+		count lua "PStash_CellCount(15)"
+		tooltip lua "PStash_CellName(15)"
+		action "PStash_CellClick(15)"
+		actionSimpleDrag "PStash_CellClick(15)"
+		actionAlt "PStash_CellDesc(15)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(15)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(15) and not PStash_Holding()"
+		area 921 309 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(15) and not PStash_Holding()"
+		area 954 308 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(16)"
+		tint lua "PStash_CellTint(16)"
+		count lua "PStash_CellCount(16)"
+		tooltip lua "PStash_CellName(16)"
+		action "PStash_CellClick(16)"
+		actionSimpleDrag "PStash_CellClick(16)"
+		actionAlt "PStash_CellDesc(16)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(16)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(16) and not PStash_Holding()"
+		area 543 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(16) and not PStash_Holding()"
+		area 576 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(17)"
+		tint lua "PStash_CellTint(17)"
+		count lua "PStash_CellCount(17)"
+		tooltip lua "PStash_CellName(17)"
+		action "PStash_CellClick(17)"
+		actionSimpleDrag "PStash_CellClick(17)"
+		actionAlt "PStash_CellDesc(17)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(17)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(17) and not PStash_Holding()"
+		area 597 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(17) and not PStash_Holding()"
+		area 630 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(18)"
+		tint lua "PStash_CellTint(18)"
+		count lua "PStash_CellCount(18)"
+		tooltip lua "PStash_CellName(18)"
+		action "PStash_CellClick(18)"
+		actionSimpleDrag "PStash_CellClick(18)"
+		actionAlt "PStash_CellDesc(18)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(18)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(18) and not PStash_Holding()"
+		area 651 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(18) and not PStash_Holding()"
+		area 684 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(19)"
+		tint lua "PStash_CellTint(19)"
+		count lua "PStash_CellCount(19)"
+		tooltip lua "PStash_CellName(19)"
+		action "PStash_CellClick(19)"
+		actionSimpleDrag "PStash_CellClick(19)"
+		actionAlt "PStash_CellDesc(19)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(19)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(19) and not PStash_Holding()"
+		area 705 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(19) and not PStash_Holding()"
+		area 738 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(20)"
+		tint lua "PStash_CellTint(20)"
+		count lua "PStash_CellCount(20)"
+		tooltip lua "PStash_CellName(20)"
+		action "PStash_CellClick(20)"
+		actionSimpleDrag "PStash_CellClick(20)"
+		actionAlt "PStash_CellDesc(20)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(20)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(20) and not PStash_Holding()"
+		area 759 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(20) and not PStash_Holding()"
+		area 792 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(21)"
+		tint lua "PStash_CellTint(21)"
+		count lua "PStash_CellCount(21)"
+		tooltip lua "PStash_CellName(21)"
+		action "PStash_CellClick(21)"
+		actionSimpleDrag "PStash_CellClick(21)"
+		actionAlt "PStash_CellDesc(21)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(21)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(21) and not PStash_Holding()"
+		area 813 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(21) and not PStash_Holding()"
+		area 846 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(22)"
+		tint lua "PStash_CellTint(22)"
+		count lua "PStash_CellCount(22)"
+		tooltip lua "PStash_CellName(22)"
+		action "PStash_CellClick(22)"
+		actionSimpleDrag "PStash_CellClick(22)"
+		actionAlt "PStash_CellDesc(22)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(22)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(22) and not PStash_Holding()"
+		area 867 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(22) and not PStash_Holding()"
+		area 900 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 360 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(23)"
+		tint lua "PStash_CellTint(23)"
+		count lua "PStash_CellCount(23)"
+		tooltip lua "PStash_CellName(23)"
+		action "PStash_CellClick(23)"
+		actionSimpleDrag "PStash_CellClick(23)"
+		actionAlt "PStash_CellDesc(23)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(23)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(23) and not PStash_Holding()"
+		area 921 363 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(23) and not PStash_Holding()"
+		area 954 362 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(24)"
+		tint lua "PStash_CellTint(24)"
+		count lua "PStash_CellCount(24)"
+		tooltip lua "PStash_CellName(24)"
+		action "PStash_CellClick(24)"
+		actionSimpleDrag "PStash_CellClick(24)"
+		actionAlt "PStash_CellDesc(24)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(24)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(24) and not PStash_Holding()"
+		area 543 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(24) and not PStash_Holding()"
+		area 576 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(25)"
+		tint lua "PStash_CellTint(25)"
+		count lua "PStash_CellCount(25)"
+		tooltip lua "PStash_CellName(25)"
+		action "PStash_CellClick(25)"
+		actionSimpleDrag "PStash_CellClick(25)"
+		actionAlt "PStash_CellDesc(25)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(25)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(25) and not PStash_Holding()"
+		area 597 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(25) and not PStash_Holding()"
+		area 630 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(26)"
+		tint lua "PStash_CellTint(26)"
+		count lua "PStash_CellCount(26)"
+		tooltip lua "PStash_CellName(26)"
+		action "PStash_CellClick(26)"
+		actionSimpleDrag "PStash_CellClick(26)"
+		actionAlt "PStash_CellDesc(26)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(26)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(26) and not PStash_Holding()"
+		area 651 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(26) and not PStash_Holding()"
+		area 684 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(27)"
+		tint lua "PStash_CellTint(27)"
+		count lua "PStash_CellCount(27)"
+		tooltip lua "PStash_CellName(27)"
+		action "PStash_CellClick(27)"
+		actionSimpleDrag "PStash_CellClick(27)"
+		actionAlt "PStash_CellDesc(27)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(27)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(27) and not PStash_Holding()"
+		area 705 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(27) and not PStash_Holding()"
+		area 738 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(28)"
+		tint lua "PStash_CellTint(28)"
+		count lua "PStash_CellCount(28)"
+		tooltip lua "PStash_CellName(28)"
+		action "PStash_CellClick(28)"
+		actionSimpleDrag "PStash_CellClick(28)"
+		actionAlt "PStash_CellDesc(28)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(28)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(28) and not PStash_Holding()"
+		area 759 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(28) and not PStash_Holding()"
+		area 792 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(29)"
+		tint lua "PStash_CellTint(29)"
+		count lua "PStash_CellCount(29)"
+		tooltip lua "PStash_CellName(29)"
+		action "PStash_CellClick(29)"
+		actionSimpleDrag "PStash_CellClick(29)"
+		actionAlt "PStash_CellDesc(29)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(29)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(29) and not PStash_Holding()"
+		area 813 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(29) and not PStash_Holding()"
+		area 846 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(30)"
+		tint lua "PStash_CellTint(30)"
+		count lua "PStash_CellCount(30)"
+		tooltip lua "PStash_CellName(30)"
+		action "PStash_CellClick(30)"
+		actionSimpleDrag "PStash_CellClick(30)"
+		actionAlt "PStash_CellDesc(30)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(30)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(30) and not PStash_Holding()"
+		area 867 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(30) and not PStash_Holding()"
+		area 900 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 414 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(31)"
+		tint lua "PStash_CellTint(31)"
+		count lua "PStash_CellCount(31)"
+		tooltip lua "PStash_CellName(31)"
+		action "PStash_CellClick(31)"
+		actionSimpleDrag "PStash_CellClick(31)"
+		actionAlt "PStash_CellDesc(31)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(31)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(31) and not PStash_Holding()"
+		area 921 417 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(31) and not PStash_Holding()"
+		area 954 416 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(32)"
+		tint lua "PStash_CellTint(32)"
+		count lua "PStash_CellCount(32)"
+		tooltip lua "PStash_CellName(32)"
+		action "PStash_CellClick(32)"
+		actionSimpleDrag "PStash_CellClick(32)"
+		actionAlt "PStash_CellDesc(32)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(32)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(32) and not PStash_Holding()"
+		area 543 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(32) and not PStash_Holding()"
+		area 576 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(33)"
+		tint lua "PStash_CellTint(33)"
+		count lua "PStash_CellCount(33)"
+		tooltip lua "PStash_CellName(33)"
+		action "PStash_CellClick(33)"
+		actionSimpleDrag "PStash_CellClick(33)"
+		actionAlt "PStash_CellDesc(33)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(33)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(33) and not PStash_Holding()"
+		area 597 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(33) and not PStash_Holding()"
+		area 630 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(34)"
+		tint lua "PStash_CellTint(34)"
+		count lua "PStash_CellCount(34)"
+		tooltip lua "PStash_CellName(34)"
+		action "PStash_CellClick(34)"
+		actionSimpleDrag "PStash_CellClick(34)"
+		actionAlt "PStash_CellDesc(34)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(34)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(34) and not PStash_Holding()"
+		area 651 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(34) and not PStash_Holding()"
+		area 684 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(35)"
+		tint lua "PStash_CellTint(35)"
+		count lua "PStash_CellCount(35)"
+		tooltip lua "PStash_CellName(35)"
+		action "PStash_CellClick(35)"
+		actionSimpleDrag "PStash_CellClick(35)"
+		actionAlt "PStash_CellDesc(35)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(35)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(35) and not PStash_Holding()"
+		area 705 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(35) and not PStash_Holding()"
+		area 738 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(36)"
+		tint lua "PStash_CellTint(36)"
+		count lua "PStash_CellCount(36)"
+		tooltip lua "PStash_CellName(36)"
+		action "PStash_CellClick(36)"
+		actionSimpleDrag "PStash_CellClick(36)"
+		actionAlt "PStash_CellDesc(36)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(36)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(36) and not PStash_Holding()"
+		area 759 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(36) and not PStash_Holding()"
+		area 792 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(37)"
+		tint lua "PStash_CellTint(37)"
+		count lua "PStash_CellCount(37)"
+		tooltip lua "PStash_CellName(37)"
+		action "PStash_CellClick(37)"
+		actionSimpleDrag "PStash_CellClick(37)"
+		actionAlt "PStash_CellDesc(37)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(37)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(37) and not PStash_Holding()"
+		area 813 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(37) and not PStash_Holding()"
+		area 846 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(38)"
+		tint lua "PStash_CellTint(38)"
+		count lua "PStash_CellCount(38)"
+		tooltip lua "PStash_CellName(38)"
+		action "PStash_CellClick(38)"
+		actionSimpleDrag "PStash_CellClick(38)"
+		actionAlt "PStash_CellDesc(38)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(38)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(38) and not PStash_Holding()"
+		area 867 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(38) and not PStash_Holding()"
+		area 900 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 468 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(39)"
+		tint lua "PStash_CellTint(39)"
+		count lua "PStash_CellCount(39)"
+		tooltip lua "PStash_CellName(39)"
+		action "PStash_CellClick(39)"
+		actionSimpleDrag "PStash_CellClick(39)"
+		actionAlt "PStash_CellDesc(39)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(39)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(39) and not PStash_Holding()"
+		area 921 471 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(39) and not PStash_Holding()"
+		area 954 470 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(40)"
+		tint lua "PStash_CellTint(40)"
+		count lua "PStash_CellCount(40)"
+		tooltip lua "PStash_CellName(40)"
+		action "PStash_CellClick(40)"
+		actionSimpleDrag "PStash_CellClick(40)"
+		actionAlt "PStash_CellDesc(40)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(40)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(40) and not PStash_Holding()"
+		area 543 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(40) and not PStash_Holding()"
+		area 576 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(41)"
+		tint lua "PStash_CellTint(41)"
+		count lua "PStash_CellCount(41)"
+		tooltip lua "PStash_CellName(41)"
+		action "PStash_CellClick(41)"
+		actionSimpleDrag "PStash_CellClick(41)"
+		actionAlt "PStash_CellDesc(41)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(41)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(41) and not PStash_Holding()"
+		area 597 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(41) and not PStash_Holding()"
+		area 630 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(42)"
+		tint lua "PStash_CellTint(42)"
+		count lua "PStash_CellCount(42)"
+		tooltip lua "PStash_CellName(42)"
+		action "PStash_CellClick(42)"
+		actionSimpleDrag "PStash_CellClick(42)"
+		actionAlt "PStash_CellDesc(42)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(42)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(42) and not PStash_Holding()"
+		area 651 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(42) and not PStash_Holding()"
+		area 684 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(43)"
+		tint lua "PStash_CellTint(43)"
+		count lua "PStash_CellCount(43)"
+		tooltip lua "PStash_CellName(43)"
+		action "PStash_CellClick(43)"
+		actionSimpleDrag "PStash_CellClick(43)"
+		actionAlt "PStash_CellDesc(43)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(43)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(43) and not PStash_Holding()"
+		area 705 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(43) and not PStash_Holding()"
+		area 738 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(44)"
+		tint lua "PStash_CellTint(44)"
+		count lua "PStash_CellCount(44)"
+		tooltip lua "PStash_CellName(44)"
+		action "PStash_CellClick(44)"
+		actionSimpleDrag "PStash_CellClick(44)"
+		actionAlt "PStash_CellDesc(44)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(44)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(44) and not PStash_Holding()"
+		area 759 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(44) and not PStash_Holding()"
+		area 792 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(45)"
+		tint lua "PStash_CellTint(45)"
+		count lua "PStash_CellCount(45)"
+		tooltip lua "PStash_CellName(45)"
+		action "PStash_CellClick(45)"
+		actionSimpleDrag "PStash_CellClick(45)"
+		actionAlt "PStash_CellDesc(45)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(45)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(45) and not PStash_Holding()"
+		area 813 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(45) and not PStash_Holding()"
+		area 846 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(46)"
+		tint lua "PStash_CellTint(46)"
+		count lua "PStash_CellCount(46)"
+		tooltip lua "PStash_CellName(46)"
+		action "PStash_CellClick(46)"
+		actionSimpleDrag "PStash_CellClick(46)"
+		actionAlt "PStash_CellDesc(46)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(46)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(46) and not PStash_Holding()"
+		area 867 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(46) and not PStash_Holding()"
+		area 900 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 522 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(47)"
+		tint lua "PStash_CellTint(47)"
+		count lua "PStash_CellCount(47)"
+		tooltip lua "PStash_CellName(47)"
+		action "PStash_CellClick(47)"
+		actionSimpleDrag "PStash_CellClick(47)"
+		actionAlt "PStash_CellDesc(47)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(47)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(47) and not PStash_Holding()"
+		area 921 525 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(47) and not PStash_Holding()"
+		area 954 524 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 540 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(48)"
+		tint lua "PStash_CellTint(48)"
+		count lua "PStash_CellCount(48)"
+		tooltip lua "PStash_CellName(48)"
+		action "PStash_CellClick(48)"
+		actionSimpleDrag "PStash_CellClick(48)"
+		actionAlt "PStash_CellDesc(48)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(48)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(48) and not PStash_Holding()"
+		area 543 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(48) and not PStash_Holding()"
+		area 576 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 594 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(49)"
+		tint lua "PStash_CellTint(49)"
+		count lua "PStash_CellCount(49)"
+		tooltip lua "PStash_CellName(49)"
+		action "PStash_CellClick(49)"
+		actionSimpleDrag "PStash_CellClick(49)"
+		actionAlt "PStash_CellDesc(49)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(49)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(49) and not PStash_Holding()"
+		area 597 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(49) and not PStash_Holding()"
+		area 630 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 648 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(50)"
+		tint lua "PStash_CellTint(50)"
+		count lua "PStash_CellCount(50)"
+		tooltip lua "PStash_CellName(50)"
+		action "PStash_CellClick(50)"
+		actionSimpleDrag "PStash_CellClick(50)"
+		actionAlt "PStash_CellDesc(50)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(50)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(50) and not PStash_Holding()"
+		area 651 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(50) and not PStash_Holding()"
+		area 684 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 702 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(51)"
+		tint lua "PStash_CellTint(51)"
+		count lua "PStash_CellCount(51)"
+		tooltip lua "PStash_CellName(51)"
+		action "PStash_CellClick(51)"
+		actionSimpleDrag "PStash_CellClick(51)"
+		actionAlt "PStash_CellDesc(51)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(51)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(51) and not PStash_Holding()"
+		area 705 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(51) and not PStash_Holding()"
+		area 738 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 756 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(52)"
+		tint lua "PStash_CellTint(52)"
+		count lua "PStash_CellCount(52)"
+		tooltip lua "PStash_CellName(52)"
+		action "PStash_CellClick(52)"
+		actionSimpleDrag "PStash_CellClick(52)"
+		actionAlt "PStash_CellDesc(52)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(52)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(52) and not PStash_Holding()"
+		area 759 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(52) and not PStash_Holding()"
+		area 792 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 810 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(53)"
+		tint lua "PStash_CellTint(53)"
+		count lua "PStash_CellCount(53)"
+		tooltip lua "PStash_CellName(53)"
+		action "PStash_CellClick(53)"
+		actionSimpleDrag "PStash_CellClick(53)"
+		actionAlt "PStash_CellDesc(53)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(53)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(53) and not PStash_Holding()"
+		area 813 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(53) and not PStash_Holding()"
+		area 846 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 864 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(54)"
+		tint lua "PStash_CellTint(54)"
+		count lua "PStash_CellCount(54)"
+		tooltip lua "PStash_CellName(54)"
+		action "PStash_CellClick(54)"
+		actionSimpleDrag "PStash_CellClick(54)"
+		actionAlt "PStash_CellDesc(54)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(54)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(54) and not PStash_Holding()"
+		area 867 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(54) and not PStash_Holding()"
+		area 900 578 14 14
+		bam PSTASHUP
+	}
+	button
+	{
+		enabled "not PStash_Holding()"
+		area 918 576 52 52
+		bam STONSLOT
+		icon lua "PStash_CellIcon(55)"
+		tint lua "PStash_CellTint(55)"
+		count lua "PStash_CellCount(55)"
+		tooltip lua "PStash_CellName(55)"
+		action "PStash_CellClick(55)"
+		actionSimpleDrag "PStash_CellClick(55)"
+		actionAlt "PStash_CellDesc(55)"
+		actionScroll "PStash_Scroll()"
+		actionEnter "PStash_Hover(55)"
+		actionExit "PStash_Hover(-1)"
+	}
+	label
+	{
+		enabled "PStash_CellSell(55) and not PStash_Holding()"
+		area 921 579 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_CellPlus(55) and not PStash_Holding()"
+		area 954 578 14 14
+		bam PSTASHUP
+	}
+	label
+	{
+		enabled "PStash_StatSingle(0)"
+		area 52 470 60 34
+		text lua "PStash_StatValue(0)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(0)"
+		area 52 467 60 40
+		text lua "PStash_StatValue(0)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	text
+	{
+		area 140 429 122 112
+		text lua "PStash_StatText(0)"
+		text style "normal"
+		text point 9
+		scrollbar 'GUISCRC'
+	}
+	label
+	{
+		enabled "PStash_StatSingle(1)"
+		area 52 600 60 34
+		text lua "PStash_StatValue(1)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(1)"
+		area 52 597 60 40
+		text lua "PStash_StatValue(1)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	text
+	{
+		area 140 559 122 112
+		text lua "PStash_StatText(1)"
+		text style "normal"
+		text point 9
+		scrollbar 'GUISCRC'
+	}
+	label
+	{
+		enabled "PStash_StatSingle(2)"
+		area 292 470 60 34
+		text lua "PStash_StatValue(2)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(2)"
+		area 292 467 60 40
+		text lua "PStash_StatValue(2)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	text
+	{
+		area 380 429 122 112
+		text lua "PStash_StatText(2)"
+		text style "normal"
+		text point 9
+		scrollbar 'GUISCRC'
+	}
+	label
+	{
+		enabled "PStash_StatSingle(3)"
+		area 292 600 60 34
+		text lua "PStash_StatValue(3)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(3)"
+		area 292 597 60 40
+		text lua "PStash_StatValue(3)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	text
+	{
+		area 380 559 122 112
+		text lua "PStash_StatText(3)"
+		text style "normal"
+		text point 9
+		scrollbar 'GUISCRC'
+	}
+	button
+	{
+		area 544 638 140 36
+		text lua "PStash_T and PStash_T('store_all') or 'Store all'"
+		text style "label"
+		text align center center
+		action "PStash_StoreAll()"
+	}
+	label --this has to be last so it draws over top of everything.
+	{
+		area 0 0 1120 710
+		enabled "shouldGreyOutInventory()"
+		rectangle 0
+		rectangle opacity 200
+	}
+}
+
+menu
+{
+	name "PSTASH_STORE"
+	align center center
+	ignoreesc
+	size 864 710
+	button
+	{
+		enabled "PStash_CanSellMarked()"
+		area 638 600 204 44
+		bam GUIOSTUM
+		action "PStash_SellMarked()"
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 1"
+		area 673 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 1"
+		area 775 600 16 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 1"
+		area 788 614 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 2"
+		area 668 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 2"
+		area 770 600 26 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 2"
+		area 793 614 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 3"
+		area 663 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 3"
+		area 765 600 36 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 3"
+		area 798 614 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 4"
+		area 658 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 4"
+		area 760 600 46 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 4"
+		area 803 614 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 5"
+		area 653 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 5"
+		area 755 600 56 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 5"
+		area 808 614 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 6"
+		area 648 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 6"
+		area 750 600 66 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 6"
+		area 813 614 20 16
+		bam PSTASHSL
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 7"
+		area 643 600 108 44
+		text lua "PStash_T and PStash_T('sell_marked') or 'Sell Marked'"
+		text style "label"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 7"
+		area 745 600 76 44
+		text lua "PStash_SellAmount()"
+		text style "gold"
+		text align left center
+	}
+	label
+	{
+		enabled "PStash_SellDigits() == 7"
+		area 818 614 20 16
+		bam PSTASHSL
+	}
+	button
+	{
+		enabled "PStash_CanSellMarked()"
+		area 638 600 204 44
+		action "PStash_SellMarked()"
+	}
+}

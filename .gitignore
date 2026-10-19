@@ -1,0 +1,4 @@
+*.debug
+*.DEBUG
+__pycache__/
+weidu_external/

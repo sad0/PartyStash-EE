@@ -1,0 +1,120 @@
+BACKUP ~weidu_external/backup/PartyStash~
+AUTHOR ~sad0~
+VERSION ~v1.0~
+README ~PartyStash/README.md~
+
+// One source for BGEE and BG2EE (John 2026-10-19): the same folder installs on both. The main component comes in two
+// looks for the inventory page, either one on either game (BG1 recommended on BGEE, BG2 on BG2EE); the install code
+// is shared (lib/main.tpa). The tables M_PSTASH.lua needs (quest items, bags, merchants) are rebuilt from the
+// game's own files at install.
+
+LANGUAGE ~English~ ~english~ ~PartyStash/tra/english/setup.tra~
+LANGUAGE ~Francais~ ~french~ ~PartyStash/tra/french/setup.tra~
+LANGUAGE ~Deutsch~ ~german~ ~PartyStash/tra/german/setup.tra~
+LANGUAGE ~Español~ ~spanish~ ~PartyStash/tra/spanish/setup.tra~
+LANGUAGE ~Italiano~ ~italian~ ~PartyStash/tra/italian/setup.tra~
+LANGUAGE ~Polski~ ~polish~ ~PartyStash/tra/polish/setup.tra~
+LANGUAGE ~Русский~ ~russian~ ~PartyStash/tra/russian/setup.tra~
+LANGUAGE ~Português (Brasil)~ ~portuguese~ ~PartyStash/tra/portuguese/setup.tra~
+LANGUAGE ~Čeština~ ~czech~ ~PartyStash/tra/czech/setup.tra~
+LANGUAGE ~Magyar~ ~hungarian~ ~PartyStash/tra/hungarian/setup.tra~
+LANGUAGE ~Türkçe~ ~turkish~ ~PartyStash/tra/turkish/setup.tra~
+LANGUAGE ~Українська~ ~ukrainian~ ~PartyStash/tra/ukrainian/setup.tra~
+LANGUAGE ~简体中文~ ~schinese~ ~PartyStash/tra/schinese/setup.tra~
+LANGUAGE ~日本語~ ~japanese~ ~PartyStash/tra/japanese/setup.tra~
+LANGUAGE ~한국어~ ~korean~ ~PartyStash/tra/korean/setup.tra~
+
+// The look choice (John 2026-10-19): "(recommended)" only on the game's own look, so each look exists twice, in
+// two SUBCOMPONENT groups (@1 on BGEE, @11 = the same name on BG2EE/EET, each with its game predicate): one group
+// shows per game. One group for both did not work: WeiDU skips the whole group when any member fails its predicate. Numbers kept from v0.4: #0 = BG1 look on BGEE,
+// #2 = BG2 look on BG2EE/EET; #3 = BG1 look on BG2EE/EET, #4 = BG2 look on BGEE.
+BEGIN @6 DESIGNATED 0 SUBCOMPONENT @1 (GAME_IS ~bgee~)
+LABEL ~PARTYSTASH-MAIN~
+REQUIRE_PREDICATE GAME_IS ~bgee~ @2
+REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+OUTER_TEXT_SPRINT ps_look ~bg1~
+INCLUDE ~PartyStash/lib/main.tpa~
+
+BEGIN @10 DESIGNATED 4 SUBCOMPONENT @1 (GAME_IS ~bgee~)
+LABEL ~PARTYSTASH-MAIN-BG2-LOOK-ON-BGEE~
+REQUIRE_PREDICATE GAME_IS ~bgee~ @2
+REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+OUTER_TEXT_SPRINT ps_look ~bg2~
+INCLUDE ~PartyStash/lib/main.tpa~
+
+BEGIN @7 DESIGNATED 2 SUBCOMPONENT @11 (GAME_IS ~bg2ee eet~)
+LABEL ~PARTYSTASH-MAIN-BG2-LOOK~
+REQUIRE_PREDICATE GAME_IS ~bg2ee eet~ @2
+REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+OUTER_TEXT_SPRINT ps_look ~bg2~
+INCLUDE ~PartyStash/lib/main.tpa~
+
+BEGIN @9 DESIGNATED 3 SUBCOMPONENT @11 (GAME_IS ~bg2ee eet~)
+LABEL ~PARTYSTASH-MAIN-BG1-LOOK-ON-BG2~
+REQUIRE_PREDICATE GAME_IS ~bg2ee eet~ @2
+REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+OUTER_TEXT_SPRINT ps_look ~bg1~
+INCLUDE ~PartyStash/lib/main.tpa~
+
+// #1 Sorted loot = SadoQoL #3 (John 2026-10-19: in both mods). Same files under the same override names
+// (M_SQSORT.lua, SQSORT.menu), so whichever is installed last provides it and only one copy ever runs.
+// Ground piles, containers and the quick loot bar list quest items, weightless items, then value/weight.
+// Quest item = an item the game asks for: the dialogues and scripts are read here and every item they check or
+// take from the party, and that no store sells, goes in the Lua's quest table (nothing is written back).
+BEGIN @5 DESIGNATED 1
+LABEL ~PARTYSTASH-SORTED-LOOT~
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @2
+REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+
+ACTION_CLEAR_ARRAY sq_quest
+OUTER_TEXT_SPRINT sq_party ~PartyHasItem\|PartyHasItemIdentified\|TakePartyItem\|TakePartyItemNum\|TakePartyItemAll\|DestroyPartyItem\|DestroyPartyItemNum~
+// Dialogues keep their triggers and actions as text. HasItem there is about the speaker's party.
+COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
+	REPLACE_EVALUATE CASE_INSENSITIVE ~\(%sq_party%\|HasItem\|HasItemEquiped\|HasItemEquipedReal\)([ %TAB%]*"\([^"]+\)"~ BEGIN
+		TEXT_SPRINT r ~%MATCH2%~
+		TO_UPPER r
+		SET $sq_quest(~%r%~) = 1
+	END ~%MATCH0%~
+	REPLACE_EVALUATE CASE_INSENSITIVE ~TakeItemReplace([ %TAB%]*"[^"]*"[ %TAB%]*,[ %TAB%]*"\([^"]+\)"~ BEGIN
+		TEXT_SPRINT r ~%MATCH1%~
+		TO_UPPER r
+		SET $sq_quest(~%r%~) = 1
+	END ~%MATCH0%~
+BUT_ONLY
+// Scripts: only the party checks (HasItem there is mostly a creature looking at its own potions).
+COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
+	READ_ASCII 0 bcs (BUFFER_LENGTH)
+	INNER_PATCH ~%bcs%~ BEGIN
+		DECOMPILE_BCS_TO_BAF
+		REPLACE_EVALUATE CASE_INSENSITIVE ~\(%sq_party%\)([ %TAB%]*"\([^"]+\)"~ BEGIN
+			TEXT_SPRINT r ~%MATCH2%~
+			TO_UPPER r
+			SET $sq_quest(~%r%~) = 1
+		END ~%MATCH0%~
+	END
+BUT_ONLY
+// Anything a store sells is common (healing potions, wands, gems a dialogue happens to ask for): not a quest item.
+ACTION_CLEAR_ARRAY sq_sold
+COPY_EXISTING_REGEXP GLOB ~^.+\.sto$~ ~override~
+	READ_LONG 0x34 off
+	READ_LONG 0x38 cnt
+	FOR (i = 0; i < cnt; ++i) BEGIN
+		READ_ASCII (off + i * 0x1c) r (8) NULL
+		TO_UPPER r
+		SET $sq_sold(~%r%~) = 1
+	END
+BUT_ONLY
+
+OUTER_TEXT_SPRINT sq_list ~{~
+OUTER_SET sq_n = 0
+ACTION_PHP_EACH sq_quest AS r => v BEGIN
+	ACTION_IF FILE_EXISTS_IN_GAME ~%r%.itm~ AND NOT VARIABLE_IS_SET $sq_sold(~%r%~) BEGIN
+		OUTER_TEXT_SPRINT sq_list ~%sq_list% ["%r%"] = true,~
+		OUTER_SET sq_n += 1
+	END
+END
+OUTER_TEXT_SPRINT sq_list ~%sq_list% }~
+PRINT ~PartyStash sorted loot: %sq_n% quest items.~
+COPY ~PartyStash/M_SQSORT.lua~ ~override~
+	REPLACE_TEXTUALLY EXACT_MATCH ~SQ_SORT_QUEST_LIST~ ~%sq_list%~
+COPY ~PartyStash/SQSORT.menu~ ~override~
