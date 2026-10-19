@@ -1151,10 +1151,14 @@ end
 -- What the overlay slot shows: the last slot's data marked empty (no chest icon drawn over the grid); the engine
 -- still drops on the real slot (it goes by the widget name, slot_inv_45).
 -- The last backpack slot (the stash item): the game's slot data, with a tooltip saying what the item is for.
+-- One table, refilled in place: a new table every frame made the engine reopen the tooltip in a loop (the scroll
+-- sound over and over, John).
+P.stashSlot = P.stashSlot or {}
 function PStash_StashSlot()
 	local real = characters and characters[id] and characters[id].equipment.group15
 	if not (real and real.item and string.upper(real.item.res or '') == P.RES) then return real end
-	local t = {}
+	local t = P.stashSlot
+	for k in pairs(t) do if real[k] == nil then t[k] = nil end end
 	for k, v in pairs(real) do t[k] = v end
 	t.tooltip = T('stash_slot_tip')
 	return t
