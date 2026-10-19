@@ -912,12 +912,10 @@ end
 
 function PStash_CellIcon(i) local c = cell(i) return c and c.icon or nil end
 function PStash_CellCount(i) local c = cell(i) return c and c.units > 1 and c.units or nil end
+-- The item's name only (John 2026-10-19: no comparison lines; the "+" marker on the cell still flags upgrades).
 function PStash_CellName(i)
 	local c = cell(i)
-	if not c then return '' end
-	local ok, _, lines = pcall(compare, shownPortrait(), PStash_ItemInfo(c.res))
-	if ok and lines and #lines > 0 then return c.name .. '\n' .. table.concat(lines, '\n') end
-	return c.name
+	return c and c.name or ''
 end
 function PStash_CellDesc(i)
 	local c = cell(i)
