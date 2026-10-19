@@ -70,3 +70,11 @@
 @168 = ~2 armas~ // ab_two_weapon
 @169 = ~Esvaziar o baú? Suas bolsas colecionadas voltam cheias dos itens que comportam; todo o resto cai no chão. Faça isso antes de desinstalar o Party Stash.~ // empty_confirm
 @170 = ~Ctrl + clique esquerdo: esvaziar o baú nas suas bolsas e no chão (antes de desinstalar)~ // bag_tip
+@171 = ~Este é o seu baú~ // help_stash_title
+@172 = ~Clique: pegar um item (clique duplo: pegar e equipar)\nCtrl + clique: marcar para venda (Vender marcados em um mercador)\nClique direito: descrição. Roda do mouse: rolar~ // help_stash
+@173 = ~Este é o inventário do seu personagem~ // help_pack_title
+@174 = ~Shift + clique duplo, ou arrastar para o baú: guardar um item\nEspaço ou Guardar tudo: guardar a mochila inteira~ // help_pack
+@175 = ~Espaço: guardar a mochila inteira.\nItens de missão ficam na mochila; bolsas pedem confirmação.~ // help_storeall
+@176 = ~Clique para mudar a ordenação.\nAuto: cada aba com sua ordem (armas e armaduras por qualidade, pergaminhos por classe e nível...).\nTambém: Data, Qualidade, Tipo, Preço, Valor/peso.~ // help_sort
+@177 = ~Guarde uma bolsa (Shift + clique duplo ou Guardar tudo): ela é esvaziada no baú e mantida aqui.\nOs itens do baú que ela comporta não pesam nada.~ // help_bags
+@178 = ~%d itens marcados serão vendidos por %d po.\n%d itens marcados foram ignorados (sem valor, de missão ou não comprados aqui).~ // help_sell

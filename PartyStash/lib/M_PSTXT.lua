@@ -72,4 +72,12 @@ PStash_Strings = {
 	ab_two_weapon = [==[%ps_t_ab_two_weapon%]==],
 	empty_confirm = [==[%ps_t_empty_confirm%]==],
 	bag_tip = [==[%ps_t_bag_tip%]==],
+	help_stash_title = [==[%ps_t_help_stash_title%]==],
+	help_stash = [==[%ps_t_help_stash%]==],
+	help_pack_title = [==[%ps_t_help_pack_title%]==],
+	help_pack = [==[%ps_t_help_pack%]==],
+	help_storeall = [==[%ps_t_help_storeall%]==],
+	help_sort = [==[%ps_t_help_sort%]==],
+	help_bags = [==[%ps_t_help_bags%]==],
+	help_sell = [==[%ps_t_help_sell%]==],
 }

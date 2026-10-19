@@ -70,3 +70,11 @@
 @168 = ~2 bronie~ // ab_two_weapon
 @169 = ~Opróżnić skrzynię? Zebrane torby wracają wypełnione przedmiotami, które mogą pomieścić; cała reszta spada na ziemię. Zrób to przed odinstalowaniem Party Stash.~ // empty_confirm
 @170 = ~Ctrl + lewy przycisk: opróżnij skrzynię do toreb i na ziemię (przed odinstalowaniem)~ // bag_tip
+@171 = ~To twoja skrzynia~ // help_stash_title
+@172 = ~Kliknięcie: wyjmij przedmiot (podwójne: wyjmij i załóż)\nCtrl + kliknięcie: zaznacz do sprzedaży (Sprzedaj zazn. u kupca)\nPrawy przycisk: opis. Kółko myszy: przewijanie~ // help_stash
+@173 = ~To ekwipunek twojej postaci~ // help_pack_title
+@174 = ~Shift + podwójne kliknięcie lub przeciągnięcie na skrzynię: schowaj przedmiot\nSpacja lub Schowaj wszystko: schowaj cały plecak~ // help_pack
+@175 = ~Spacja: schowaj cały plecak.\nPrzedmioty fabularne zostają w plecaku; torby wymagają potwierdzenia.~ // help_storeall
+@176 = ~Kliknij, aby zmienić sortowanie.\nAuto: każda karta ma własną kolejność (broń i pancerze według jakości, zwoje według klasy i poziomu...).\nPonadto: Data, Jakość, Typ, Cena, Wartość/waga.~ // help_sort
+@177 = ~Schowaj torbę (Shift + podwójne kliknięcie lub Schowaj wszystko): zostaje opróżniona do skrzyni i zachowana tutaj.\nPrzedmioty ze skrzyni, które może pomieścić, nic nie ważą.~ // help_bags
+@178 = ~%d zaznaczonych przedmiotów zostanie sprzedanych za %d szt. zł.\n%d zaznaczonych przedmiotów pominięto (bez wartości, fabularne lub tu nieskupowane).~ // help_sell

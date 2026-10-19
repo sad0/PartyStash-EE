@@ -291,8 +291,8 @@ menu
 		bam CONTBACK
 		frame lua "PStash_BagFrame()"
 		action "PStash_BagClick()"
-		actionEnter "PStash_BagHover(true)"
-		actionExit "PStash_BagHover(false)"
+		actionEnter "PStash_Help('bag')"
+		actionExit "PStash_Help(nil)"
 	}
 	label
 	{
@@ -318,6 +318,8 @@ menu
 		text style "label"
 		text align right center
 		action "PStash_CycleSort()"
+		actionEnter "PStash_Help('sort')"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -327,6 +329,8 @@ menu
 		text align center center
 		action "PStash_SetTab(1)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(1)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -336,6 +340,8 @@ menu
 		text align center center
 		action "PStash_SetTab(2)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(2)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -345,6 +351,8 @@ menu
 		text align center center
 		action "PStash_SetTab(3)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(3)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -354,6 +362,8 @@ menu
 		text align center center
 		action "PStash_SetTab(4)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(4)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -363,6 +373,8 @@ menu
 		text align center center
 		action "PStash_SetTab(5)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(5)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -372,6 +384,8 @@ menu
 		text align center center
 		action "PStash_SetTab(6)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(6)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -381,6 +395,8 @@ menu
 		text align center center
 		action "PStash_SetTab(7)"
 		actionScroll "PStash_TabWheel()"
+		actionEnter "PStash_TabHover(7)"
+		actionExit "PStash_Help(nil)"
 	}
 	button
 	{
@@ -2592,19 +2608,117 @@ menu
 		text lua "PStash_T and PStash_T('store_all') or 'Store all'"
 		text style "button"
 		action "PStash_StoreAll()"
+		actionEnter "PStash_Help('storeall')"
+		actionExit "PStash_Help(nil)"
 	}
 	label
 	{
-		enabled "PStash_BagHovering()"
-		area 540 128 432 110
+		enabled "PStash_HelpIs('bag')"
+		area 0 0 544 710
 		rectangle 0
-		rectangle opacity 230
+		rectangle opacity 150
 	}
 	label
 	{
-		enabled "PStash_BagHovering()"
-		area 548 132 416 102
-		text lua "PStash_WeightTooltip()"
+		enabled "PStash_HelpIs('bag')"
+		area 612 0 508 710
+		rectangle 0
+		rectangle opacity 150
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 544 92 68 618
+		rectangle 0
+		rectangle opacity 150
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 616 2 356 86
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 624 6 340 78
+		text lua "PStash_HelpText('weight')"
+		text style "normal"
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 540 130 432 108
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 548 134 416 100
+		text lua "PStash_HelpText('pack')"
+		text style "normal"
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 540 264 432 150
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bag')"
+		area 548 268 416 142
+		text lua "PStash_HelpText('stash')"
+		text style "normal"
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_HelpIs('storeall')"
+		area 540 540 432 86
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('storeall')"
+		area 548 544 416 78
+		text lua "PStash_HelpText('storeall')"
+		text style "normal"
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_HelpIs('sort')"
+		area 540 264 432 120
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('sort')"
+		area 548 268 416 112
+		text lua "PStash_HelpText('sort')"
+		text style "normal"
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bags')"
+		area 540 264 432 110
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('bags')"
+		area 548 268 416 102
+		text lua "PStash_HelpText('bags')"
 		text style "normal"
 		text align center center
 	}
@@ -2789,5 +2903,22 @@ menu
 		enabled "PStash_CanSellMarked()"
 		area 638 600 204 44
 		action "PStash_SellMarked()"
+		actionEnter "PStash_Help('sell')"
+		actionExit "PStash_Help(nil)"
+	}
+	label
+	{
+		enabled "PStash_HelpIs('sell')"
+		area 538 504 404 90
+		rectangle 0
+		rectangle opacity 235
+	}
+	label
+	{
+		enabled "PStash_HelpIs('sell')"
+		area 546 508 388 82
+		text lua "PStash_HelpText('sell')"
+		text style "normal"
+		text align center center
 	}
 }

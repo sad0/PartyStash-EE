@@ -76,4 +76,12 @@ OUTER_SPRINT ps_t_ab_off_hand @167
 OUTER_SPRINT ps_t_ab_two_weapon @168
 OUTER_SPRINT ps_t_empty_confirm @169
 OUTER_SPRINT ps_t_bag_tip @170
+OUTER_SPRINT ps_t_help_stash_title @171
+OUTER_SPRINT ps_t_help_stash @172
+OUTER_SPRINT ps_t_help_pack_title @173
+OUTER_SPRINT ps_t_help_pack @174
+OUTER_SPRINT ps_t_help_storeall @175
+OUTER_SPRINT ps_t_help_sort @176
+OUTER_SPRINT ps_t_help_bags @177
+OUTER_SPRINT ps_t_help_sell @178
 COPY ~PartyStash/lib/M_PSTXT.lua~ ~override~ EVALUATE_BUFFER

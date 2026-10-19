@@ -44,12 +44,25 @@ P.EN = {
 	st_ac = 'AC ', st_hp = 'HP ', st_thac0 = 'THAC0 ', st_damage = 'Damage ',
 	ab_ac = 'AC', ab_ac_mods = 'AC mods', ab_missile = 'Missile', ab_prof = 'Prof.', ab_base_thac0 = 'Base THAC0',
 	ab_main_hand = 'Main', ab_off_hand = 'Off', ab_two_weapon = '2 weapons',
+	help_stash_title = 'This is your stash',
+	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\n'
+		.. 'Right-click: description. Mouse wheel: scroll',
+	help_pack_title = "This is your character's inventory",
+	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack',
+	help_storeall = 'Space: store the whole backpack.\nQuest items stay in the backpack; bags ask first.',
+	help_sort = 'Click to change the sort.\nAuto: each tab its own order (weapons and armor by quality, scrolls by class '
+		.. 'and level...).\nAlso: Date, Quality, Type, Price, Value/weight.',
+	help_bags = 'Store a bag (Shift + double-click or Store all): it is emptied into the stash and kept here.\n'
+		.. 'Stash items it can hold weigh nothing.',
+	help_sell = '%d marked items will be sold for %d gp.\n%d marked items are skipped (no value, quest item, or not '
+		.. 'bought here).',
 	empty_confirm = 'Empty the stash? Your collected bags come back filled with the items they can hold; '
 		.. 'everything else drops on the ground. Do this before uninstalling Party Stash.',
 	bag_tip = 'Ctrl + left click: empty the stash into your bags and onto the ground (before uninstalling)',
 }
 function PStash_T(k, ...)
 	local s = (PStash_Strings and PStash_Strings[k]) or P.EN[k] or k
+	s = string.gsub(s, '\\n', '\n') -- tra texts write a line break as \n
 	if select('#', ...) > 0 then return string.format(s, ...) end
 	return s
 end
@@ -1027,14 +1040,29 @@ local function wrap(text, width)
 end
 
 function PStash_WeightTooltip()
-	return wrap(T('weight_tip'), 60) .. '\n' .. wrap(T('bag_tip'), 60)
+	return wrap(T('weight_tip'), 55) .. '\n' .. wrap(T('bag_tip'), 55)
 end
--- The bag's help panel (PSTASH.menu): shown while the mouse is on the weight bag.
-P.bagHover = false
-function PStash_BagHover(on) P.bagHover = on and true or false end
-function PStash_BagHovering()
+-- Hover help panels (PSTASH.menu, John): P.help = the hovered element ('bag', 'storeall', 'sort', 'bags', 'sell').
+P.help = nil
+function PStash_Help(k) P.help = k end
+function PStash_HelpIs(k)
+	if P.help ~= k then return false end
 	local inv = EEex_EngineGlobal_CBaldurChitin.m_pEngineInventory
-	return P.bagHover and not (inv and inv.m_pTempItem)
+	return not (inv and inv.m_pTempItem)
+end
+function PStash_TabHover(i)
+	local t = P.TABS[i + P.tabTop]
+	P.help = t and t.bags and 'bags' or nil
+end
+-- older menus (a hot reload over an older page)
+function PStash_BagHover(on) P.help = on and 'bag' or nil end
+function PStash_BagHovering() return PStash_HelpIs('bag') end
+function PStash_HelpText(k)
+	if k == 'weight' then return PStash_WeightTooltip() end
+	if k == 'pack' then return T('help_pack_title') .. '\n' .. T('help_pack') end
+	if k == 'stash' then return T('help_stash_title') .. '\n' .. T('help_stash') end
+	if k == 'sell' and PStash_SellHelp then return PStash_SellHelp() end
+	return T('help_' .. k)
 end
 
 -- The inventory page reads the engine's item tables: rebuild them after we move items behind its back.
@@ -1852,6 +1880,13 @@ function PStash_SellText()
 end
 
 -- The store button's amount and its length (the menu has one label set per length, 1-7 digits); 0 = nothing shown.
+-- The Sell Marked help (store menu): how many marked kinds sell, for how much, how many are skipped.
+function PStash_SellHelp()
+	if not P.storeName then return '' end
+	local list, total = saleList()
+	return T('help_sell', #list, total, math.max(0, PStash_MarkedCount() - #list))
+end
+
 function PStash_SellAmount()
 	if not P.storeName then return '' end
 	local _, total = saleList()

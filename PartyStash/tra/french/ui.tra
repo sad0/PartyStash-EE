@@ -70,3 +70,11 @@
 @168 = ~2 armes~ // ab_two_weapon
 @169 = ~Vider le coffre ? Vos sacs collectionnés reviennent remplis des objets qu'ils peuvent contenir ; tout le reste tombe au sol. À faire avant de désinstaller Party Stash.~ // empty_confirm
 @170 = ~Ctrl + clic gauche : vider le coffre dans vos sacs et au sol (avant de désinstaller)~ // bag_tip
+@171 = ~Voici votre coffre~ // help_stash_title
+@172 = ~Clic : prendre un objet (double-clic : prendre et équiper)\nCtrl + clic : le cocher pour la vente (Vendre cochés chez un marchand)\nClic droit : description. Molette : défiler~ // help_stash
+@173 = ~Voici l'inventaire de votre personnage~ // help_pack_title
+@174 = ~Maj + double-clic, ou glisser sur le coffre : ranger un objet\nEspace ou Tout ranger : ranger tout le sac à dos~ // help_pack
+@175 = ~Espace : ranger tout le sac à dos.\nLes objets de quête restent dans le sac ; les sacs demandent confirmation.~ // help_storeall
+@176 = ~Cliquez pour changer le tri.\nAuto : chaque onglet a son ordre (armes et armures par qualité, parchemins par classe et niveau...).\nAussi : Date, Qualité, Type, Prix, Valeur/poids.~ // help_sort
+@177 = ~Rangez un sac (Maj + double-clic ou Tout ranger) : il est vidé dans le coffre et gardé ici.\nLes objets du coffre qu'il peut contenir ne pèsent rien.~ // help_bags
+@178 = ~%d objets cochés seront vendus pour %d po.\n%d objets cochés sont ignorés (sans valeur, objet de quête ou non acheté ici).~ // help_sell
