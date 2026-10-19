@@ -1029,6 +1029,13 @@ end
 function PStash_WeightTooltip()
 	return wrap(T('weight_tip'), 60) .. '\n' .. wrap(T('bag_tip'), 60)
 end
+-- The bag's help panel (PSTASH.menu): shown while the mouse is on the weight bag.
+P.bagHover = false
+function PStash_BagHover(on) P.bagHover = on and true or false end
+function PStash_BagHovering()
+	local inv = EEex_EngineGlobal_CBaldurChitin.m_pEngineInventory
+	return P.bagHover and not (inv and inv.m_pTempItem)
+end
 
 -- The inventory page reads the engine's item tables: rebuild them after we move items behind its back.
 -- Page closed: nothing to do, the engine rebuilds them when it opens (a pending refresh would cost a second full

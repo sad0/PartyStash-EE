@@ -298,8 +298,9 @@ menu
 		area 544 -8 68 100
 		bam CONTBACK
 		frame lua "PStash_BagFrame()"
-		tooltip lua "PStash_WeightTooltip()"
 		action "PStash_BagClick()"
+		actionEnter "PStash_BagHover(true)"
+		actionExit "PStash_BagHover(false)"
 	}
 	label
 	{
@@ -2606,6 +2607,21 @@ menu
 		text style "label"
 		text align center center
 		action "PStash_StoreAll()"
+	}
+	label
+	{
+		enabled "PStash_BagHovering()"
+		area 540 128 432 110
+		rectangle 0
+		rectangle opacity 230
+	}
+	label
+	{
+		enabled "PStash_BagHovering()"
+		area 548 132 416 102
+		text lua "PStash_WeightTooltip()"
+		text style "normal"
+		text align center center
 	}
 	label --this has to be last so it draws over top of everything.
 	{
