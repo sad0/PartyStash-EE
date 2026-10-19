@@ -1,4 +1,4 @@
-@1 = ~Party Stash: one infinite stash shared by the whole party (requires EEex)~
+@1 = ~Party Stash: one infinite stash shared by the whole party (requires EEex). Before uninstalling: Ctrl + left click on the weight bag to empty the stash~
 @2 = ~Requires EEex.~
 @3 = ~Stash~
 @4 = ~The whole party's shared stash, on the inventory page. Click an item to take it; Shift + double-click a backpack item or press Space (Store all) to store; Ctrl + click marks an item to sell with the merchant's "Sell Marked" button. A bag put in the stash is emptied into it and kept in the Bags tab: stash items it can hold weigh nothing. The rest counts against the sum of the members' weight allowances; above it, everyone is slowed down.~
@@ -8,4 +8,4 @@
 @8 = ~Party Stash: before uninstalling, empty the stash in game: Ctrl + left click on the big bag next to the weight, on the inventory page. Your collected bags come back filled with the items they can hold; everything else drops on the ground. Otherwise the stash contents stay in your saves but cannot be reached until the mod is reinstalled.~
 @9 = ~Baldur's Gate 1 look~
 @10 = ~Baldur's Gate II look~
-@11 = ~Party Stash: one infinite stash shared by the whole party (requires EEex)~
+@11 = ~Party Stash: one infinite stash shared by the whole party (requires EEex). Before uninstalling: Ctrl + left click on the weight bag to empty the stash~
