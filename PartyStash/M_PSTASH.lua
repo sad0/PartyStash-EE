@@ -351,6 +351,7 @@ function PStash_ItemInfo(res)
 		stack = math.max(1, EEex_ReadU16(p + 0x38)),
 		icon = table.concat(icon), weight = EEex_ReadU32(p + 0x4C), price = EEex_ReadU32(p + 0x34), enchant = EEex_ReadU32(p + 0x60),
 		magical = EEex_BAnd(EEex_ReadU32(p + 0x18), 0x40) ~= 0, cursed = EEex_BAnd(EEex_ReadU32(p + 0x18), 0x10) ~= 0,
+		twoHanded = EEex_BAnd(EEex_ReadU32(p + 0x18), 0x2) ~= 0,
 		unusable = EEex_ReadU32(p + 0x1E), prof = EEex_ReadU8(p + 0x31),
 		minStr = EEex_ReadU16(p + 0x26), minStrEx = EEex_ReadU8(p + 0x28), minInt = EEex_ReadU8(p + 0x2A),
 		minDex = EEex_ReadU8(p + 0x2C), minWis = EEex_ReadU8(p + 0x2E), minCon = EEex_ReadU8(p + 0x30),
@@ -694,21 +695,29 @@ local function compare(p, info)
 	end
 	if info.ability and info.prof > 0 then
 		local hit, dmg, pips = weaponScore(sp, info)
-		if pips == 0 then return 0, { T('cmp_no_skill') } end
+		if pips == 0 then return 0, lines end
+		local score = hit + dmg
 		local launcher = info.ability.kind == 4
-		local main = items:get(MAIN_HAND)
-		local ci = main and PStash_ItemInfo(main.pRes.resref:get())
-		local cHit, cDmg = 0, 0
-		-- Compared with the current weapon of the same kind (bow vs bow, melee vs melee); none -> no "+".
-		if not (ci and ci.ability and (ci.ability.kind == 4) == launcher) then
-			return 0, { T('cmp_no_weapon') }
+		-- John: against the BEST equipped weapon of the same kind (bow vs bow, melee vs melee) among the main hand
+		-- and the quick weapon slots (35-38); none of that kind -> no "+".
+		local best
+		for slot = MAIN_HAND, MAIN_HAND + 3 do
+			local it = items:get(slot)
+			local ci = it and PStash_ItemInfo(it.pRes.resref:get())
+			if ci and ci.ability and ci.prof > 0 and (ci.ability.kind == 4) == launcher then
+				local h, d = weaponScore(sp, ci)
+				if not best or h + d > best then best = h + d end
+			end
 		end
-		cHit, cDmg = weaponScore(sp, ci)
-		local dHit, dDmg = hit - cHit, dmg - cDmg
-		if dHit ~= 0 then lines[#lines + 1] = T('cmp_hit') .. sign(dHit) end
-		if dDmg ~= 0 then lines[#lines + 1] = T('cmp_damage') .. sign(dDmg) end
-		lines[#lines + 1] = T('cmp_skill', pips)
-		return dHit + dDmg, lines
+		local gain = best and (score - best) or 0
+		-- Dual wielding (a weapon already in the off hand): a one-handed melee weapon better than it is an upgrade.
+		local off = items:get(9)
+		local oi = off and PStash_ItemInfo(off.pRes.resref:get())
+		if oi and oi.ability and oi.prof > 0 and oi.ability.kind ~= 4 and not launcher and not info.twoHanded then
+			local h, d = weaponScore(sp, oi)
+			gain = math.max(gain, score - (h + d))
+		end
+		return gain, lines
 	end
 	return 0, lines
 end
