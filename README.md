@@ -80,6 +80,14 @@ until the mod is reinstalled.
 - **EET** (Enhanced Edition Trilogy): it should work (it installs like on **BG2:EE**) but has not been tested yet. Feedback welcome.
 - Translations other than English and French were made by the author: corrections are welcome (`PartyStash/tra/`).
 
+## Download and discussion
+
+- Download: [GitHub release](https://github.com/sad0/PartyStash-EE/releases/latest) or [Nexus Mods](https://www.nexusmods.com/baldursgate/mods/134)
+- Discussion: [Gibberlings3](https://www.gibberlings3.net/forums/topic/41660-weidu-party-stash-v10-a-shared-infinite-stash-on-a-redesigned-inventory-page-bgee-sod-bg2ee-eeex/) ·
+  [Beamdog Forums](https://forums.beamdog.com/discussion/90867/mod-party-stash-v1-0-shared-infinite-stash-redesigned-inventory-eeex/p1) ·
+  [Reddit](https://www.reddit.com/r/baldursgate/comments/1xabaur/i_made_a_mod_for_bgee_bg2ee_one_infinite_stash/)
+- Bugs and suggestions: [GitHub issues](https://github.com/sad0/PartyStash-EE/issues)
+
 ## License
 
 [MIT](LICENSE) © sad0. Game art used by the looks comes from the player's own Enhanced Edition games.
@@ -146,6 +154,14 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 reviennent remplis des objets qu'ils peuvent contenir ; tout le reste tombe au sol. Puis lancez
 `setup-PartyStash.exe` et désinstallez. Sinon, le contenu du coffre reste dans vos sauvegardes mais devient
 inaccessible jusqu'à la réinstallation du mod.
+
+### Téléchargement et discussion
+
+- Téléchargement : [Release GitHub](https://github.com/sad0/PartyStash-EE/releases/latest) ou [Nexus Mods](https://www.nexusmods.com/baldursgate/mods/134)
+- Discussion : [Gibberlings3](https://www.gibberlings3.net/forums/topic/41660-weidu-party-stash-v10-a-shared-infinite-stash-on-a-redesigned-inventory-page-bgee-sod-bg2ee-eeex/) ·
+  [Beamdog Forums](https://forums.beamdog.com/discussion/90867/mod-party-stash-v1-0-shared-infinite-stash-redesigned-inventory-eeex/p1) ·
+  [Reddit](https://www.reddit.com/r/baldursgate/comments/1xabaur/i_made_a_mod_for_bgee_bg2ee_one_infinite_stash/)
+- Bugs et suggestions : [issues GitHub](https://github.com/sad0/PartyStash-EE/issues)
 
 ### Licence
 
