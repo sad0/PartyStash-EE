@@ -2625,7 +2625,7 @@ menu
 		rectangle 0
 		rectangle opacity 235
 	}
-	label
+	button
 	{
 		enabled "PStash_HelpIs('bag')"
 		area 624 6 340 78
@@ -2640,7 +2640,7 @@ menu
 		rectangle 0
 		rectangle opacity 235
 	}
-	label
+	button
 	{
 		enabled "PStash_HelpIs('bag')"
 		area 548 134 416 100
@@ -2655,7 +2655,7 @@ menu
 		rectangle 0
 		rectangle opacity 235
 	}
-	label
+	button
 	{
 		enabled "PStash_HelpIs('bag')"
 		area 548 268 416 142
@@ -2670,7 +2670,7 @@ menu
 		rectangle 0
 		rectangle opacity 235
 	}
-	label
+	button
 	{
 		enabled "PStash_HelpIs('storeall')"
 		area 548 544 416 78
@@ -2685,7 +2685,7 @@ menu
 		rectangle 0
 		rectangle opacity 235
 	}
-	label
+	button
 	{
 		enabled "PStash_HelpIs('sort')"
 		area 548 268 416 112
@@ -2700,7 +2700,7 @@ menu
 		rectangle 0
 		rectangle opacity 235
 	}
-	label
+	button
 	{
 		enabled "PStash_HelpIs('bags')"
 		area 548 268 416 102

@@ -1058,10 +1058,41 @@ end
 -- older menus (a hot reload over an older page)
 function PStash_BagHover(on) P.help = on and 'bag' or nil end
 function PStash_BagHovering() return PStash_HelpIs('bag') end
+-- Keybinds in green (John): in each sentence, what comes before its colon ("Ctrl + click: ..."), or only the
+-- part in brackets when there is one ("Store a bag (Shift + double-click or Store all): ..."). ^G...^- is the
+-- game's colour markup (it renders in button texts: the help panels are buttons).
+local function greenKeys(text)
+	local out = {}
+	for line in string.gmatch(text .. '\n', '(.-)\n') do
+		local parts = {}
+		for raw, sep in string.gmatch(line .. '. ', '(.-)(%. )') do
+			local sentence = raw
+			local cut = string.find(sentence, ':', 1, true) or string.find(sentence, '\239\188\154', 1, true)
+			if cut then
+				local key, rest = string.sub(sentence, 1, cut - 1), string.sub(sentence, cut)
+				local o, c = string.find(key, '%b()')
+				if o then
+					key = string.sub(key, 1, o) .. '^G' .. string.sub(key, o + 1, c - 1) .. '^-' .. string.sub(key, c)
+				else
+					local lead, body = string.match(key, '^(%s*)(.-)%s*$')
+					local tail = string.sub(key, #lead + #body + 1)
+					key = lead .. '^G' .. body .. '^-' .. tail
+				end
+				sentence = key .. rest
+			end
+			parts[#parts + 1] = sentence .. sep
+		end
+		local l = table.concat(parts)
+		out[#out + 1] = string.sub(l, 1, #l - 2) -- the '. ' added above
+	end
+	return table.concat(out, '\n')
+end
+
 function PStash_HelpText(k)
-	if k == 'weight' then return PStash_WeightTooltip() end
-	if k == 'pack' then return T('help_pack_title') .. '\n' .. T('help_pack') end
-	if k == 'stash' then return T('help_stash_title') .. '\n' .. T('help_stash') end
+	if k == 'weight' then return wrap(T('weight_tip'), 55) .. '\n' .. greenKeys(wrap(T('bag_tip'), 55)) end
+	if k == 'pack' then return T('help_pack_title') .. '\n' .. greenKeys(T('help_pack')) end
+	if k == 'stash' then return T('help_stash_title') .. '\n' .. greenKeys(T('help_stash')) end
+	if k == 'storeall' or k == 'bags' then return greenKeys(T('help_' .. k)) end
 	if k == 'sell' and PStash_SellHelp then return PStash_SellHelp() end
 	return T('help_' .. k)
 end
