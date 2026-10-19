@@ -7,6 +7,8 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 
 ![Inventory, Baldur's Gate 1 look](docs/inventory_bg1.png)
 
+![Hover help, keybinds in green](docs/help.png)
+
 ## Features
 
 - **Shared stash**: every party member reaches the same infinite stash, right on the inventory page. Quests still
