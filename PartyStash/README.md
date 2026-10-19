@@ -1,4 +1,4 @@
-# Party Stash (BG:EE / SoD / BG2:EE / EET)
+# Party Stash (BG:EE / SoD / BG2:EE)
 
 *[Version française plus bas](#français)*
 
@@ -38,7 +38,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 ## Requirements
 
 - **Baldur's Gate: Enhanced Edition** (with or without Siege of Dragonspear), **Baldur's Gate II: Enhanced Edition**
-  or **EET**, game version **v2.7.x** (the mod calls the game engine directly; on another version the stash disables
+  (EET should work but is untested), game version **v2.7.x** (the mod calls the game engine directly; on another version the stash disables
   itself instead of crashing).
 - **[EEex](https://github.com/Bubb13/EEex)**, installed first.
 - A mod that replaces the inventory screen (LeUI, Dragonspear UI++…) will conflict with the new inventory page.
@@ -77,6 +77,7 @@ until the mod is reinstalled.
 
 - Moving from Baldur's Gate to Siege of Dragonspear: the stash is carried over as long as the game is not closed
   between the end of BG1 and the start of SoD.
+- **EET** (Enhanced Edition Trilogy): it should work (it installs like on BG2:EE) but has not been tested yet. Feedback welcome.
 - Translations other than English and French were made by the author: corrections are welcome (`PartyStash/tra/`).
 
 ## License
@@ -115,7 +116,7 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 
 ### Prérequis
 
-- **BG:EE** (avec ou sans Siege of Dragonspear), **BG2:EE** ou **EET**, version **v2.7.x**.
+- **BG:EE** (avec ou sans Siege of Dragonspear) ou **BG2:EE**, version **v2.7.x**. EET devrait marcher mais n'est pas encore testé.
 - **[EEex](https://github.com/Bubb13/EEex)**, installé avant.
 - Un mod qui remplace l'écran d'inventaire (LeUI, Dragonspear UI++…) entre en conflit avec la nouvelle page.
 
