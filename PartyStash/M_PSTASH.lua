@@ -856,6 +856,7 @@ local function rebuild()
 		P.shownId = id
 		return
 	end
+	local gearTab = tabIndex('Gear')
 	for order, e in ipairs(P.list) do
 		local info = PStash_ItemInfo(e.res)
 		if info and (P.tab == 1 or tabOf(info, e.res, e.identified) == P.tab) then
@@ -871,8 +872,10 @@ local function rebuild()
 				tint = (not e.identified and P.tintUnid) or (not ok and P.tintBad) or P.tintOk,
 				desc = validRef(e.identified and info.idDesc or info.unidDesc) or validRef(info.idDesc)
 					or validRef(info.unidDesc) or -1, descPic = info.descPic,
-				-- "+": an upgrade for the shown character, or a mage scroll a party scribe can still learn.
-				plus = e.identified and (upgrade(p, info) or (known ~= nil and info.spell ~= nil
+				-- "+": an upgrade for the shown character (not for Gear items: helmets, boots, rings... John), or a
+				-- mage scroll a party scribe can still learn.
+				plus = e.identified and ((tabOf(info, e.res, e.identified) ~= gearTab and upgrade(p, info))
+					or (known ~= nil and info.spell ~= nil
 					and string.sub(info.spell, 1, 4) == 'SPWI' and not known[info.spell])) }
 		end
 	end
