@@ -73,7 +73,7 @@
 @171 = ~Este é o seu baú~ // help_stash_title
 @172 = ~Clique: pegar um item (clique duplo: pegar e equipar)\nCtrl + clique: marcar para venda (Vender marcados em um mercador)\nClique direito: descrição. Roda do mouse: rolar~ // help_stash
 @173 = ~Este é o inventário do seu personagem~ // help_pack_title
-@174 = ~Shift + clique duplo, ou arrastar para o baú: guardar um item\nEspaço ou Guardar tudo: guardar a mochila inteira~ // help_pack
+@174 = ~Shift + clique duplo, ou arrastar para o baú: guardar um item\nEspaço ou Guardar tudo: guardar a mochila inteira\nO baú no último espaço: o seu baú; o jogo conta os itens dele como carregados (missões).~ // help_pack
 @175 = ~Espaço: guardar a mochila inteira.\nItens de missão ficam na mochila; bolsas pedem confirmação.~ // help_storeall
 @176 = ~Clique para mudar a ordenação.\nAuto: cada aba com sua ordem (armas e armaduras por qualidade, pergaminhos por classe e nível...).\nTambém: Data, Qualidade, Tipo, Preço, Valor/peso.~ // help_sort
 @177 = ~Guarde uma bolsa (Shift + clique duplo ou Guardar tudo): ela é esvaziada no baú e mantida aqui.\nOs itens do baú que ela comporta não pesam nada.~ // help_bags

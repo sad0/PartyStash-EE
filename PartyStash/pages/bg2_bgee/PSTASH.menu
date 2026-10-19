@@ -2636,14 +2636,14 @@ menu
 	label
 	{
 		enabled "PStash_HelpIs('bag')"
-		area 540 130 432 108
+		area 540 130 432 138
 		rectangle 0
 		rectangle opacity 235
 	}
 	button
 	{
 		enabled "PStash_HelpIs('bag')"
-		area 548 134 416 100
+		area 548 134 416 130
 		text lua "PStash_HelpText('pack')"
 		text style "normal"
 		text align center center
@@ -2651,14 +2651,14 @@ menu
 	label
 	{
 		enabled "PStash_HelpIs('bag')"
-		area 540 264 432 150
+		area 540 286 432 150
 		rectangle 0
 		rectangle opacity 235
 	}
 	button
 	{
 		enabled "PStash_HelpIs('bag')"
-		area 548 268 416 142
+		area 548 290 416 142
 		text lua "PStash_HelpText('stash')"
 		text style "normal"
 		text align center center

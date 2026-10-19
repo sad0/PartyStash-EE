@@ -49,7 +49,8 @@ P.EN = {
 	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\n'
 		.. 'Right-click: description. Mouse wheel: scroll',
 	help_pack_title = "This is your character's inventory",
-	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack',
+	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack\n'
+		.. 'The chest in the last slot: your stash; the game counts its items as carried (quests).',
 	help_storeall = 'Space: store the whole backpack.\nQuest items stay in the backpack; bags ask first.',
 	help_sort = 'Click to change the sort.\nAuto: each tab its own order (weapons and armor by quality, scrolls by class '
 		.. 'and level...).\nAlso: Date, Quality, Type, Price, Value/weight.',

@@ -73,7 +73,7 @@
 @171 = ~Das ist eure Truhe~ // help_stash_title
 @172 = ~Klick: Gegenstand nehmen (Doppelklick: nehmen und ausrüsten)\nStrg + Klick: zum Verkauf markieren (Markierte verk. beim Händler)\nRechtsklick: Beschreibung. Mausrad: scrollen~ // help_stash
 @173 = ~Das ist das Inventar eures Charakters~ // help_pack_title
-@174 = ~Umschalt + Doppelklick oder auf die Truhe ziehen: Gegenstand einlagern\nLeertaste oder Alles einl.: ganzen Rucksack einlagern~ // help_pack
+@174 = ~Umschalt + Doppelklick oder auf die Truhe ziehen: Gegenstand einlagern\nLeertaste oder Alles einl.: ganzen Rucksack einlagern\nDie Truhe im letzten Platz: eure Truhe; das Spiel zählt ihre Gegenstände als getragen (Quests).~ // help_pack
 @175 = ~Leertaste: ganzen Rucksack einlagern.\nQuestgegenstände bleiben im Rucksack; Beutel fragen nach.~ // help_storeall
 @176 = ~Klicken, um die Sortierung zu wechseln.\nAuto: jeder Reiter mit eigener Reihenfolge (Waffen und Rüstungen nach Qualität, Schriftrollen nach Klasse und Grad...).\nAußerdem: Datum, Qualität, Typ, Preis, Wert/Gewicht.~ // help_sort
 @177 = ~Beutel einlagern (Umschalt + Doppelklick oder Alles einl.): er wird in die Truhe geleert und hier behalten.\nTruhengegenstände, die er aufnehmen kann, wiegen nichts.~ // help_bags

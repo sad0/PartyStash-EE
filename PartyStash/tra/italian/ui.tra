@@ -73,7 +73,7 @@
 @171 = ~Questo è il tuo baule~ // help_stash_title
 @172 = ~Clic: prendi un oggetto (doppio clic: prendi ed equipaggia)\nCtrl + clic: segnalo per la vendita (Vendi segnati da un mercante)\nClic destro: descrizione. Rotellina: scorri~ // help_stash
 @173 = ~Questo è l'inventario del tuo personaggio~ // help_pack_title
-@174 = ~Maiusc + doppio clic, o trascina sul baule: riponi un oggetto\nSpazio o Riponi tutto: riponi tutto lo zaino~ // help_pack
+@174 = ~Maiusc + doppio clic, o trascina sul baule: riponi un oggetto\nSpazio o Riponi tutto: riponi tutto lo zaino\nIl baule nell'ultimo slot: il tuo baule; il gioco considera i suoi oggetti come portati (missioni).~ // help_pack
 @175 = ~Spazio: riponi tutto lo zaino.\nGli oggetti di missione restano nello zaino; le borse chiedono conferma.~ // help_storeall
 @176 = ~Clicca per cambiare l'ordinamento.\nAuto: ogni scheda il suo ordine (armi e armature per qualità, pergamene per classe e livello...).\nInoltre: Data, Qualità, Tipo, Prezzo, Valore/peso.~ // help_sort
 @177 = ~Riponi una borsa (Maiusc + doppio clic o Riponi tutto): viene svuotata nel baule e conservata qui.\nGli oggetti del baule che può contenere non pesano nulla.~ // help_bags
