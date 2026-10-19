@@ -80,4 +80,5 @@ PStash_Strings = {
 	help_sort = [==[%ps_t_help_sort%]==],
 	help_bags = [==[%ps_t_help_bags%]==],
 	help_sell = [==[%ps_t_help_sell%]==],
+	stash_slot_tip = [==[%ps_t_stash_slot_tip%]==],
 }

@@ -78,3 +78,4 @@
 @176 = ~Klicken, um die Sortierung zu wechseln.\nAuto: jeder Reiter mit eigener Reihenfolge (Waffen und Rüstungen nach Qualität, Schriftrollen nach Klasse und Grad...).\nAußerdem: Datum, Qualität, Typ, Preis, Wert/Gewicht.~ // help_sort
 @177 = ~Beutel einlagern (Umschalt + Doppelklick oder Alles einl.): er wird in die Truhe geleert und hier behalten.\nTruhengegenstände, die er aufnehmen kann, wiegen nichts.~ // help_bags
 @178 = ~%d markierte Gegenstände werden für %d GM verkauft.\n%d markierte Gegenstände werden übergangen (wertlos, Questgegenstand oder hier nicht gekauft).~ // help_sell
+@179 = ~Die Truhe der Gruppe: Das Spiel zählt ihre Gegenstände als getragen (Quests).~ // stash_slot_tip

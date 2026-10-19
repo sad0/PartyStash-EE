@@ -84,4 +84,5 @@ OUTER_SPRINT ps_t_help_storeall @175
 OUTER_SPRINT ps_t_help_sort @176
 OUTER_SPRINT ps_t_help_bags @177
 OUTER_SPRINT ps_t_help_sell @178
+OUTER_SPRINT ps_t_stash_slot_tip @179
 COPY ~PartyStash/lib/M_PSTXT.lua~ ~override~ EVALUATE_BUFFER

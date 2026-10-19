@@ -44,6 +44,7 @@ P.EN = {
 	st_ac = 'AC ', st_hp = 'HP ', st_thac0 = 'THAC0 ', st_damage = 'Damage ',
 	ab_ac = 'AC', ab_ac_mods = 'AC mods', ab_missile = 'Missile', ab_prof = 'Prof.', ab_base_thac0 = 'Base THAC0',
 	ab_main_hand = 'Main', ab_off_hand = 'Off', ab_two_weapon = '2 weapons',
+	stash_slot_tip = 'Your party\'s stash: the game counts its items as carried (quests).',
 	help_stash_title = 'This is your stash',
 	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\n'
 		.. 'Right-click: description. Mouse wheel: scroll',
@@ -1149,6 +1150,16 @@ end
 
 -- What the overlay slot shows: the last slot's data marked empty (no chest icon drawn over the grid); the engine
 -- still drops on the real slot (it goes by the widget name, slot_inv_45).
+-- The last backpack slot (the stash item): the game's slot data, with a tooltip saying what the item is for.
+function PStash_StashSlot()
+	local real = characters and characters[id] and characters[id].equipment.group15
+	if not (real and real.item and string.upper(real.item.res or '') == P.RES) then return real end
+	local t = {}
+	for k, v in pairs(real) do t[k] = v end
+	t.tooltip = T('stash_slot_tip')
+	return t
+end
+
 function PStash_OverlaySlot()
 	local real = characters and characters[id] and characters[id].equipment.group15
 	local t = {}

@@ -78,3 +78,4 @@
 @176 = ~Kliknij, aby zmienić sortowanie.\nAuto: każda karta ma własną kolejność (broń i pancerze według jakości, zwoje według klasy i poziomu...).\nPonadto: Data, Jakość, Typ, Cena, Wartość/waga.~ // help_sort
 @177 = ~Schowaj torbę (Shift + podwójne kliknięcie lub Schowaj wszystko): zostaje opróżniona do skrzyni i zachowana tutaj.\nPrzedmioty ze skrzyni, które może pomieścić, nic nie ważą.~ // help_bags
 @178 = ~%d zaznaczonych przedmiotów zostanie sprzedanych za %d szt. zł.\n%d zaznaczonych przedmiotów pominięto (bez wartości, fabularne lub tu nieskupowane).~ // help_sell
+@179 = ~Skrzynia drużyny: gra liczy jej przedmioty jako noszone (zadania).~ // stash_slot_tip

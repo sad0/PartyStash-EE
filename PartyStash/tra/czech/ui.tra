@@ -78,3 +78,4 @@
 @176 = ~Kliknutím změníte řazení.\nAuto: každá karta má vlastní pořadí (zbraně a zbroje podle kvality, svitky podle povolání a úrovně...).\nDále: Datum, Kvalita, Typ, Cena, Cena/váha.~ // help_sort
 @177 = ~Uložte vak (Shift + dvojklik nebo Uložit vše): vysype se do truhly a zůstane tady.\nPředměty v truhle, které pojme, nic neváží.~ // help_bags
 @178 = ~Prodá se označených předmětů: %d, za %d zl.\nPřeskočeno označených: %d (bez ceny, úkolové nebo je zde nevykupují).~ // help_sell
+@179 = ~Truhla družiny: hra počítá její předměty jako nesené (úkoly).~ // stash_slot_tip

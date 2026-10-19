@@ -78,3 +78,4 @@
 @176 = ~Clicca per cambiare l'ordinamento.\nAuto: ogni scheda il suo ordine (armi e armature per qualità, pergamene per classe e livello...).\nInoltre: Data, Qualità, Tipo, Prezzo, Valore/peso.~ // help_sort
 @177 = ~Riponi una borsa (Maiusc + doppio clic o Riponi tutto): viene svuotata nel baule e conservata qui.\nGli oggetti del baule che può contenere non pesano nulla.~ // help_bags
 @178 = ~%d oggetti segnati saranno venduti per %d mo.\n%d oggetti segnati sono esclusi (senza valore, di missione o non acquistati qui).~ // help_sell
+@179 = ~Il baule del gruppo: il gioco considera i suoi oggetti come portati (missioni).~ // stash_slot_tip

@@ -78,3 +78,4 @@
 @176 = ~Click to change the sort.\nAuto: each tab its own order (weapons and armor by quality, scrolls by class and level...).\nAlso: Date, Quality, Type, Price, Value/weight.~ // help_sort
 @177 = ~Store a bag (Shift + double-click or Store all): it is emptied into the stash and kept here.\nStash items it can hold weigh nothing.~ // help_bags
 @178 = ~%d marked items will be sold for %d gp.\n%d marked items are skipped (no value, quest item, or not bought here).~ // help_sell
+@179 = ~Your party's stash: the game counts its items as carried (quests).~ // stash_slot_tip

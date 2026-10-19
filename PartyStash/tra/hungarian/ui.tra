@@ -78,3 +78,4 @@
 @176 = ~Kattints a rendezés váltásához.\nAuto: minden fül saját sorrenddel (fegyverek és páncélok minőség, tekercsek kaszt és szint szerint...).\nTovábbá: Dátum, Minőség, Típus, Ár, Érték/súly.~ // help_sort
 @177 = ~Rakj el egy zsákot (Shift + dupla kattintás vagy Mindet elrak): kiürül a ládába, és itt marad.\nA láda tárgyai, amelyeket befogad, nem nyomnak semmit.~ // help_bags
 @178 = ~Eladásra kerülő jelölt tárgyak: %d, %d aranyért.\nKihagyott jelölt tárgyak: %d (értéktelen, küldetéstárgy vagy itt nem vásárolják).~ // help_sell
+@179 = ~A csapat ládája: a játék a tárgyait viseltnek tekinti (küldetések).~ // stash_slot_tip

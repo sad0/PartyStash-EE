@@ -78,3 +78,4 @@
 @176 = ~Clique para mudar a ordenação.\nAuto: cada aba com sua ordem (armas e armaduras por qualidade, pergaminhos por classe e nível...).\nTambém: Data, Qualidade, Tipo, Preço, Valor/peso.~ // help_sort
 @177 = ~Guarde uma bolsa (Shift + clique duplo ou Guardar tudo): ela é esvaziada no baú e mantida aqui.\nOs itens do baú que ela comporta não pesam nada.~ // help_bags
 @178 = ~%d itens marcados serão vendidos por %d po.\n%d itens marcados foram ignorados (sem valor, de missão ou não comprados aqui).~ // help_sell
+@179 = ~O baú do grupo: o jogo conta os itens dele como carregados (missões).~ // stash_slot_tip

@@ -140,7 +140,7 @@ menu
 	slot {name "slot_inv_42"		area 756 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group12"		}
 	slot {name "slot_inv_43"		area 810 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group13"		}
 	slot {name "slot_inv_44"		area 864 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group14"		}
-	slot {name "slot_inv_45"		area 918 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.group15"		}
+	slot {name "slot_inv_45"		area 918 184 52 52	bam "STONSLOT"	slotinfo "PStash_StashSlot()"		}
 	slot {name "slot_inv_68"		area 1001 130 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground0"	actionScroll "scrollGroundItems()"	}
 	slot {name "slot_inv_69"		area 1001 184 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground1"	actionScroll "scrollGroundItems()"	}
 	slot {name "slot_inv_70"		area 1001 238 52 52	bam "STONSLOT"	slotinfo "characters[id].equipment.ground2"	actionScroll "scrollGroundItems()"	}
@@ -2610,27 +2610,6 @@ menu
 		action "PStash_StoreAll()"
 		actionEnter "PStash_Help('storeall')"
 		actionExit "PStash_Help(nil)"
-	}
-	label
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 0 0 544 710
-		rectangle 0
-		rectangle opacity 150
-	}
-	label
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 612 0 508 710
-		rectangle 0
-		rectangle opacity 150
-	}
-	label
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 544 92 68 618
-		rectangle 0
-		rectangle opacity 150
 	}
 	label
 	{
