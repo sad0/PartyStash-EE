@@ -26,33 +26,35 @@ LANGUAGE ~한국어~ ~korean~ ~PartyStash/tra/korean/setup.tra~
 
 // The look choice (John 2026-10-19): "(recommended)" only on the game's own look, so each look exists twice, in
 // two SUBCOMPONENT groups (@1 on BGEE, @11 = the same name on BG2EE/EET, each with its game predicate): one group
-// shows per game. One group for both did not work: WeiDU skips the whole group when any member fails its predicate. Numbers kept from v0.4: #0 = BG1 look on BGEE,
+// shows per game. One group for both did not work: WeiDU skips the whole group when any member fails its predicate.
+// No per-component REQUIRE_PREDICATE on the game (WeiDU would print "SKIPPING ..." for the other game's group): the
+// group predicate hides it, and a forced install (--force-install) of the other game's look stops with @12 / @13. Numbers kept from v0.4: #0 = BG1 look on BGEE,
 // #2 = BG2 look on BG2EE/EET; #3 = BG1 look on BG2EE/EET, #4 = BG2 look on BGEE.
 BEGIN @6 DESIGNATED 0 SUBCOMPONENT @1 (GAME_IS ~bgee~)
 LABEL ~PARTYSTASH-MAIN~
-REQUIRE_PREDICATE GAME_IS ~bgee~ @2
 REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+ACTION_IF NOT GAME_IS ~bgee~ BEGIN FAIL @12 END   // forced installs ignore the group predicate
 OUTER_TEXT_SPRINT ps_look ~bg1~
 INCLUDE ~PartyStash/lib/main.tpa~
 
 BEGIN @10 DESIGNATED 4 SUBCOMPONENT @1 (GAME_IS ~bgee~)
 LABEL ~PARTYSTASH-MAIN-BG2-LOOK-ON-BGEE~
-REQUIRE_PREDICATE GAME_IS ~bgee~ @2
 REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+ACTION_IF NOT GAME_IS ~bgee~ BEGIN FAIL @12 END   // forced installs ignore the group predicate
 OUTER_TEXT_SPRINT ps_look ~bg2~
 INCLUDE ~PartyStash/lib/main.tpa~
 
 BEGIN @7 DESIGNATED 2 SUBCOMPONENT @11 (GAME_IS ~bg2ee eet~)
 LABEL ~PARTYSTASH-MAIN-BG2-LOOK~
-REQUIRE_PREDICATE GAME_IS ~bg2ee eet~ @2
 REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+ACTION_IF NOT GAME_IS ~bg2ee eet~ BEGIN FAIL @13 END   // forced installs ignore the group predicate
 OUTER_TEXT_SPRINT ps_look ~bg2~
 INCLUDE ~PartyStash/lib/main.tpa~
 
 BEGIN @9 DESIGNATED 3 SUBCOMPONENT @11 (GAME_IS ~bg2ee eet~)
 LABEL ~PARTYSTASH-MAIN-BG1-LOOK-ON-BG2~
-REQUIRE_PREDICATE GAME_IS ~bg2ee eet~ @2
 REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+ACTION_IF NOT GAME_IS ~bg2ee eet~ BEGIN FAIL @13 END   // forced installs ignore the group predicate
 OUTER_TEXT_SPRINT ps_look ~bg1~
 INCLUDE ~PartyStash/lib/main.tpa~
 
