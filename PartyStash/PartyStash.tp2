@@ -1,7 +1,7 @@
 BACKUP ~weidu_external/backup/PartyStash~
 AUTHOR ~sad0~
 VERSION ~v1.0~
-README ~PartyStash/README.md~
+README ~PartyStash/readme/readme-%LANGUAGE%.html~ ~PartyStash/readme/readme-english.html~
 
 // One source for BGEE and BG2EE (John 2026-10-19): the same folder installs on both. The main component comes in two
 // looks for the inventory page, either one on either game (BG1 recommended on BGEE, BG2 on BG2EE); the install code
