@@ -6,7 +6,7 @@ First public release.
 
 - Shared infinite stash on a redesigned inventory page (backpack + stash grid, ground column, 2×2 stats).
 - Tabs, Auto sorting per tab, Date / Quality / Type / Price / Value-weight sorts.
-- Unusable / unidentified / upgrade hints and comparison tooltips.
+- Unusable / unidentified / upgrade hints.
 - Sell Marked at merchants (Ctrl + click to mark).
 - Bags tab: collected bags make the items they hold weightless.
 - Party weight against the sum of the members' allowances.

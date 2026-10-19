@@ -59,7 +59,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 | Store a backpack item | Shift + double-click it, or drop it on the stash grid |
 | Store the whole backpack | **Store all** button, or **Space** |
 | Mark / unmark for sale | **Ctrl + click** a stash item, then **Sell Marked** at a merchant |
-| Item description / comparison | Right-click / hover |
+| Item description | Right-click |
 | Scroll the grid, the tabs, the ground | Mouse wheel, arrows |
 | Store a bag | Shift + double-click it, or Store all (asks first) |
 | **Empty the stash** (before uninstalling) | **Ctrl + left click** on the big bag next to the weight |
@@ -132,7 +132,7 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 | Ranger un objet du sac à dos | Maj + double-clic, ou le déposer sur la grille du coffre |
 | Tout ranger | Bouton **Tout ranger**, ou **Espace** |
 | Cocher / décocher pour la vente | **Ctrl + clic** sur un objet du coffre, puis **Vendre cochés** chez un marchand |
-| Description / comparaison | Clic droit / survol |
+| Description | Clic droit |
 | Faire défiler la grille, les onglets, le sol | Molette, flèches |
 | Ranger un sac | Maj + double-clic, ou Tout ranger (avec confirmation) |
 | **Vider le coffre** (avant de désinstaller) | **Ctrl + clic gauche** sur le gros sac à côté du poids |
