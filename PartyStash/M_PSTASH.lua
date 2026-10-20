@@ -1650,6 +1650,10 @@ local function hpDetails(c)
 	return table.concat(lines, '\n')
 end
 
+-- LeUI installed (buildInventoryStats exists only in its UI.MENU): on BGEE it brings BG2's label font, so the
+-- page uses BG2's offset for the stats values.
+function PStash_LeUI() return type(buildInventoryStats) == 'function' end
+
 -- Dual wielding: the engine gives two values ("4\n8"); the menu shows them in a smaller font.
 function PStash_StatSingle(k) return not string.find(PStash_StatValue(k), '\n', 1, true) end
 function PStash_StatDouble(k) return not PStash_StatSingle(k) end
@@ -1675,23 +1679,52 @@ function PStash_StatValue(k)
 	return tostring(getInventoryDamage())
 end
 
+-- The UI.MENU helper when it exists, else the same text built here (LeUI's UI.MENU has no
+-- getInventoryTHAC0Details / getInventoryDamageDetails).
+local function statDetails(c, key, helper)
+	if type(helper) == 'function' then return helper() end
+	local s = c[key]
+	if not s then return '' end
+	if s.detailsOffhand == nil or s.detailsOffhand == '' then return s.details end
+	return tostring(s.details) .. '\n\n' .. s.detailsOffhand
+end
+
+-- Compared value as the vanilla getTempStat: "-" when unchanged, red when worse, green when better.
+-- Built here because LeUI's UI.MENU lacks part of the vanilla compare helpers (getStat, getTempHP...).
+local function tempStat(old, key, coeff)
+	local new = tempStats[id] and tempStats[id][key]
+	if new == nil then return '-' end
+	local score = coeff * (new - old)
+	if score == 0 then return '-' end
+	return (score < 0 and '^R' or '^G') .. new .. '^-'
+end
+
+local function tempHP(c)
+	local maxHP = tempStat(c.HP.max, 'maxHP', 1)
+	local curHP = tempStat(c.HP.current, 'currentHP', 1)
+	if maxHP == '-' and curHP == '-' then return '-' end
+	if maxHP == '-' then maxHP = c.HP.max end
+	if curHP == '-' then curHP = c.HP.current end
+	return curHP .. '/' .. maxHP
+end
+
 -- Shortened details, or "current > new" while an item is being compared (dragged / hovered).
 function PStash_StatText(k)
 	local c = ch()
 	if not c then return '' end
 	if comparing() then
-		local title = k == 0 and (tostring(getStatsTitle()) .. '\n') or ''
-		if k == 0 then return title .. T('st_ac') .. getStat(c.AC.current, 'AC', -1) .. ' > ' .. getTempStat(c.AC.current, 'AC', -1) end
-		if k == 1 then return T('st_hp') .. c.HP.current .. '/' .. c.HP.max .. ' > ' .. tostring(getTempHP()) end
+		local title = k == 0 and (tostring(tempStats[id].tempItem or '') .. '\n') or ''
+		if k == 0 then return title .. T('st_ac') .. c.AC.current .. ' > ' .. tempStat(c.AC.current, 'AC', -1) end
+		if k == 1 then return T('st_hp') .. c.HP.current .. '/' .. c.HP.max .. ' > ' .. tempHP(c) end
 		if k == 2 then
-			return T('st_thac0') .. getStat(c.THAC0.current, 'THAC0', -1) .. ' > ' .. getTempStat(c.THAC0.current, 'THAC0', -1)
+			return T('st_thac0') .. c.THAC0.current .. ' > ' .. tempStat(c.THAC0.current, 'THAC0', -1)
 		end
 		return T('st_damage') .. c.damage.min .. '-' .. c.damage.max .. ' > ' .. tostring(getTempDamage())
 	end
 	if k == 0 then return short(c.AC.details) end
 	if k == 1 then return hpDetails(c) end
-	if k == 2 then return short(getInventoryTHAC0Details()) end
-	return short(getInventoryDamageDetails())
+	if k == 2 then return short(statDetails(c, 'THAC0', getInventoryTHAC0Details)) end
+	return short(statDetails(c, 'damage', getInventoryDamageDetails))
 end
 
 -----------------

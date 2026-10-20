@@ -2506,7 +2506,7 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatSingle(0)"
+		enabled "PStash_StatSingle(0) and not PStash_LeUI()"
 		area 50 467 60 34
 		text lua "PStash_StatValue(0)"
 		text style "label"
@@ -2515,8 +2515,26 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatDouble(0)"
+		enabled "PStash_StatDouble(0) and not PStash_LeUI()"
 		area 50 464 60 40
+		text lua "PStash_StatValue(0)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatSingle(0) and PStash_LeUI()"
+		area 52 470 60 34
+		text lua "PStash_StatValue(0)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(0) and PStash_LeUI()"
+		area 52 467 60 40
 		text lua "PStash_StatValue(0)"
 		text style "label"
 		text point 8
@@ -2532,7 +2550,7 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatSingle(1)"
+		enabled "PStash_StatSingle(1) and not PStash_LeUI()"
 		area 50 597 60 34
 		text lua "PStash_StatValue(1)"
 		text style "label"
@@ -2541,8 +2559,26 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatDouble(1)"
+		enabled "PStash_StatDouble(1) and not PStash_LeUI()"
 		area 50 594 60 40
+		text lua "PStash_StatValue(1)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatSingle(1) and PStash_LeUI()"
+		area 52 600 60 34
+		text lua "PStash_StatValue(1)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(1) and PStash_LeUI()"
+		area 52 597 60 40
 		text lua "PStash_StatValue(1)"
 		text style "label"
 		text point 8
@@ -2558,7 +2594,7 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatSingle(2)"
+		enabled "PStash_StatSingle(2) and not PStash_LeUI()"
 		area 290 467 60 34
 		text lua "PStash_StatValue(2)"
 		text style "label"
@@ -2567,8 +2603,26 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatDouble(2)"
+		enabled "PStash_StatDouble(2) and not PStash_LeUI()"
 		area 290 464 60 40
+		text lua "PStash_StatValue(2)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatSingle(2) and PStash_LeUI()"
+		area 292 470 60 34
+		text lua "PStash_StatValue(2)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(2) and PStash_LeUI()"
+		area 292 467 60 40
 		text lua "PStash_StatValue(2)"
 		text style "label"
 		text point 8
@@ -2584,7 +2638,7 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatSingle(3)"
+		enabled "PStash_StatSingle(3) and not PStash_LeUI()"
 		area 290 597 60 34
 		text lua "PStash_StatValue(3)"
 		text style "label"
@@ -2593,8 +2647,26 @@ menu
 	}
 	label
 	{
-		enabled "PStash_StatDouble(3)"
+		enabled "PStash_StatDouble(3) and not PStash_LeUI()"
 		area 290 594 60 40
+		text lua "PStash_StatValue(3)"
+		text style "label"
+		text point 8
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatSingle(3) and PStash_LeUI()"
+		area 292 600 60 34
+		text lua "PStash_StatValue(3)"
+		text style "label"
+		text point 9
+		text align center center
+	}
+	label
+	{
+		enabled "PStash_StatDouble(3) and PStash_LeUI()"
+		area 292 597 60 40
 		text lua "PStash_StatValue(3)"
 		text style "label"
 		text point 8

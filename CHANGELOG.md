@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1 (2026-10)
+
+- LeUI support: Party Stash works on top of LeUI (pick the Baldur's Gate II look).
+- Stats details (THAC0, damage, item comparison) no longer depend on helpers missing from LeUI.
+- BG:EE with LeUI: the stats values are placed for LeUI's font.
+
 ## v1.0 (2026-10)
 
 First public release.

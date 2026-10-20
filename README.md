@@ -41,7 +41,14 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
   (**EET** should work but is untested), game version **v2.7.x** (the mod calls the game engine directly; on another version the stash disables
   itself instead of crashing).
 - **[EEex](https://github.com/Bubb13/EEex)**, installed first.
-- A mod that replaces the inventory screen (**LeUI**, **Dragonspear UI++**…) will conflict with the new inventory page.
+- **LeUI** works with Party Stash: install LeUI first, then pick the **Baldur's Gate II look** (see below).
+- Another mod that replaces the inventory screen (**Dragonspear UI++**…) will conflict with the new inventory page.
+
+### With LeUI
+
+Party Stash with the Baldur's Gate II look on top of **LeUI** (BG:EE):
+
+![Party Stash with LeUI](docs/leui_bg2.png)
 
 ## Installation
 
@@ -126,7 +133,8 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 
 - **BG:EE** (avec ou sans **Siege of Dragonspear**) ou **BG2:EE**, version **v2.7.x**. **EET** devrait marcher mais n'est pas encore testé.
 - **[EEex](https://github.com/Bubb13/EEex)**, installé avant.
-- Un mod qui remplace l'écran d'inventaire (**LeUI**, **Dragonspear UI++**…) entre en conflit avec la nouvelle page.
+- **LeUI** fonctionne avec Party Stash : installez LeUI avant, puis choisissez le **look Baldur's Gate II**.
+- Un autre mod qui remplace l'écran d'inventaire (**Dragonspear UI++**…) entre en conflit avec la nouvelle page.
 
 ### Installation
 
