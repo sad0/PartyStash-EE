@@ -38,6 +38,11 @@
 <tr><td>清空储物箱（卸载前）</td><td><strong>按住 Ctrl 左键单击重量旁的大包袋</strong></td></tr>
 </table>
 <h2>卸载</h2><p><strong>先在游戏中清空储物箱</strong>：按住 Ctrl 左键单击重量旁的大包袋。已收集的包袋会装着它们能容纳的物品还给你，其余物品都会掉在地上。然后运行 <strong>setup-PartyStash.exe</strong> 卸载。否则储物箱内容会留在存档中，但在重新安装前无法取用。</p>
+<h2>常见问题</h2>
+<p><strong>排序是怎么工作的？</strong> 每个标签页都有自己的默认排序（<strong>自动</strong>：武器和护甲按品质，卷轴按职业和等级……），也可以选择<strong>日期</strong>、<strong>品质</strong>、<strong>类型</strong>、<strong>价格</strong>或<strong>金/磅</strong>。</p>
+<p><strong>那包袋呢，连次元袋也行？</strong> 不会嵌套。放入储物箱的包袋会被倒空进储物箱，并保存在“<strong>包袋</strong>”标签页中，因此储物箱始终是一个列表。每个收集到的包袋都会让储物箱中它能装下的物品不计重量。次元袋涵盖所有类型：有了它，整个储物箱都没有重量。</p>
+<p><strong>我什么都捡。这是问题吗？</strong> 储物箱是无限的。没有次元袋时，它的重量计入队伍的合计负重（超过后全员减速）。“<strong>全部存放</strong>”一键清空背包，“<strong>出售标记</strong>”可在任何商人处一次卖掉所有标记的物品。</p>
+<p><strong>会拖慢游戏吗？</strong> 没有针对每个生物的钩子（没有 opcode、脚本或动作钩子）：工作是分散进行的（每 500 毫秒快速检查一次，每 2 秒计算一次队伍重量），所以屏幕上的生物数量不会改变它的开销。</p>
 <h2>说明</h2><ul>
 <li>从博德之门进入 <strong>Siege of Dragonspear</strong> 时，只要在 BG1 结束与 SoD 开始之间不关闭游戏，储物箱就会保留。</li>
 <li>欢迎改进翻译：PartyStash/tra/。</li>
