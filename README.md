@@ -80,6 +80,25 @@ come back filled with the items they can hold; everything else drops on the grou
 `setup-PartyStash.exe` and uninstall. If you skip this, the stash contents stay in your saves but cannot be reached
 until the mod is reinstalled.
 
+## FAQ
+
+**How does sorting work?** Each tab has its own default sort (**Auto**: weapons and armor by quality, scrolls by
+class and level...), or you pick **Date**, **Quality**, **Type**, **Price** or **Value/weight**.
+
+**What about bags, even bags of holding?** There is no nesting. A bag put in the stash is emptied into it and kept
+in the **Bags** tab, so the stash stays one flat list. Each collected bag makes the stash items it could hold
+weightless. A **bag of holding** covers every type, so with one the whole stash weighs nothing.
+
+**I carry around every damn thing. Is that a problem?** The stash is infinite. Without a bag of holding, its weight
+counts against the party's combined allowance (over it, everyone slows down). **Store all** empties a backpack in
+one click, and **Sell Marked** sells everything you marked at any merchant in one go.
+
+**Does it slow the game down?** No per-creature hooks (no opcode, script or action hooks): its work is throttled
+(a quick check every 500 ms, the party weight every 2 s), so the number of creatures on screen doesn't change its
+cost. Here is the Ducal Palace in **Siege of Dragonspear**, with hundreds of NPCs, still around 120+ FPS:
+
+![FPS in a crowded scene](docs/fps_sod.png)
+
 ## Notes
 
 - Moving from Baldur's Gate to **Siege of Dragonspear**: the stash is carried over as long as the game is not closed
@@ -162,6 +181,23 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 reviennent remplis des objets qu'ils peuvent contenir ; tout le reste tombe au sol. Puis lancez
 `setup-PartyStash.exe` et désinstallez. Sinon, le contenu du coffre reste dans vos sauvegardes mais devient
 inaccessible jusqu'à la réinstallation du mod.
+
+### FAQ
+
+**Comment marche le tri ?** Chaque onglet a son tri par défaut (**Auto** : armes et armures par qualité, parchemins
+par classe et niveau...), ou bien vous choisissez **Date**, **Qualité**, **Type**, **Prix** ou **po/lb**.
+
+**Et les sacs, même les sacs sans fond ?** Pas d'imbrication. Un sac mis dans le coffre y est vidé puis rangé dans
+l'onglet **Sacs** : le coffre reste une seule liste. Chaque sac collectionné rend sans poids les objets du coffre qu'il
+pourrait contenir. Un **sac sans fond** couvre tous les types : avec lui, le coffre entier ne pèse rien.
+
+**Je ramasse absolument tout. C'est un problème ?** Le coffre est infini. Sans sac sans fond, son poids compte dans la
+capacité cumulée du groupe (au-delà, tout le monde est ralenti). **Tout ranger** vide un sac à dos en un clic, et
+**Vendre cochés** vend d'un coup tout ce que vous avez marqué, chez n'importe quel marchand.
+
+**Est-ce que ça ralentit le jeu ?** Aucun hook par créature (ni opcode, ni script, ni action) : le travail est espacé
+(une vérification toutes les 500 ms, le poids du groupe toutes les 2 s), donc le nombre de créatures à l'écran ne
+change pas son coût.
 
 ### Téléchargement et discussion
 
