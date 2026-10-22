@@ -101,4 +101,7 @@ PStash_Strings = {
 	bubble_ground_t = [==[%ps_t_bubble_ground_t%]==],
 	bubble_ground = [==[%ps_t_bubble_ground%]==],
 	bubble_close = [==[%ps_t_bubble_close%]==],
+	tab_notes = [==[%ps_t_tab_notes%]==],
+	sort_dps = [==[%ps_t_sort_dps%]==],
+	sort_level = [==[%ps_t_sort_level%]==],
 }

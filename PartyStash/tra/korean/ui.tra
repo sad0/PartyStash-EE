@@ -99,3 +99,6 @@
 @200 = ~땅~ // bubble_ground_t
 @201 = ~파티 주변 땅의 아이템\n끌기: 아이템 내려놓기 또는 줍기\n귀중품은 여기에 내려놓을 수 없음~ // bubble_ground
 @202 = ~아무 곳이나 클릭하면 닫힘~ // bubble_close
+@203 = ~메모~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~레벨~ // sort_level

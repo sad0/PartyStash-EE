@@ -99,3 +99,6 @@
 @200 = ~Yer~ // bubble_ground_t
 @201 = ~Grubun etrafında yerdeki eşyalar\nSürükle: eşya bırak veya al\nDeğerli eşyalar buraya bırakılamaz~ // bubble_ground
 @202 = ~Kapatmak için herhangi bir yere tıklayın~ // bubble_close
+@203 = ~Notlar~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Seviye~ // sort_level

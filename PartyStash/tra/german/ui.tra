@@ -99,3 +99,6 @@
 @200 = ~Boden~ // bubble_ground_t
 @201 = ~Gegenstände auf dem Boden um die Gruppe\nZiehen: Gegenstände ablegen oder aufheben\nWertvolle Gegenstände können hier nicht abgelegt werden~ // bubble_ground
 @202 = ~Irgendwo klicken zum Schließen~ // bubble_close
+@203 = ~Notizen~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Grad~ // sort_level

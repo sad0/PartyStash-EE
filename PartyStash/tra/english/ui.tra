@@ -99,3 +99,6 @@
 @200 = ~Ground~ // bubble_ground_t
 @201 = ~Items on the ground around the party\nDrag: put items down or pick them up\nValuable items cannot be dropped here~ // bubble_ground
 @202 = ~Click anywhere to close~ // bubble_close
+@203 = ~Notes~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Level~ // sort_level
