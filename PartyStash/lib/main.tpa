@@ -31,6 +31,9 @@ COPY ~PartyStash/pages/%ps_look%_%ps_game%/PSTASH.menu~ ~override~   // the new 
      ~PartyStash/art/PSTASHSL.BAM~   ~override~   // the "to sell" marker (the game's gold pile)
      ~PartyStash/art/PSTASHOR.BAM~   ~override~   // the "valuable" cell tint (old gold ~25 %, art/build_tints.py)
      ~PartyStash/art/PSTASHDK.BAM~   ~override~   // the "to sell" cell tint (black ~75 %)
+// The game's own STONSLOT (art/build_slot.py) under another name: a UI mod replacing STONSLOT (Infinity UI++ ships an
+// opaque one) leaves the page's slots alone.
+COPY ~PartyStash/art/PSSLOT_%ps_game%.BAM~ ~override/PSSLOT.BAM~
 // The swapped look's own art (BG1 look on BG2 / BG2 look on BGEE): each look's game BAMs as our copies
 // (art/build_art.py slots): slots, weight bag, colours button, Store all, ground arrows.
 COPY ~PartyStash/art/PSTSLOT1.BAM~ ~override~
