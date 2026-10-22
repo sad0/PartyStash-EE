@@ -11,35 +11,35 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 
 ## Features
 
-### 🎒 One stash for the whole party
+### One stash for the whole party
 
 - Infinite and shared, right on the inventory page
 - Quests still see the items you store
 - Tabs and smart sorting (right-click the sort button to reverse it)
 
-### ⚔️ Know your weapons
+### Know your weapons
 
 - Damage per round and THAC0 in every weapon tooltip
 - A **+** on the weapons that beat what you hold
 - Charges shown on wands
 
-### 💰 Sell the junk, keep the treasure
+### Sell the junk, keep the treasure
 
 - **Ctrl + click**: for sale → valuable → clear
 - **Sell Marked** sells all the junk at once, at any merchant
 - Valuable items are never sold or dropped
 
-### 👜 Bags and weight
+### Bags and weight
 
 - Store a bag: it is emptied into the stash and its items weigh nothing
 - A Bag of Holding makes the whole stash weightless
 - The stash weighs against the whole party's allowance
 
-### 📦 Containers
+### Containers
 
 - Put your backpack or a stash page into any chest in one click
 
-### ✨ And also
+### And also
 
 - The gold **?** button explains every part of the page
 - Baldur's Gate 1 or II look, LeUI and Infinity UI++ support
@@ -186,35 +186,35 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 
 ### Fonctionnalités
 
-#### 🎒 Un coffre pour tout le groupe
+#### Un coffre pour tout le groupe
 
 - Infini et partagé, directement sur la page d'inventaire
 - Les quêtes voient toujours les objets rangés
 - Onglets et tri intelligent (clic droit sur le tri pour l'inverser)
 
-#### ⚔️ Connaître ses armes
+#### Connaître ses armes
 
 - Dégâts par round et TAC0 dans chaque infobulle d'arme
 - Un **+** sur les armes meilleures que la vôtre
 - Charges affichées sur les baguettes
 
-#### 💰 Vendre le bazar, garder les trésors
+#### Vendre le bazar, garder les trésors
 
 - **Ctrl + clic** : à vendre → précieux → effacer
 - **Vendre cochés** vend tout d'un coup, chez n'importe quel marchand
 - Les objets précieux ne sont jamais vendus ni jetés
 
-#### 👜 Sacs et poids
+#### Sacs et poids
 
 - Rangez un sac : il est vidé dans le coffre et ses objets ne pèsent plus rien
 - Un Sac de contenance rend tout le coffre sans poids
 - Le coffre pèse sur la charge de tout le groupe
 
-#### 📦 Conteneurs
+#### Conteneurs
 
 - Déposez votre sac à dos ou une page du coffre dans n'importe quel coffre en un clic
 
-#### ✨ Et aussi
+#### Et aussi
 
 - Le bouton **?** doré explique chaque partie de la page
 - Look Baldur's Gate 1 ou II, compatible LeUI et Infinity UI++
