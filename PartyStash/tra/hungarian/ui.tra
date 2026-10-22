@@ -90,3 +90,4 @@
 @188 = ~Elrakás megszakítva~ // dump_cancel
 @189 = ~Hátizsák~ // dump_backpack
 @190 = ~Ládaoldal~ // dump_stashpage
+@191 = ~A hátizsák vagy a legutóbb mutatott ládaoldal betétele ebbe a tárolóba (az értékes és küldetéstárgyak kivételével)~ // container_tip

@@ -90,3 +90,4 @@
 @188 = ~Dépôt annulé~ // dump_cancel
 @189 = ~Sac à dos~ // dump_backpack
 @190 = ~Page du coffre~ // dump_stashpage
+@191 = ~Déposer le sac à dos ou la dernière page du coffre affichée dans ce conteneur (sauf objets précieux et de quête)~ // container_tip

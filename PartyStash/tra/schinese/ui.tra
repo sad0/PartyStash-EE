@@ -90,3 +90,4 @@
 @188 = ~已取消放入~ // dump_cancel
 @189 = ~背包~ // dump_backpack
 @190 = ~储物箱此页~ // dump_stashpage
+@191 = ~把背包或最后显示的储物箱页面放入此容器（贵重物品和任务物品除外）~ // container_tip

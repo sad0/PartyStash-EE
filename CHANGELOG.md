@@ -12,6 +12,7 @@
   ground. A backpack item marked for sale goes straight to the stash.
 - Right-click the sort button to reverse the sort.
 - Put away: right-click the big bag, open a container, choose the backpack or the shown stash page.
+  Or the new red button at the bottom right of the container panel.
 - Gold sound when selling the marked items.
 - New optional components: weightless stash; keep the party gold through campaign changes; hardcore (campaign
   changes empty the stash too).

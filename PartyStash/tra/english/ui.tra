@@ -90,3 +90,4 @@
 @188 = ~Put away cancelled~ // dump_cancel
 @189 = ~Backpack~ // dump_backpack
 @190 = ~Stash page~ // dump_stashpage
+@191 = ~Put the backpack or the last stash page shown into this container (not the valuable or quest items)~ // container_tip

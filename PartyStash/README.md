@@ -30,7 +30,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
   proficiencies, attacks per round, both hands when dual-wielding); the stats show the attacks per round.
 - **Charges**: wands and other charged items show their charges in the corner of their cell.
 - **Put away**: **right-click** the big bag next to the weight, then open a container, and choose to put the
-  backpack or the shown stash page in it (valuable and quest items stay).
+  backpack or the shown stash page in it (valuable and quest items stay). The container panel has a button for it too.
 - **Bags**: put a gem bag, scroll case, potion case… in the stash. It is emptied into the stash and kept in the Bags
   tab, and the stash items it can hold weigh nothing. A Bag of Holding makes the whole stash weightless.
 - **Weight**: the stash counts against the sum of the members' weight allowances; above it, the party is slowed.
@@ -84,7 +84,7 @@ Party Stash with the Baldur's Gate II look on top of **LeUI** (BG:EE):
 | Item description | Right-click |
 | Scroll the grid, the tabs, the ground | Mouse wheel, arrows |
 | Reverse the sort | **Right-click** the sort button |
-| Put the backpack or a stash page in a container | **Right-click** the big bag, then open the container |
+| Put the backpack or a stash page in a container | **Right-click** the big bag, then open the container; or the red button at the bottom right of the container panel |
 | Store a bag | **Shift + double-click** it, or Store all (asks first) |
 | **Empty the stash** (before uninstalling) | **Ctrl + left click** on the big bag next to the weight |
 
@@ -163,7 +163,8 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
   par round.
 - **Charges** : les baguettes et autres objets à charges affichent leurs charges dans le coin de leur case.
 - **Dépôt** : **clic droit** sur le gros sac à côté du poids, puis ouvrez un conteneur, et choisissez d'y déposer le
-  sac à dos ou la page du coffre affichée (les objets précieux et de quête restent).
+  sac à dos ou la page du coffre affichée (les objets précieux et de quête restent). Le panneau du conteneur a aussi
+  un bouton pour ça.
 - **Sacs** : rangez un sac à gemmes, un étui à parchemins, une boîte à potions… dans le coffre. Il y est vidé et
   gardé dans l'onglet Sacs, et les objets du coffre qu'il peut contenir ne pèsent plus rien. Un Sac de contenance
   rend tout le coffre sans poids.
@@ -203,7 +204,7 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 | Description | Clic droit |
 | Faire défiler la grille, les onglets, le sol | Molette, flèches |
 | Inverser le tri | **Clic droit** sur le bouton de tri |
-| Déposer le sac à dos ou une page du coffre dans un conteneur | **Clic droit** sur le gros sac, puis ouvrir le conteneur |
+| Déposer le sac à dos ou une page du coffre dans un conteneur | **Clic droit** sur le gros sac, puis ouvrir le conteneur ; ou le bouton rouge en bas à droite du panneau du conteneur |
 | Ranger un sac | **Maj + double-clic**, ou Tout ranger (avec confirmation) |
 | **Vider le coffre** (avant de désinstaller) | **Ctrl + clic gauche** sur le gros sac à côté du poids |
 

@@ -90,3 +90,4 @@
 @188 = ~Odkładanie anulowane~ // dump_cancel
 @189 = ~Plecak~ // dump_backpack
 @190 = ~Strona skrzyni~ // dump_stashpage
+@191 = ~Włóż plecak lub ostatnio pokazaną stronę skrzyni do tego pojemnika (bez cennych i questowych przedmiotów)~ // container_tip

@@ -51,6 +51,7 @@ P.EN = {
 	dump_confirm = 'Put into this container: the backpack (%d items) or this stash page (%d items)?',
 	dump_done = '%d items put in the container', dump_none = 'Nothing to put away', dump_cancel = 'Put away cancelled',
 	dump_backpack = 'Backpack', dump_stashpage = 'Stash page',
+	container_tip = 'Put the backpack or the last stash page shown into this container (not the valuable or quest items)',
 	help_stash_title = 'This is your stash',
 	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant); again: valuable (golden, never sold)\n'
 		.. 'Right-click: description. Mouse wheel: scroll\nTabs: filter the stash by category (wheel or arrows to see them all)',
@@ -2652,17 +2653,34 @@ local function dumpSlots(p)
 	end
 	return out
 end
-function PStash_DumpArm()
+local function dumpPrepare(p)
 	local page = {}
 	for _, c in ipairs(P.view or {}) do
 		local info = not c.bag and PStash_ItemInfo(c.res)
 		if info and not info.critical and not PStash_IsValuable(c.res) then page[#page + 1] = c.res end
 	end
-	local p = shownPortrait()
-	if #page == 0 and #dumpSlots(p) == 0 then P.msg = T('dump_none') return end
+	if #page == 0 and #dumpSlots(p) == 0 then return false end
 	P.dump = { portrait = p, page = page }
+	return true
+end
+function PStash_DumpArm()
+	if not dumpPrepare(shownPortrait()) then P.msg = T('dump_none') return end
 	pcall(function() e:SelectEngine(worldScreen) end)
 	Infinity_DisplayString(T('dump_armed'))
+end
+-- The container panel's button (lib/main.tpa): the container is already open, the popup comes at the next tick.
+-- Backpack of the character who opened it; stash page = the last one shown in the inventory (rebuilt first).
+function PStash_DumpHere()
+	if P.dump then return end
+	local p = shownPortrait()
+	local opener = EEex_EngineGlobal_CBaldurChitin.m_pObjectGame.m_iContainerSprite
+	for q = 0, 5 do
+		local sp = EEex_Sprite_GetInPortrait(q)
+		if sp and sp.m_id == opener then p = q end
+	end
+	P.dirty = true
+	pcall(PStash_Holding)
+	if not dumpPrepare(p) then Infinity_DisplayString(T('dump_none')) end
 end
 
 local function dumpCancel(say)

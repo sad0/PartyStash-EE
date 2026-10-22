@@ -92,4 +92,5 @@ PStash_Strings = {
 	dump_cancel = [==[%ps_t_dump_cancel%]==],
 	dump_backpack = [==[%ps_t_dump_backpack%]==],
 	dump_stashpage = [==[%ps_t_dump_stashpage%]==],
+	container_tip = [==[%ps_t_container_tip%]==],
 }

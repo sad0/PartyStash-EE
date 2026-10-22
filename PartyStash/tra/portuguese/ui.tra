@@ -90,3 +90,4 @@
 @188 = ~Guardar cancelado~ // dump_cancel
 @189 = ~Mochila~ // dump_backpack
 @190 = ~Página do baú~ // dump_stashpage
+@191 = ~Colocar a mochila ou a última página do baú mostrada neste contêiner (exceto itens valiosos e de missão)~ // container_tip

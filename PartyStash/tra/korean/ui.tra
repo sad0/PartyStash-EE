@@ -90,3 +90,4 @@
 @188 = ~넣기 취소됨~ // dump_cancel
 @189 = ~배낭~ // dump_backpack
 @190 = ~보관함 페이지~ // dump_stashpage
+@191 = ~배낭이나 마지막으로 표시된 보관함 페이지를 이 용기에 넣기 (귀중품과 퀘스트 아이템 제외)~ // container_tip

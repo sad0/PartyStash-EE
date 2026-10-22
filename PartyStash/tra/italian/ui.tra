@@ -90,3 +90,4 @@
 @188 = ~Deposito annullato~ // dump_cancel
 @189 = ~Zaino~ // dump_backpack
 @190 = ~Pagina del baule~ // dump_stashpage
+@191 = ~Metti lo zaino o l'ultima pagina del baule mostrata in questo contenitore (tranne oggetti preziosi e di missione)~ // container_tip

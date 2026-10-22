@@ -96,4 +96,5 @@ OUTER_SPRINT ps_t_dump_none @187
 OUTER_SPRINT ps_t_dump_cancel @188
 OUTER_SPRINT ps_t_dump_backpack @189
 OUTER_SPRINT ps_t_dump_stashpage @190
+OUTER_SPRINT ps_t_container_tip @191
 COPY ~PartyStash/lib/M_PSTXT.lua~ ~override~ EVALUATE_BUFFER

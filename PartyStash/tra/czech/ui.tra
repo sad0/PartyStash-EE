@@ -90,3 +90,4 @@
 @188 = ~Ukládání zrušeno~ // dump_cancel
 @189 = ~Batoh~ // dump_backpack
 @190 = ~Stránka truhly~ // dump_stashpage
+@191 = ~Vložit batoh nebo naposledy zobrazenou stránku truhly do tohoto kontejneru (kromě cenných a úkolových předmětů)~ // container_tip

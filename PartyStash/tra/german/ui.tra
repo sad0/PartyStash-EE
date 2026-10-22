@@ -90,3 +90,4 @@
 @188 = ~Ablegen abgebrochen~ // dump_cancel
 @189 = ~Rucksack~ // dump_backpack
 @190 = ~Truhenseite~ // dump_stashpage
+@191 = ~Den Rucksack oder die zuletzt gezeigte Truhenseite in diesen Behälter legen (außer wertvollen und Questgegenständen)~ // container_tip

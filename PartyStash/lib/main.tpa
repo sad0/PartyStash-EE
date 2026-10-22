@@ -194,6 +194,22 @@ COPY_EXISTING ~UI.MENU~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~~~~~if store.groupItems[storeGroupItemsVar].valid ~= 0 then~~~~~ ~~~~~if string.upper(store.groupItems[storeGroupItemsVar].item.res or '') ~= 'PSTASH' and not (PStash_IsValuable and PStash_IsValuable(string.upper(store.groupItems[storeGroupItemsVar].item.res or ''))) and store.groupItems[storeGroupItemsVar].valid ~= 0 then~~~~~
 	// ... and its row is greyed like an unsellable item (the game never greys bags); valuable items too.
 	REPLACE_TEXTUALLY EXACT_MATCH ~~~~~enabled "store.groupItems[rowNumber].valid == 0  and store.groupItems[rowNumber].item.isBag ~= 1"~~~~~ ~~~~~enabled "(store.groupItems[rowNumber].valid == 0  and (store.groupItems[rowNumber].item.isBag ~= 1 or string.upper(store.groupItems[rowNumber].item.res or '') == 'PSTASH')) or (PStash_IsValuable and PStash_IsValuable(string.upper(store.groupItems[rowNumber].item.res or '')))"~~~~~
+	// Container panel (John 2026-10-22): a copy of the game's "take all" button, bottom right, puts the backpack or the
+	// shown stash page into the open container (same popup as right-click on the weight bag). The gold moves up to
+	// make room; only on the game's own layout (UI mods keep theirs).
+	PATCH_IF (INDEX_BUFFER (EXACT_MATCH ~area 575 76 71 28~) >= 0) AND (INDEX_BUFFER (EXACT_MATCH ~worldScreen:TakeAllFromContainer()~) >= 0) BEGIN
+		REPLACE_TEXTUALLY ~area 568 20 78 50\([^a-z]+bam GUIGOLD\)~ ~area 574 4 66 42\1~
+		REPLACE_TEXTUALLY ~area 575 76 71 28\([^a-z]+text lua "game:GetPartyGold()"\)~ ~area 575 46 71 28\1~
+		REPLACE_TEXTUALLY ~worldScreen:TakeAllFromContainer()\([^}]*}\)~ ~worldScreen:TakeAllFromContainer()\1
+	button
+	{
+		area 591 82 32 32
+		bam "ROUNDBUT"
+		scaleToClip
+		tooltip lua "PStash_T and PStash_T('container_tip') or ''"
+		action "if PStash_DumpHere then PStash_DumpHere() end"
+	}~
+	END
 BUT_ONLY
 
 
