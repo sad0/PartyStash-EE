@@ -99,3 +99,6 @@
 @200 = ~Zem~ // bubble_ground_t
 @201 = ~Předměty na zemi kolem družiny\nPřetažení: položit nebo sebrat předmět\nCenné předměty sem nelze položit~ // bubble_ground
 @202 = ~Kliknutím kamkoli zavřete~ // bubble_close
+@203 = ~Poznámky~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Úroveň~ // sort_level

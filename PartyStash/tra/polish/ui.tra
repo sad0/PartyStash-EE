@@ -99,3 +99,6 @@
 @200 = ~Ziemia~ // bubble_ground_t
 @201 = ~Przedmioty na ziemi wokół drużyny\nPrzeciągnij: połóż lub podnieś przedmiot\nCennych przedmiotów nie można tu położyć~ // bubble_ground
 @202 = ~Kliknij gdziekolwiek, aby zamknąć~ // bubble_close
+@203 = ~Notatki~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Poziom~ // sort_level

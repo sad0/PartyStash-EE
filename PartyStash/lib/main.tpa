@@ -143,6 +143,20 @@ ACTION_PHP_EACH ps_keep AS r => v BEGIN
 END
 PRINT ~PartyStash: %ps_n% quest items kept out of the stash.~
 
+// Quest items weigh nothing (John 2026-10-22): the critical ones, those kept out of the stash, and every item a
+// dialog or script of BG1 / SoD / BG2 checks or takes (lib/quest_items.tpa, build_quest.py).
+INCLUDE ~PartyStash/lib/quest_items.tpa~   // the list: one COPY_EXISTING each
+COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
+	PATCH_IF (BUFFER_LENGTH > 0x72) BEGIN
+		READ_LONG 0x18 ps_flags
+		TEXT_SPRINT ps_r ~%SOURCE_RES%~
+		TO_UPPER ps_r
+		PATCH_IF ((ps_flags BAND 1) OR (VARIABLE_IS_SET $ps_keep(~%ps_r%~))) BEGIN
+			WRITE_LONG 0x4c 0
+		END
+	END
+BUT_ONLY
+
 COPY ~PartyStash/M_PSTASH.lua~ ~override~
 	REPLACE_TEXTUALLY ~-- KEEP:BEGIN[^@]*-- KEEP:END~ ~-- KEEP:BEGIN (PartyStash.tp2)%WNL%P.KEEP = {%ps_keepl% }%WNL%-- KEEP:END~
 	REPLACE_TEXTUALLY ~-- BAGS:BEGIN[^@]*-- BAGS:END~ ~-- BAGS:BEGIN (PartyStash.tp2)%WNL%P.BAG_RES = {%ps_bags% }%WNL%-- BAGS:END~

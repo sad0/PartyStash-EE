@@ -99,3 +99,6 @@
 @200 = ~Sol~ // bubble_ground_t
 @201 = ~Les objets au sol autour du groupe\nGlisser : poser ou ramasser un objet\nLes objets précieux ne peuvent pas être posés ici~ // bubble_ground
 @202 = ~Cliquez n'importe où pour fermer~ // bubble_close
+@203 = ~Notes~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Niveau~ // sort_level

@@ -105,4 +105,7 @@ OUTER_SPRINT ps_t_bubble_sort_t @199
 OUTER_SPRINT ps_t_bubble_ground_t @200
 OUTER_SPRINT ps_t_bubble_ground @201
 OUTER_SPRINT ps_t_bubble_close @202
+OUTER_SPRINT ps_t_tab_notes @203
+OUTER_SPRINT ps_t_sort_dps @204
+OUTER_SPRINT ps_t_sort_level @205
 COPY ~PartyStash/lib/M_PSTXT.lua~ ~override~ EVALUATE_BUFFER

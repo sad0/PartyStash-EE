@@ -99,3 +99,6 @@
 @200 = ~Chão~ // bubble_ground_t
 @201 = ~Itens no chão ao redor do grupo\nArrastar: largar ou pegar itens\nItens valiosos não podem ser largados aqui~ // bubble_ground
 @202 = ~Clique em qualquer lugar para fechar~ // bubble_close
+@203 = ~Notas~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Nível~ // sort_level

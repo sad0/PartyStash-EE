@@ -99,3 +99,6 @@
 @200 = ~Föld~ // bubble_ground_t
 @201 = ~Tárgyak a földön a csapat körül\nHúzás: tárgy letétele vagy felvétele\nÉrtékes tárgyat nem lehet ide tenni~ // bubble_ground
 @202 = ~Kattintson bárhová a bezáráshoz~ // bubble_close
+@203 = ~Jegyzetek~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Szint~ // sort_level

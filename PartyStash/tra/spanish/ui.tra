@@ -99,3 +99,6 @@
 @200 = ~Suelo~ // bubble_ground_t
 @201 = ~Objetos en el suelo alrededor del grupo\nArrastrar: dejar o recoger objetos\nLos objetos valiosos no se pueden dejar aquí~ // bubble_ground
 @202 = ~Haz clic en cualquier sitio para cerrar~ // bubble_close
+@203 = ~Notas~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Nivel~ // sort_level

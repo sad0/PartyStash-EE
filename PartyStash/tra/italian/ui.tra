@@ -99,3 +99,6 @@
 @200 = ~Terreno~ // bubble_ground_t
 @201 = ~Oggetti a terra intorno al gruppo\nTrascina: posa o raccogli oggetti\nGli oggetti preziosi non possono essere posati qui~ // bubble_ground
 @202 = ~Clicca ovunque per chiudere~ // bubble_close
+@203 = ~Note~ // tab_notes
+@204 = ~DPS~ // sort_dps
+@205 = ~Livello~ // sort_level
