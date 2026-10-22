@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.1 (2026-10)
+
+- Weapon tooltips: THAC0 and damage per round no longer change with the weapon in hand (attacks per round read
+  right, the untrained weapon penalty counted for every weapon).
+- README: new help screenshot.
+
 ## v1.2 (2026-10)
 
 - Game version v2.6.6 supported (as well as v2.7.x).

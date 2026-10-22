@@ -769,8 +769,19 @@ local function strBonus(sp)
 	return hit, dmg
 end
 
--- Engine attacks-per-round code: 1-5 attacks, 6 = 1.5, 7 = 2.5, 8 = 3.5, 9 = 4.5.
-local function aprCode(v) if v >= 6 then return v - 4.5 end return v end
+-- Engine attacks-per-round code (NUMBEROFATTACKS): 1-5 attacks, 6 = 1/2, 7 = 3/2, 8 = 5/2, 9 = 7/2, 10 = 9/2
+-- (checked in game: a specialized level 1 fighter = 7 = 1.5, WSPATCK's figure).
+local function aprCode(v) if v >= 6 then return v - 5.5 end return v end
+
+-- No skill in a weapon: the class's to-hit penalty (the best of a multiclass): warriors -2, priests and rogues -3,
+-- mages -5 (the engine's "Prof.: +2" line for an untrained fighter).
+local NONPROF = { [1] = -5, [19] = -5, [3] = -3, [4] = -3, [5] = -3, [11] = -3, [13] = -3, [14] = -3, [15] = -3,
+	[20] = -3, [21] = -3 }
+local function nonProficient(sp)
+	local cls = sp.m_typeAI.m_Class
+	if WARRIOR[cls] then return -2 end
+	return NONPROF[cls] or -2
+end
 
 -- Attacks per round with a weapon of `pips` skill: warriors from WSPATCK (skill x level; 0 = 1, 1 = 2, 2 = 3,
 -- -1 = 1.5, -2 = 2.5), monks as the engine counts them, others 1; plus the weapon's own extra attacks.
@@ -793,6 +804,7 @@ local function weaponCore(sp, info)
 	local ab = info.ability
 	local pips = EEex_Sprite_GetStat(sp, info.prof)
 	local sHit, sDmg = skillBonus(pips)
+	if pips == 0 then sHit = sHit + nonProficient(sp) end
 	local hit, dmg = ab.toHit + sHit, ab.bonus + sDmg
 	local dice, sides = ab.dice, ab.sides
 	if ab.kind == 4 then

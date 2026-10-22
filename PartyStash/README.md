@@ -7,7 +7,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 
 ![Inventory, Baldur's Gate 1 look](docs/inventory_bg1.png)
 
-![Help overlay (the gold ? button), keybinds in green](docs/help.png)
+![Click on the gold ? for the help overlay](docs/help.png)
 
 ## Features
 

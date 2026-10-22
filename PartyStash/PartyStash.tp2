@@ -1,6 +1,6 @@
 BACKUP ~weidu_external/backup/PartyStash~
 AUTHOR ~sad0~
-VERSION ~v1.2~
+VERSION ~v1.2.1~
 README ~PartyStash/readme/readme-%LANGUAGE%.html~ ~PartyStash/readme/readme-english.html~
 
 // One source for BGEE and BG2EE (John 2026-10-19): the same folder installs on both. The main component comes in two
