@@ -11,6 +11,44 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 
 ## Features
 
+### 🎒 One stash for the whole party
+
+- Infinite and shared, right on the inventory page
+- Quests still see the items you store
+- Tabs and smart sorting (right-click the sort button to reverse it)
+
+### ⚔️ Know your weapons
+
+- Damage per round and THAC0 in every weapon tooltip
+- A **+** on the weapons that beat what you hold
+- Charges shown on wands
+
+### 💰 Sell the junk, keep the treasure
+
+- **Ctrl + click**: for sale → valuable → clear
+- **Sell Marked** sells all the junk at once, at any merchant
+- Valuable items are never sold or dropped
+
+### 👜 Bags and weight
+
+- Store a bag: it is emptied into the stash and its items weigh nothing
+- A Bag of Holding makes the whole stash weightless
+- The stash weighs against the whole party's allowance
+
+### 📦 Containers
+
+- Put your backpack or a stash page into any chest in one click
+
+### ✨ And also
+
+- The gold **?** button explains every part of the page
+- Baldur's Gate 1 or II look, LeUI and Infinity UI++ support
+- Options: weightless stash, keep your gold through campaign changes, hardcore mode
+- 15 languages
+
+<details>
+<summary><b>All the details</b></summary>
+
 - **Shared stash**: every party member reaches the same infinite stash, right on the inventory page. Quests still
   see the items stored in it.
 - **New inventory page**: your backpack and the stash in one scrollable grid, a ground column, and the stats shown
@@ -44,8 +82,11 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 - **15 languages**: English, French, German, Spanish, Italian, Polish, Russian, Portuguese (Brazil), Czech,
   Hungarian, Turkish, Ukrainian, Simplified Chinese, Japanese, Korean.
 
+</details>
+
 ![Merchant: Sell Marked](docs/merchant.png)
 ![Bags tab](docs/bags.png)
+
 
 ## Requirements
 
@@ -145,6 +186,44 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 
 ### Fonctionnalités
 
+#### 🎒 Un coffre pour tout le groupe
+
+- Infini et partagé, directement sur la page d'inventaire
+- Les quêtes voient toujours les objets rangés
+- Onglets et tri intelligent (clic droit sur le tri pour l'inverser)
+
+#### ⚔️ Connaître ses armes
+
+- Dégâts par round et TAC0 dans chaque infobulle d'arme
+- Un **+** sur les armes meilleures que la vôtre
+- Charges affichées sur les baguettes
+
+#### 💰 Vendre le bazar, garder les trésors
+
+- **Ctrl + clic** : à vendre → précieux → effacer
+- **Vendre cochés** vend tout d'un coup, chez n'importe quel marchand
+- Les objets précieux ne sont jamais vendus ni jetés
+
+#### 👜 Sacs et poids
+
+- Rangez un sac : il est vidé dans le coffre et ses objets ne pèsent plus rien
+- Un Sac de contenance rend tout le coffre sans poids
+- Le coffre pèse sur la charge de tout le groupe
+
+#### 📦 Conteneurs
+
+- Déposez votre sac à dos ou une page du coffre dans n'importe quel coffre en un clic
+
+#### ✨ Et aussi
+
+- Le bouton **?** doré explique chaque partie de la page
+- Look Baldur's Gate 1 ou II, compatible LeUI et Infinity UI++
+- Options : coffre sans poids, garder l'or aux changements de campagne, mode hardcore
+- 15 langues
+
+<details>
+<summary><b>Tous les détails</b></summary>
+
 - **Coffre partagé** : tous les membres du groupe accèdent au même coffre infini, directement sur la page
   d'inventaire. Les quêtes voient toujours les objets rangés dedans.
 - **Nouvelle page d'inventaire** : sac à dos et coffre dans une seule grille défilante, une colonne pour le sol, et
@@ -179,6 +258,9 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 - **Options** (composants optionnels) : le coffre ne pèse rien ; garder l'or du groupe aux changements de campagne
   (BG1 vers SoD, SoD vers BG2 dans EET) ; hardcore : ces changements vident aussi le coffre.
 - **15 langues**.
+
+</details>
+
 
 ### Prérequis
 

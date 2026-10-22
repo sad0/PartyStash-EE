@@ -1,11 +1,41 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8">
 <title>Party Stash v1.2.1</title>
-<style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
+<style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}</style></head><body>
 <h1>Party Stash <span class="v">v1.2.1</span></h1>
 <p>パーティ全員で共有する無限の収納箱を、<strong>Pillars of Eternity</strong> 風に、作り直したインベントリ画面に組み込みます。<strong>Baldur's Gate: Enhanced Edition</strong>（<strong>Siege of Dragonspear</strong> の有無を問わず）、<strong>Baldur's Gate II: Enhanced Edition</strong>、<strong>EET</strong> 用。</p>
 <p><img src="inventory_bg1.png" alt="インベントリ、バルダーズ・ゲート 1 の外観"></p>
-<h2>機能</h2><ul>
+<h2>機能</h2>
+<h3>🎒 パーティー全員で一つの収納箱</h3><ul>
+<li>無限・共有、インベントリ画面にそのまま</li>
+<li>クエストは収納したアイテムも認識</li>
+<li>タブと賢い並べ替え（並べ替えを右クリックで逆順）</li>
+</ul>
+<h3>⚔️ 武器を知る</h3><ul>
+<li>すべての武器のツールチップに 1 ラウンドのダメージと THAC0</li>
+<li>手持ちより強い武器に <strong>+</strong></li>
+<li>ワンドに残りチャージを表示</li>
+</ul>
+<h3>💰 ガラクタは売り、お宝は残す</h3><ul>
+<li><strong>Ctrl＋クリック</strong>：売却 → 貴重品 → 解除</li>
+<li><strong>印を売る</strong> でどの商人でもガラクタを一括売却</li>
+<li>貴重品は売られず、捨てられない</li>
+</ul>
+<h3>👜 袋と重さ</h3><ul>
+<li>袋を収納：中身は収納箱へ、そのアイテムは重さゼロ</li>
+<li>保管の袋で収納箱全体が重さゼロ</li>
+<li>収納箱はパーティー全体の積載量に加算</li>
+</ul>
+<h3>📦 容器</h3><ul>
+<li>バックパックか収納箱の 1 ページをワンクリックで好きな箱へ</li>
+</ul>
+<h3>✨ さらに</h3><ul>
+<li>金色の <strong>?</strong> ボタンでページの各部分を解説</li>
+<li>Baldur's Gate 1 / II の外観、LeUI と Infinity UI++ に対応</li>
+<li>オプション：重さゼロの収納箱、キャンペーン移行で所持金を保持、ハードコア</li>
+<li>15 言語</li>
+</ul>
+<details><summary>すべての詳細</summary><ul>
 <li><strong>共有の収納箱</strong>：パーティの全員がインベントリ画面で同じ無限の収納箱を使えます。クエストは収納箱の中のアイテムも認識します。</li>
 <li><strong>新しいインベントリ画面</strong>：バックパックと収納箱を一つのスクロール式グリッドに、地面の列、コンパクトな 2×2 の能力値（能力名は 3 文字）。</li>
 <li><strong>タブ</strong>：全て、武器、鎧、装備、矢弾、宝石、巻物、薬、クエスト、その他、袋。</li>
@@ -21,7 +51,7 @@
 <li><strong>重量</strong>：収納箱はメンバーの最大積載量の合計に数えられ、超えるとパーティが遅くなります。</li>
 <li><strong>二つの外観</strong>：バルダーズ・ゲート 1 風かバルダーズ・ゲート II 風。どちらのゲームでも使えます。</li>
 <li><strong>整理された戦利品（任意）</strong>：地面の山、コンテナ、戦利品バーでクエストアイテム、重さ0のアイテム、残りを価値/重さ順に表示。</li>
-</ul>
+</ul></details>
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="商人：印を売る"><br><em>商人：印を売る</em></p>
 <p><img src="bags.png" alt="袋タブ"><br><em>袋タブ</em></p>
