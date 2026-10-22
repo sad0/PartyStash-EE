@@ -17,7 +17,8 @@ END
 ACTION_IF ~%WEIDU_OS%~ STRING_EQUAL_CASE ~win32~ BEGIN
 	OUTER_TEXT_SPRINT ps_red ~powershell -NoProfile -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; Write-Host ([IO.File]::ReadAllText('PartyStash/tra/%LANGUAGE%/uninstall.txt')) -ForegroundColor Red"~
 	AT_EXIT ~%ps_red%~   // at the very end, right above WeiDU's "Press ENTER to exit" (John)
-	AT_INTERACTIVE_UNINSTALL ~%ps_red%~
+	// spelled out: the uninstall evaluates this text without running the component, so ps_red is not set then
+	AT_INTERACTIVE_UNINSTALL ~powershell -NoProfile -Command "[Console]::OutputEncoding=[Text.Encoding]::UTF8; Write-Host ([IO.File]::ReadAllText('PartyStash/tra/%LANGUAGE%/uninstall.txt')) -ForegroundColor Red"~
 END ELSE BEGIN
 	PRINT @8
 	AT_INTERACTIVE_UNINSTALL ~cat PartyStash/tra/%LANGUAGE%/uninstall.txt~

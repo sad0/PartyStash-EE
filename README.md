@@ -53,7 +53,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
   stash disables itself instead of crashing).
 - **[EEex](https://github.com/Bubb13/EEex)**, installed first.
 - **LeUI** works with Party Stash: install LeUI first, then pick the **Baldur's Gate II look** (see below).
-- **Infinity UI++** installs and runs in our tests; feedback welcome.
+- **Infinity UI++** works with Party Stash: install it first.
 - Another mod that replaces the inventory screen (**Dragonspear UI++**…) will conflict with the new inventory page.
 
 ### With LeUI
@@ -181,7 +181,7 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 - **BG:EE** (avec ou sans **Siege of Dragonspear**), **BG2:EE** ou **EET**, version **v2.6.6** ou **v2.7.x**.
 - **[EEex](https://github.com/Bubb13/EEex)**, installé avant.
 - **LeUI** fonctionne avec Party Stash : installez LeUI avant, puis choisissez le **look Baldur's Gate II**.
-- **Infinity UI++** s'installe et tourne dans nos tests ; les retours sont les bienvenus.
+- **Infinity UI++** fonctionne avec Party Stash : installez-le avant.
 - Un autre mod qui remplace l'écran d'inventaire (**Dragonspear UI++**…) entre en conflit avec la nouvelle page.
 
 ### Installation

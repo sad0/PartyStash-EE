@@ -15,7 +15,7 @@
 - Gold sound when selling the marked items.
 - New optional components: weightless stash; keep the party gold through campaign changes; hardcore (campaign
   changes empty the stash too).
-- Infinity UI++: the stats no longer depend on its helpers; installs and runs in our tests.
+- Infinity UI++ supported (the stats no longer depend on its helpers, the slots keep their frames).
 - LeUI: fixed the inventory opening script stopping early on the first open.
 - The inventory error message no longer overlaps the page.
 
