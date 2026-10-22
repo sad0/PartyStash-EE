@@ -11,3 +11,7 @@
 @11 = ~Party Stash : un coffre infini partagé par tout le groupe (nécessite EEex). Avant de désinstaller : Ctrl + clic gauche sur le sac du poids pour vider le coffre~
 @12 = ~Uniquement pour Baldur's Gate: Enhanced Edition.~
 @13 = ~Uniquement pour Baldur's Gate II: Enhanced Edition / EET.~
+@14 = ~Option : le coffre ne pèse rien~
+@15 = ~Option : garder l'or du groupe aux changements de campagne (BG1 vers SoD, SoD vers BG2 dans EET)~
+@16 = ~Option (hardcore) : les changements de campagne vident aussi le coffre, comme tout ce que porte le groupe~
+@17 = ~Nécessite Party Stash.~

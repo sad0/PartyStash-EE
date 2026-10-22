@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="it"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>Un baule infinito condiviso da tutto il gruppo, in stile <strong>Pillars of Eternity</strong>, integrato in una pagina dell'inventario ridisegnata. Per <strong>Baldur's Gate: Enhanced Edition</strong> (con o senza <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> ed <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventario, aspetto Baldur&#x27;s Gate 1"></p>
 <h2>Caratteristiche</h2><ul>
 <li><strong>Baule condiviso</strong>: tutti i membri del gruppo raggiungono lo stesso baule infinito nella pagina dell'inventario. Le missioni continuano a vedere gli oggetti riposti.</li>
 <li><strong>Nuova pagina dell'inventario</strong>: zaino e baule in un'unica griglia scorrevole, una colonna per il terreno, statistiche compatte 2×2 (caratteristiche in 3 lettere).</li>
 <li><strong>Schede</strong>: Tutto, Armi, Armatura, Equipaggiamento, Munizioni, Gemme, Pergamene, Pozioni, Missione, Varie, Borse.</li>
-<li><strong>Ordinamento</strong>: Auto (ogni scheda il suo ordine: armi e armature per qualità, poi CA e valore; pergamene per classe e livello…), Data, Qualità, Tipo, Prezzo, Valore/peso.</li>
+<li><strong>Ordinamento</strong>: Auto (ogni scheda il suo ordine: armi per danni per round per il personaggio mostrato, armature per CA, pergamene per classe e livello…), Data, Qualità, Tipo, Prezzo, Valore/peso. Clic destro sul pulsante di ordinamento per invertirlo.</li>
 <li><strong>Indicazioni</strong>: rosso = inutilizzabile dal personaggio mostrato, blu = non identificato, + = un miglioramento per lui (o una pergamena che un mago del gruppo può ancora imparare).</li>
-<li><strong>Vendi segnati</strong>: <strong>Ctrl + clic</strong> sugli oggetti del baule, poi vendili tutti insieme da qualsiasi mercante, con il totale sul pulsante.</li>
+<li><strong>Segni</strong>: <strong>Ctrl + clic</strong> su un oggetto (baule, zaino o equipaggiato) lo segna per la vendita (scurito), ancora lo rende prezioso (dorato), ancora lo toglie. Vendi segnati vende in una volta tutti gli oggetti segnati per la vendita da qualsiasi mercante, con il totale sul pulsante.</li>
+<li><strong>Danni per round</strong>: i tooltip delle armi mostrano i danni per round e il THAC0 per il personaggio mostrato (forza, competenze, attacchi per round, entrambe le mani combattendo con due armi); le statistiche mostrano gli attacchi per round.</li>
+<li><strong>Cariche</strong>: bacchette e altri oggetti a cariche mostrano le cariche nell'angolo della loro casella.</li>
+<li><strong>Oggetti preziosi</strong>: mai venduti, ignorati da Riponi tutto e dalla selezione dei mercanti, e non possono essere lasciati a terra. Un oggetto dello zaino segnato per la vendita va dritto nel baule.</li>
+<li><strong>Deposito</strong>: clic destro sulla grande borsa accanto al peso, poi aprite un contenitore e scegliete di metterci lo zaino o la pagina del baule mostrata (gli oggetti preziosi e di missione restano).</li>
+<li><strong>Opzioni (componenti separati)</strong>: il baule non pesa nulla; conserva l'oro del gruppo ai cambi di campagna (BG1 a SoD, SoD a BG2 in <strong>EET</strong>); hardcore: quei cambi svuotano anche il baule.</li>
 <li><strong>Borse</strong>: una borsa riposta nel baule viene svuotata al suo interno e conservata nella scheda Borse; gli oggetti del baule che può contenere non pesano nulla (una Borsa conservante: tutto il baule).</li>
 <li><strong>Peso</strong>: il baule conta nella somma dei carichi massimi dei membri; oltre, il gruppo è rallentato.</li>
 <li><strong>Due aspetti</strong>: stile Baldur's Gate 1 o Baldur's Gate II, in entrambi i giochi.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="Mercante: Vendi segnati"><br><em>Mercante: Vendi segnati</em></p>
 <p><img src="bags.png" alt="Scheda Borse"><br><em>Scheda Borse</em></p>
-<h2>Requisiti</h2><p>Versione del gioco <strong>v2.7.x</strong> ed <strong>EEex</strong> (installato prima). Una mod che sostituisce la schermata dell'inventario (<strong>Dragonspear UI++</strong>…) è in conflitto con la nuova pagina. <strong>LeUI</strong> funziona con <strong>Party Stash</strong>: scegliete l'aspetto Baldur's Gate II.</p>
+<h2>Requisiti</h2><p>Versione del gioco <strong>v2.6.6</strong> o <strong>v2.7.x</strong>, ed <strong>EEex</strong> (installato prima). Una mod che sostituisce la schermata dell'inventario (<strong>Dragonspear UI++</strong>…) è in conflitto con la nuova pagina. <strong>LeUI</strong> funziona con <strong>Party Stash</strong>: scegliete l'aspetto Baldur's Gate II. <strong>Infinity UI++</strong> si installa e funziona nei nostri test; i riscontri sono benvenuti.</p>
 <h2>Installazione</h2><ol>
 <li>Installa <strong>EEex</strong>.</li>
 <li>Estrai l'archivio nella cartella del gioco (dove si trova <strong>chitin.key</strong>).</li>
@@ -31,20 +36,22 @@
 <tr><td>Prendere un oggetto dal baule</td><td><strong>Clic (doppio clic: prendere ed equipaggiare)</strong></td></tr>
 <tr><td>Riporre un oggetto dello zaino</td><td><strong>Maiusc + doppio clic, o rilasciarlo sulla griglia del baule</strong></td></tr>
 <tr><td>Riporre tutto lo zaino</td><td><strong>Pulsante Riponi tutto, o Spazio</strong></td></tr>
-<tr><td>Segnare / togliere per la vendita</td><td><strong>Ctrl + clic su un oggetto del baule, poi Vendi segnati da un mercante</strong></td></tr>
+<tr><td>Segnare per la vendita / prezioso / togliere</td><td><strong>Ctrl + clic su un oggetto (baule, zaino o equipaggiato)</strong></td></tr>
 <tr><td>Descrizione</td><td><strong>Clic destro</strong></td></tr>
 <tr><td>Scorrere griglia, schede, terreno</td><td><strong>Rotellina, frecce</strong></td></tr>
+<tr><td>Invertire l'ordinamento</td><td><strong>Clic destro sul pulsante di ordinamento</strong></td></tr>
+<tr><td>Mettere lo zaino o una pagina del baule in un contenitore</td><td><strong>Clic destro sulla grande borsa, poi aprire il contenitore</strong></td></tr>
 <tr><td>Riporre una borsa</td><td><strong>Maiusc + doppio clic, o Riponi tutto (chiede conferma)</strong></td></tr>
 <tr><td>Svuotare il baule (prima di disinstallare)</td><td><strong>Ctrl + clic sinistro sulla grande borsa accanto al peso</strong></td></tr>
 </table>
 <h2>Disinstallazione</h2><p><strong>Prima svuota il baule in gioco</strong>: <strong>Ctrl + clic sinistro</strong> sulla grande borsa accanto al peso. Le borse collezionate tornano piene degli oggetti che possono contenere; tutto il resto cade a terra. Poi avvia <strong>setup-PartyStash.exe</strong> e disinstalla. Altrimenti il contenuto del baule resta nei salvataggi ma è inaccessibile finché la mod non viene reinstallata.</p>
 <h2>Domande frequenti</h2>
-<p><strong>Come funziona l&#x27;ordinamento?</strong> Ogni scheda ha il suo ordinamento predefinito (<strong>Auto</strong>: armi e armature per qualità, pergamene per classe e livello…), oppure scegliete <strong>Data</strong>, <strong>Qualità</strong>, <strong>Tipo</strong>, <strong>Prezzo</strong> o <strong>mo/lb</strong>.</p>
+<p><strong>Come funziona l&#x27;ordinamento?</strong> Ogni scheda ha il suo ordinamento predefinito (<strong>Auto</strong>: armi per danni per round, armature per CA, pergamene per classe e livello…), oppure scegliete <strong>Data</strong>, <strong>Qualità</strong>, <strong>Tipo</strong>, <strong>Prezzo</strong> o <strong>mo/lb</strong>.</p>
 <p><strong>E le borse, anche le borse conservanti?</strong> Niente annidamento. Una borsa messa nel deposito viene svuotata al suo interno e conservata nella scheda <strong>Borse</strong>, quindi il deposito resta un'unica lista. Ogni borsa raccolta rende senza peso gli oggetti del deposito che potrebbe contenere. Una borsa conservante copre tutti i tipi: con essa, l'intero deposito non pesa nulla.</p>
 <p><strong>Raccolgo proprio tutto. È un problema?</strong> Il deposito è infinito. Senza borsa conservante, il suo peso conta sulla capacità complessiva del gruppo (oltre, tutti rallentano). <strong>Riponi tutto</strong> svuota uno zaino con un clic, e <strong>Vendi segnati</strong> vende in un colpo tutto ciò che avete segnato, da qualsiasi mercante.</p>
 <p><strong>Rallenta il gioco?</strong> Nessun hook per creatura (né opcode, né script, né azioni): il lavoro è distribuito (un rapido controllo ogni 500 ms, il peso del gruppo ogni 2 s), quindi il numero di creature sullo schermo non ne cambia il costo.</p>
 <h2>Note</h2><ul>
 <li>Da Baldur's Gate a <strong>Siege of Dragonspear</strong> il baule viene conservato, purché il gioco non venga chiuso tra la fine di BG1 e l'inizio di SoD.</li>
 <li>Le correzioni della traduzione sono benvenute: PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy): dovrebbe funzionare (si installa come su <strong>BG2:EE</strong>) ma non è ancora stato testato. I riscontri sono benvenuti.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy): testato su <strong>v2.6.6</strong>. Il baule sopravvive al passaggio da <strong>Siege of Dragonspear</strong> a Baldur's Gate II.</li>
 </ul><h2>Licenza</h2><p>MIT. Autore: sad0.</p></body></html>

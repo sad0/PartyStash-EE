@@ -1,4 +1,4 @@
--- Party Stash (requires EEex, BGEE or BG2EE v2.7.3.0): one stash shared by the whole party, Pillars of Eternity style.
+-- Party Stash (requires EEex, BGEE or BG2EE v2.7.3.0 or v2.6.6.0): one stash shared by the whole party, Pillars of Eternity style.
 -- One source for both games: the generated tables below are BGEE's; PartyStash.tp2 rewrites them at install on
 -- the other games (BG2EE, EET) from that game's own files (same format).
 -- The stash is the PSTASH bag store, read and written straight through the engine (no bag screen). It is shown
@@ -45,22 +45,30 @@ P.EN = {
 	ab_ac = 'AC', ab_ac_mods = 'AC mods', ab_missile = 'Missile', ab_prof = 'Prof.', ab_base_thac0 = 'Base THAC0',
 	ab_main_hand = 'Main', ab_off_hand = 'Off', ab_two_weapon = '2 weapons',
 	stash_slot_tip = 'Your party\'s stash: the game counts its items as carried (quests).',
+	dps_line = '%s dmg/round, THAC0 %d', st_apr = 'Attacks/round: %s',
+	msg_valuable_ground = 'A valuable item cannot be dropped on the ground',
+	dump_armed = 'Open the container that should receive the items (Esc cancels)',
+	dump_confirm = 'Put into this container: the backpack (%d items) or this stash page (%d items)?',
+	dump_done = '%d items put in the container', dump_none = 'Nothing to put away', dump_cancel = 'Put away cancelled',
+	dump_backpack = 'Backpack', dump_stashpage = 'Stash page',
 	help_stash_title = 'This is your stash',
-	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\n'
+	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant); again: valuable (golden, never sold)\n'
 		.. 'Right-click: description. Mouse wheel: scroll\nTabs: filter the stash by category (wheel or arrows to see them all)',
 	help_pack_title = "This is your character's inventory",
 	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack\n'
 		.. 'The chest in the last slot: your stash; the game counts its items as carried (quests).',
 	help_storeall = 'Space: store the whole backpack.\nQuest items stay in the backpack; bags ask first.',
-	help_sort = 'Click to change the sort.\nAuto: each tab its own order (weapons and armor by quality, scrolls by class '
-		.. 'and level...).\nAlso: Date, Quality, Type, Price, Value/weight.',
+	help_sort = 'Click to change the sort, right-click to reverse it.\nAuto: each tab its own order (weapons by damage '
+		.. 'per round for the shown character, armor by AC, scrolls by class and level...).\nAlso: Date, Quality, Type, Price, '
+		.. 'Value/weight.', sort_rev = ' (rev.)',
 	help_bags = 'Store a bag (Shift + double-click or Store all): it is emptied into the stash and kept here.\n'
 		.. 'Stash items it can hold weigh nothing.',
 	help_sell = '%d marked items will be sold for %d gp.\n%d marked items are skipped (no value, quest item, or not '
 		.. 'bought here).',
 	empty_confirm = 'Empty the stash? Your collected bags come back filled with the items they can hold; '
 		.. 'everything else drops on the ground. Do this before uninstalling Party Stash.',
-	bag_tip = 'Ctrl + left click: empty the stash into your bags and onto the ground (before uninstalling)',
+	bag_tip = 'Ctrl + left click: empty the stash into your bags and onto the ground (before uninstalling)\nRight click: '
+		.. 'put the backpack or this stash page (not the valuable or quest items) into the next container you open',
 }
 function PStash_T(k, ...)
 	local s = (PStash_Strings and PStash_Strings[k]) or P.EN[k] or k
@@ -207,18 +215,55 @@ end
 -----------------------
 
 -- The engine's own bag functions (CInfGame::AddItemToStore and friends), called through fixed-target stubs.
--- Each stub is a tiny lua_CFunction wired to ONE whitelisted function of v2.7.3.0 (prologue bytes checked
+-- Each stub is a tiny lua_CFunction wired to ONE whitelisted function of a known build (prologue bytes checked
 -- first; on any other build the mod switches itself off). Integer/pointer args only (Win64 ABI). BGEE and BG2EE
--- v2.7.3.0 share the same code (.text differs by 32 bytes, checked 2026-10-19): same addresses for both.
-P.FUNCS = {
-	AddItemToStore = { 0x14026D680, { 0x40, 0x55, 0x53, 0x56, 0x57, 0x41, 0x54 }, 4 },
-	SwapItemPersonal = { 0x1402913C0, { 0x40, 0x55, 0x53, 0x56, 0x57, 0x41, 0x54 }, 9 },
-	AddDisposableItem = { 0x14026D660, { 0x48, 0x85, 0xD2, 0x74, 0x0C }, 2 },
-	DemandServerStore = { 0x1402728F0, { 0x48, 0x89, 0x5C, 0x24, 0x10 }, 3 },
-	GetServerStore = { 0x140278F00, { 0x32, 0xC0 }, 2 },
-	ReleaseServerStore = { 0x140285C60, { 0x48, 0x83, 0xEC, 0x28 }, 2 },
-	TakeItemFromStore = { 0x140292B00, { 0x48, 0x89, 0x5C, 0x24, 0x20, 0x55, 0x56, 0x57 }, 4 },
+-- share the same code on each build (2.7.3.0: .text differs by 32 bytes, checked 2026-10-19): same addresses.
+-- Addresses from EEex's loader/<build>/<game>/function_names.db (2026-10-21: same prologues on both builds).
+-- SwapItemPersonal is CInfGame::SwapItemPersonalInventory.
+local PROLOGUE = {
+	AddItemToStore = { { 0x40, 0x55, 0x53, 0x56, 0x57, 0x41, 0x54 }, 4 },
+	SwapItemPersonal = { { 0x40, 0x55, 0x53, 0x56, 0x57, 0x41, 0x54 }, 9 },
+	AddDisposableItem = { { 0x48, 0x85, 0xD2, 0x74, 0x0C }, 2 },
+	DemandServerStore = { { 0x48, 0x89, 0x5C, 0x24, 0x10 }, 3 },
+	GetServerStore = { { 0x32, 0xC0 }, 2 },
+	ReleaseServerStore = { { 0x48, 0x83, 0xEC, 0x28 }, 2 },
+	TakeItemFromStore = { { 0x48, 0x89, 0x5C, 0x24, 0x20, 0x55, 0x56, 0x57 }, 4 },
 }
+-- probe: CInfGame::AddPartyGold, whose rip-relative load (bytes 13-19) tells the builds apart.
+P.BUILDS = {
+	['2.7.3.0'] = {
+		probe = { 0x14026DAC0, { 0x85, 0xD2, 0x0F, 0x84, 0x88, 0x00, 0x00, 0x00, 0x53, 0x48, 0x83, 0xEC, 0x20, 0x48, 0x8B, 0x05, 0x8C, 0x9A, 0x3F, 0x00 } },
+		AddItemToStore = 0x14026D680, SwapItemPersonal = 0x1402913C0, AddDisposableItem = 0x14026D660,
+		DemandServerStore = 0x1402728F0, GetServerStore = 0x140278F00, ReleaseServerStore = 0x140285C60,
+		TakeItemFromStore = 0x140292B00 },
+	['2.6.6.0'] = {
+		probe = { 0x14026D860, { 0x85, 0xD2, 0x0F, 0x84, 0x88, 0x00, 0x00, 0x00, 0x53, 0x48, 0x83, 0xEC, 0x20, 0x48, 0x8B, 0x05, 0x24, 0x78, 0x3F, 0x00 } },
+		AddItemToStore = 0x14026D420, SwapItemPersonal = 0x140290E00, AddDisposableItem = 0x14026D400,
+		DemandServerStore = 0x140272680, GetServerStore = 0x140278A70, ReleaseServerStore = 0x140285760,
+		TakeItemFromStore = 0x140292480 },
+}
+
+local function bytesAt(addr, bytes)
+	for i, b in ipairs(bytes) do
+		if EEex_ReadU8(addr + i - 1) ~= b then return false end
+	end
+	return true
+end
+
+-- The running build's functions as { name = { address, prologue, nargs } }, or nil on an unknown build.
+local function engineFuncs()
+	for build, t in pairs(P.BUILDS) do
+		if bytesAt(t.probe[1], t.probe[2]) then
+			local out = {}
+			for name, pro in pairs(PROLOGUE) do
+				if not bytesAt(t[name], pro[1]) then return nil end
+				out[name] = { t[name], pro[1], pro[2] }
+			end
+			P.build = build
+			return out
+		end
+	end
+end
 
 local function bytesLE(v, n)
 	local out = {}
@@ -266,13 +311,13 @@ local function buildStub(name, target, nargs)
 	EEex_ExposeToLua(addr, 'PStash_Eng_' .. name)
 end
 
+-- The engine build the stash runs on ('2.7.3.0', '2.6.6.0'), nil before PStash_Ready() or on an unknown build.
+function PStash_Build() PStash_Ready() return P.build end
+
 function PStash_Ready()
 	if P.ready ~= nil and (P.ready == false or _G.PStash_Eng_TakeItemFromStore) then return P.ready end
-	for _, f in pairs(P.FUNCS) do
-		for i, b in ipairs(f[2]) do
-			if EEex_ReadU8(f[1] + i - 1) ~= b then P.ready = false return false end
-		end
-	end
+	P.FUNCS = engineFuncs()
+	if not P.FUNCS then P.ready = false return false end
 	for name, f in pairs(P.FUNCS) do
 		if not _G['PStash_Eng_' .. name] then buildStub(name, f[1], f[3]) end
 	end
@@ -326,12 +371,13 @@ local function firstAbility(p)
 	local bonus = EEex_ReadU16(ab + 0x1A)
 	if bonus >= 0x8000 then bonus = bonus - 0x10000 end
 	return { kind = EEex_ReadU8(ab), toHit = toHit, sides = EEex_ReadU8(ab + 0x16), dice = EEex_ReadU8(ab + 0x18),
-		bonus = bonus }
+		bonus = bonus, charges = EEex_ReadU16(ab + 0x22), launcher = EEex_ReadU8(ab + 0x10), strHit = EEex_BAnd(EEex_ReadU32(ab + 0x26), 0x9) ~= 0, strDmg = EEex_BAnd(EEex_ReadU32(ab + 0x26), 0x5) ~= 0 }
 end
 
--- Equipping effects that matter for the comparison: AC (opcode 0) and saving throws (33-37).
+-- Equipping effects that matter for the comparison: AC (opcode 0), saving throws (33-37), attacks per round
+-- (opcode 1 in increment mode: bows' extra shot, Kondar...).
 local function equipEffects(p)
-	local out = { ac = 0, base = nil, saves = 0 }
+	local out = { ac = 0, base = nil, saves = 0, apr = 0 }
 	local off, first, count = EEex_ReadU32(p + 0x6A), EEex_ReadU16(p + 0x6E), EEex_ReadU16(p + 0x70)
 	for e = first, first + count - 1 do
 		local ef = p + off + e * 0x30
@@ -339,12 +385,15 @@ local function equipEffects(p)
 		if p1 >= 0x80000000 then p1 = p1 - 0x100000000 end
 		if op == 0 and p2 == 16 then out.base = p1             -- armor: sets base AC
 		elseif op == 0 and p2 == 0 then out.ac = out.ac + p1   -- generic AC bonus
-		elseif op >= 33 and op <= 37 then out.saves = out.saves + p1 end
+		elseif op >= 33 and op <= 37 then out.saves = out.saves + p1
+		elseif op == 1 and p2 == 0 then out.apr = out.apr + p1 end
 	end
 	return out
 end
 
 -- Raw ITM header fields (EEex hands out the file header as loaded in memory).
+-- itmV: bumped when the fields change, so a reloaded file does not use older cached entries.
+if P.itmV ~= 5 then P.itm, P.itmV = {}, 5 end
 P.itm = P.itm or {}
 function PStash_ItemInfo(res)
 	res = string.upper(res)
@@ -502,6 +551,11 @@ local function itemWeight(res, units)
 end
 
 -- (party + stash weight, sum of allowances)
+-- Install options (optional WeiDU components; each one writes an override M_PSOPT*.lua setting PStash_Opt.<name>):
+-- weightless = the stash never weighs anything; keepgold = the party gold survives the campaign moves (BG1 -> SoD,
+-- EET SoD -> BG2); losestash = the stash is emptied by those moves, like everything else the party carries.
+local function opt(name) return type(PStash_Opt) == 'table' and PStash_Opt[name] == true end
+
 function PStash_Weight()
 	local load, cap = 0, 0
 	for p = 0, 5 do
@@ -516,7 +570,7 @@ function PStash_Weight()
 	end
 	-- The stash: items a collected bag holds weigh nothing (John), the rest counts.
 	local cov = coveredTypes()
-	if not cov.all then
+	if not cov.all and not opt('weightless') then
 		for _, e in ipairs(P.list or {}) do
 			local info = PStash_ItemInfo(e.res)
 			if info and not cov[info.type] then
@@ -674,6 +728,127 @@ local function weaponScore(sp, info)
 	return ab.toHit + hit, ab.dice * (ab.sides + 1) / 2 + ab.bonus + dmg, pips
 end
 
+-- Weapon DPS for the shown character (John 2026-10-21): damage per round (6 s) and THAC0 with this weapon, from the
+-- game's own tables. Damage = average dice + item bonus + strength (abilities flagged "add strength bonus") + skill;
+-- x attacks per round. Launchers shoot their base ammo (AROW01 / BOLT01 / BULL01). Sort score = damage/round x
+-- (1 + 5% per point of to-hit bonus): no reference AC (1 THAC0 = 5% to hit).
+local WARRIOR = { [2] = true, [6] = true, [7] = true, [8] = true, [9] = true, [10] = true, [12] = true, [16] = true,
+	[17] = true, [18] = true }
+local BASE_AMMO = { [15] = 'AROW01', [27] = 'BOLT01', [18] = 'BULL01' }
+
+local function table2DA(name)
+	P.t2da = P.t2da or {}
+	if not P.t2da[name] then P.t2da[name] = EEex_Resource_Load2DA(name) end
+	return P.t2da[name]
+end
+local function at2DA(name, col, row) return tonumber(EEex_Resource_GetAt2DALabels(table2DA(name), col, tostring(row))) or 0 end
+
+-- Strength to-hit and damage (STRMOD, plus STRMODEX for 18/xx).
+local function strBonus(sp)
+	local str, ex = EEex_Sprite_GetStat(sp, 36), EEex_Sprite_GetStat(sp, 37)
+	local hit, dmg = at2DA('STRMOD', 'TO_HIT', str), at2DA('STRMOD', 'DAMAGE', str)
+	if str == 18 and ex > 0 then
+		hit, dmg = hit + at2DA('STRMODEX', 'TO_HIT', ex), dmg + at2DA('STRMODEX', 'DAMAGE', ex)
+	end
+	return hit, dmg
+end
+
+-- Engine attacks-per-round code: 1-5 attacks, 6 = 1.5, 7 = 2.5, 8 = 3.5, 9 = 4.5.
+local function aprCode(v) if v >= 6 then return v - 4.5 end return v end
+
+-- Attacks per round with a weapon of `pips` skill: warriors from WSPATCK (skill x level; 0 = 1, 1 = 2, 2 = 3,
+-- -1 = 1.5, -2 = 2.5), monks as the engine counts them, others 1; plus the weapon's own extra attacks.
+local function attacksPerRound(sp, info, pips)
+	local cls, apr = sp.m_typeAI.m_Class, 1
+	if WARRIOR[cls] then
+		local lvl = math.max(1, math.min(40, math.max(EEex_Sprite_GetStat(sp, 34), EEex_Sprite_GetStat(sp, 68))))
+		local v = at2DA('WSPATCK', lvl == 1 and 'LEVEL1' or tostring(lvl), math.min(pips, 5))
+		apr = v >= 0 and 1 + v or 0.5 - v
+	elseif cls == 20 then
+		apr = aprCode(EEex_Sprite_GetStat(sp, 8))
+	end
+	-- bows shoot twice as often as the other weapons (the engine's own rule, not an item effect)
+	if info.type == 15 then apr = apr + 1 end
+	return apr + (info.equip and info.equip.apr or 0)
+end
+
+-- Damage per hit, to-hit bonus and attacks per round of a weapon from its own data and the character's tables.
+local function weaponCore(sp, info)
+	local ab = info.ability
+	local pips = EEex_Sprite_GetStat(sp, info.prof)
+	local sHit, sDmg = skillBonus(pips)
+	local hit, dmg = ab.toHit + sHit, ab.bonus + sDmg
+	local dice, sides = ab.dice, ab.sides
+	if ab.kind == 4 then
+		local ammo = BASE_AMMO[info.type] and PStash_ItemInfo(BASE_AMMO[info.type])
+		local aa = ammo and ammo.ability
+		if not aa then return nil end
+		dice, sides, hit, dmg = aa.dice, aa.sides, hit + aa.toHit, dmg + aa.bonus
+	end
+	-- strength: melee always; ranged when flagged (bit 0 both, EE bit 2 damage, bit 3 to-hit: slings, thrown...)
+	if ab.kind == 1 or ab.strHit or ab.strDmg then
+		local h, d = strBonus(sp)
+		if ab.kind == 1 or ab.strHit then hit = hit + h end
+		if ab.kind == 1 or ab.strDmg then dmg = dmg + d end
+	end
+	return dice * (sides + 1) / 2 + dmg, hit, attacksPerRound(sp, info, pips)
+end
+
+local function isWeapon(info)
+	local ab = info and info.ability
+	return ab ~= nil and info.prof > 0 and (ab.kind == 1 or ab.kind == 2 or ab.kind == 4)
+end
+
+-- What the engine says about the weapon in use (inventory numbers: damage min-max, THAC0, attacks per round), minus
+-- what weaponCore finds for it: the character's own bonuses (gloves, kit, ammo in the quiver, effects...). Added to
+-- the weapons of the same group (launchers / the others), so the weapon in hand shows the game's exact figures
+-- (John 2026-10-21). Computed once per page rebuild; rebuild() keeps one per character and group (P.anchors).
+local AMMO_LAUNCHER = { [1] = 15, [2] = 27, [3] = 18 } -- ammo "launcher required" -> launcher item type
+local function weaponAnchor(p)
+	local sp, c = EEex_Sprite_GetInPortrait(p), characters and characters[id]
+	if not sp or not c or not c.damage or not c.THAC0 then return nil end
+	local items = sp.m_equipment.m_items
+	local sel = sp.m_equipment.m_selectedWeapon
+	local it = sel and items:get(sel)
+	local info = it and PStash_ItemInfo(it.pRes.resref:get())
+	if info and info.ability and info.ability.kind == 2 and sel >= 11 and sel <= 13 then
+		-- ammo selected: the launcher it needs, among the weapon slots
+		local want = AMMO_LAUNCHER[info.ability.launcher or 0]
+		info = nil
+		for slot = MAIN_HAND, MAIN_HAND + 3 do
+			local w = items:get(slot)
+			local wi = w and PStash_ItemInfo(w.pRes.resref:get())
+			if wi and wi.type == want then info = wi break end
+		end
+	end
+	if not isWeapon(info) then return nil end
+	local function first(v) return tonumber(string.match(tostring(v or ''), '%-?%d+')) end
+	local lo, hi, thac0 = first(c.damage.min), first(c.damage.max), first(c.THAC0.current)
+	if not lo or not hi or not thac0 then return nil end
+	local perHit, hit, apr = weaponCore(sp, info)
+	if not perHit then return nil end
+	local engApr = aprCode(EEex_Sprite_GetStat(sp, 8))
+	local off = items:get(9)
+	local oi = off and PStash_ItemInfo(off.pRes.resref:get())
+	if oi and oi.ability and oi.ability.kind == 1 then engApr = engApr - 1 end -- the off-hand's own attack
+	return { launcher = info.ability.kind == 4, dmg = (lo + hi) / 2 - perHit,
+		hit = (EEex_Sprite_GetStat(sp, 7) - thac0) - hit, apr = engApr - apr }
+end
+
+-- { round = damage per round, hit = to-hit bonus, thac0 = THAC0 with it, score } of a weapon for this character, or
+-- nil (not a weapon, or unusable by him).
+local function weaponDps(p, info)
+	local sp = EEex_Sprite_GetInPortrait(p)
+	if not sp or not isWeapon(info) or not usable(p, info) then return nil end
+	if info.ability.kind == 4 and not BASE_AMMO[info.type] then return nil end
+	local perHit, hit, apr = weaponCore(sp, info)
+	if not perHit then return nil end
+	local a = P.anchor and P.anchor[info.ability.kind == 4]
+	if a then perHit, hit, apr = perHit + a.dmg, hit + a.hit, apr + a.apr end
+	local round = math.max(1, perHit) * math.max(1, apr)
+	return { round = round, hit = hit, thac0 = EEex_Sprite_GetStat(sp, 7) - hit, score = round * (1 + 0.05 * hit) }
+end
+
 -- Game language, read from a string the game translates: "Arc" (8733, the Bow skill) in French.
 local function lang()
 	if P.lang == nil then P.lang = Infinity_FetchString(8733) == 'Arc' and 'fr' or 'en' end
@@ -827,7 +1002,16 @@ local function autoLess(a, b)
 	local T = tabs()
 	if a.tabIdx ~= b.tabIdx then return a.tabIdx < b.tabIdx end
 	local t = a.tabIdx
-	if t == T.weap or t == T.armor then return qualityLess(a, b) end
+	if t == T.weap then
+		-- DPS for the shown character, best first; weapons he cannot use last (John 2026-10-21)
+		if (a.dps ~= nil) ~= (b.dps ~= nil) then return a.dps ~= nil end
+		if a.dps and a.dps.score ~= b.dps.score then return a.dps.score > b.dps.score end
+		return qualityLess(a, b)
+	end
+	if t == T.armor then -- best AC first, then quality (John 2026-10-22)
+		if a.ac ~= b.ac then return a.ac > b.ac end
+		return qualityLess(a, b)
+	end
 	if t == T.gear then
 		local ra, rb = BODY_ORDER[a.type] or 9, BODY_ORDER[b.type] or 9
 		if ra ~= rb then return ra < rb end
@@ -872,18 +1056,32 @@ local function rebuild()
 		return
 	end
 	local gearTab = tabIndex('Gear')
+	-- the anchor of the weapon in hand, remembered per character and per group: an archer stays an archer when he
+	-- puts his bow away (John 2026-10-21); lasts for the game session
+	local okA, anchor = pcall(weaponAnchor, p)
+	local who = EEex_Sprite_GetInPortrait(p)
+	P.anchors = P.anchors or {}
+	local mine = who and P.anchors[who.m_id] or {}
+	if who then P.anchors[who.m_id] = mine end
+	if okA and anchor then mine[anchor.launcher] = anchor end
+	P.anchor = mine
 	for order, e in ipairs(P.list) do
 		local info = PStash_ItemInfo(e.res)
 		if info and (P.tab == 1 or tabOf(info, e.res, e.identified) == P.tab) then
 			local units = info.stack > 1 and math.max(1, e.uses) or 1
 			local ok = usable(p, info)
+			local itemTab = tabOf(info, e.res, e.identified)
+			-- charged items (wands, rods...): the charges left, like the backpack shows them (John 2026-10-21)
+			-- (both: charges bottom left, the number of copies bottom right, John 2026-10-22)
+			local charged = info.stack == 1 and info.ability and info.ability.charges > 0
 			P.view[#P.view + 1] = { res = e.res, icon = info.icon, units = units * math.max(1, e.count),
 				name = Infinity_FetchString(e.identified and info.idName or info.unidName),
 				order = order, type = info.type, price = info.price,
 				-- value per weight unit (John): weightless items first
 				ratio = info.weight > 0 and info.price / info.weight or math.huge, tabIdx = tabOf(info, e.res, e.identified),
 				magic = info.magical or info.enchant > 0, enchant = info.enchant, ac = (acOf(info)), sub = subRank(info),
-				cursed = e.identified and cursedItem(info) or false,
+				cursed = e.identified and cursedItem(info) or false, charged = charged or nil, charges = charged and e.uses or nil,
+				dps = itemTab == tabs().weap and weaponDps(p, info) or nil,
 				tint = (not e.identified and P.tintUnid) or (not ok and P.tintBad) or P.tintOk,
 				desc = validRef(e.identified and info.idDesc or info.unidDesc) or validRef(info.idDesc)
 					or validRef(info.unidDesc) or -1, descPic = info.descPic,
@@ -921,6 +1119,24 @@ local function rebuild()
 			return a.order < b.order
 		end)
 	end
+	if P.reverse then
+		-- Date / Price / Gp/lb mix the tabs: the whole list turns over; the others turn over within each tab,
+		-- weapons the shown character cannot use staying last
+		local function flip(i, j) while i < j do P.view[i], P.view[j] = P.view[j], P.view[i] i, j = i + 1, j - 1 end end
+		if mode == 'Date' or mode == 'Price' or mode == 'Gp/lb' then
+			flip(1, #P.view)
+		else
+			local i = 1
+			while i <= #P.view do
+				local j = i
+				while j < #P.view and P.view[j + 1].tabIdx == P.view[i].tabIdx do j = j + 1 end
+				local last = j
+				if P.view[i].tabIdx == TAB.weap then while last >= i and not P.view[last].dps do last = last - 1 end end
+				flip(i, last)
+				i = j + 1
+			end
+		end
+	end
 	local maxTop = math.max(0, math.ceil(#P.view / P.COLS) - P.ROWS)
 	P.top = math.min(P.top, maxTop)
 	P.load, P.cap = PStash_Weight()
@@ -939,10 +1155,23 @@ end
 
 function PStash_CellIcon(i) local c = cell(i) return c and c.icon or nil end
 function PStash_CellCount(i) local c = cell(i) return c and c.units > 1 and c.units or nil end
--- The item's name only (John 2026-10-19: no comparison lines; the "+" marker on the cell still flags upgrades).
+-- Charges of a charged item, bottom left of its cell like the game's inventory (John 2026-10-21). Drawn in the
+-- "label" style: a custom style with the BAM font NUMBER crashed the game (0xC0000005, 2026-10-21).
+function PStash_CellCharged(i) local c = cell(i) return c ~= nil and c.charged == true end
+-- Digit k (0 = first) of a charged item's charges, or nil.
+function PStash_ChargeDigit(i, k)
+	local c = cell(i)
+	if not c or not c.charged then return nil end
+	return tonumber(string.sub(tostring(math.min(c.charges or 0, 999)), k + 1, k + 1))
+end
+-- Name; weapons add their damage per round and THAC0 for the shown character (John 2026-10-21).
 function PStash_CellName(i)
 	local c = cell(i)
-	return c and c.name or ''
+	if not c then return '' end
+	if c.dps then
+		return c.name .. '\n' .. T('dps_line', string.format('%.1f', c.dps.round), c.dps.thac0)
+	end
+	return c.name
 end
 function PStash_CellDesc(i)
 	local c = cell(i)
@@ -951,14 +1180,36 @@ function PStash_CellDesc(i)
 		icon = c.icon }, 2)
 end
 function PStash_CellSell(i) local c = cell(i) return c ~= nil and PStash_IsMarked(c.res) end
-function PStash_CellTint(i) local c = cell(i) return c and c.tint or nil end
+function PStash_CellValuable(i) local c = cell(i) return c ~= nil and PStash_IsValuable(c.res) end
+-- Valuable items: old gold over the cell (15 %); to sell: the cell darkened (45 %) and the icon in greyscale
+-- (John 2026-10-22).
+local TINT_VALUABLE, TINT_SELL = 'PSTASHOR', 'PSTASHDK'
+function PStash_CellTint(i)
+	local c = cell(i)
+	if not c then return nil end
+	if not c.bag and PStash_IsValuable(c.res) then return TINT_VALUABLE end
+	if not c.bag and PStash_IsMarked(c.res) then return TINT_SELL end
+	return c.tint
+end
+function PStash_CellGrey(i) local c = cell(i) return c ~= nil and not c.bag and PStash_IsMarked(c.res) end
 function PStash_CellPlus(i) local c = cell(i) return c ~= nil and c.plus == true end
 
 local SORT_KEY = { Auto = 'sort_auto', Date = 'sort_date', Quality = 'sort_quality', Type = 'sort_type',
 	Price = 'sort_price', ['Gp/lb'] = 'sort_gplb' }
-function PStash_SortText() return T('sort_prefix') .. T(SORT_KEY[P.SORTS[P.sort]] or P.SORTS[P.sort]) end
+function PStash_SortText()
+	return T('sort_prefix') .. T(SORT_KEY[P.SORTS[P.sort]] or P.SORTS[P.sort]) .. (P.reverse and T('sort_rev') or '')
+end
+-- Right click on the sort button: the same sort, reversed (John 2026-10-22).
+function PStash_ReverseSort()
+	P.reverse = not P.reverse
+	P.help = nil
+	rebuild()
+end
+-- A click on the sort button closes its help panel (John 2026-10-22: the player wants to see the grid); the panel
+-- comes back when the mouse leaves the button and enters it again (actionEnter).
 function PStash_CycleSort()
 	P.sort = P.sort % #P.SORTS + 1
+	P.help = nil
 	rebuild()
 end
 
@@ -1205,6 +1456,94 @@ function PStash_OverlaySlot()
 	return t
 end
 
+-- Backpack and equipped items behave like stash items (John 2026-10-22): marks (Ctrl + click), gold coin / gold rim,
+-- and weapons' damage per round in their tooltip. Slot names (UI.MENU slotinfo) -> m_items index.
+local SLOT_INDEX = { amulet = 0, armor = 1, belt = 2, boots = 3, cloak = 4, gauntlets = 5, helmet = 6, ringleft = 7,
+	ringright = 8, shield = 9, quiver0 = 11, quiver1 = 12, quiver2 = 13, personal0 = 15, personal1 = 16, personal2 = 17,
+	weapon0 = 35, weapon1 = 36, weapon2 = 37, weapon3 = 38 }
+for k = 0, 15 do SLOT_INDEX['group' .. k] = 18 + k end
+
+-- Item type in a slot of the shown character, or nil.
+function PStash_SlotRes(name)
+	local sp = EEex_Sprite_GetInPortrait(shownPortrait())
+	local idx = SLOT_INDEX[name]
+	local it = sp and idx and sp.m_equipment.m_items:get(idx)
+	return it and string.upper(it.pRes.resref:get()) or nil
+end
+function PStash_SlotMark(name)
+	local res = PStash_SlotRes(name)
+	return res and ((PStash_IsValuable(res) and 2) or (PStash_IsMarked(res) and 1)) or 0
+end
+function PStash_CtrlDown()
+	return EEex_Key_IsDown(EEex_Key_GetFromName('Left Ctrl')) or EEex_Key_IsDown(EEex_Key_GetFromName('Right Ctrl'))
+end
+-- Ctrl + click on a backpack / equipment slot (a button over it, enabled only while Ctrl is down).
+-- A backpack item just marked to sell goes straight to the stash, where Sell Marked sells it (John 2026-10-22): an
+-- item taken out of a backpack slot while a store is open crashed the game, so not at a store.
+function PStash_SlotToggle(name)
+	local res = PStash_SlotRes(name)
+	if not res then return end
+	PStash_ToggleMark(res)
+	P.saleCache, P.dirty = {}, true
+	local idx = SLOT_INDEX[name]
+	if PStash_IsMarked(res) and idx >= 18 and idx <= 33 and e:GetActiveEngine() ~= storeScreen then
+		if PStash_Add(shownPortrait(), idx) then P.list = nil rebuild() refreshInventory() end
+	end
+end
+
+-- An item in hand that is valuable: the ground column refuses it (John 2026-10-22: never dropped on the floor).
+function PStash_HoldingValuable()
+	local it = heldItem()
+	return it ~= nil and PStash_IsValuable(string.upper(it.pRes.resref:get()))
+end
+function PStash_RefuseGround() P.msg = T('msg_valuable_ground') end
+
+-- Weapons' tooltips in the backpack and weapon slots: the engine's text + "x dmg/round, THAC0 y" for the shown
+-- character. The engine's own tables are edited in place (a new slotinfo table every frame made tooltips loop),
+-- from a label's "enabled" check evaluated every frame before the slots draw; the figures are cached 1 s.
+local TIP_SLOTS = { 'weapon0', 'weapon1', 'weapon2', 'weapon3', 'shield' }
+for k = 0, 15 do TIP_SLOTS[#TIP_SLOTS + 1] = 'group' .. k end
+P.tipLine = P.tipLine or {}
+function PStash_DecorateTooltips()
+	local eq = characters and characters[id] and characters[id].equipment
+	if not eq then return false end
+	local now, p = Infinity_GetClockTicks(), shownPortrait()
+	if not P.tipAt or now - P.tipAt > 1000 or P.tipFor ~= id then P.tipLine, P.tipAt, P.tipFor = {}, now, id end
+	-- marked items: their tint on the slot too (the engine's slot table edited in place, its own tint kept)
+	P.slotTint = P.slotTint or {}
+	for name in pairs(SLOT_INDEX) do
+		local s = eq[name]
+		local item = s and s.item
+		if item then
+			local res = PStash_SlotRes(name)
+			local want = res and ((PStash_IsValuable(res) and 'PSTASHOR') or (PStash_IsMarked(res) and 'PSTASHDK')) or nil
+			local ours = item.tint == 'PSTASHOR' or item.tint == 'PSTASHDK'
+			if want then
+				if item.tint ~= want then
+					if not ours then P.slotTint[name] = item.tint end
+					item.tint = want
+				end
+			elseif ours then
+				item.tint = P.slotTint[name] or ''
+			end
+		end
+	end
+	for _, name in ipairs(TIP_SLOTS) do
+		local s = eq[name]
+		local res = s and s.tooltip and s.tooltip ~= '' and PStash_SlotRes(name)
+		if res then
+			local line = P.tipLine[res]
+			if line == nil then
+				local d = weaponDps(p, PStash_ItemInfo(res))
+				line = d and T('dps_line', string.format('%.1f', d.round), d.thac0) or false
+				P.tipLine[res] = line
+			end
+			if line and not string.find(s.tooltip, line, 1, true) then s.tooltip = s.tooltip .. '\n' .. line end
+		end
+	end
+	return false
+end
+
 -- The old raw-SDL drop (mouse coordinates were unreliable: their origin depends on the open menus) is retired;
 -- a hook left over from a hot reload calls this and gets "not handled".
 function PStash_MouseEvent() return false end
@@ -1361,7 +1700,8 @@ local function storeAllFor(p, forBot, bags)
 		if it then
 			local res = string.upper(it.pRes.resref:get())
 			local info = PStash_ItemInfo(res)
-			local kept = forBot and botKeep(res) or P.KEEP[res]
+			-- valuable items stay where the player put them (John 2026-10-22)
+			local kept = (forBot and botKeep(res) or P.KEEP[res]) or PStash_IsValuable(res)
 			if info and info.type == 36 and res ~= P.RES and not kept and hasStore(res) then
 				-- a bag: collected (bot) or listed for the player's confirmation
 				if forBot then if PStash_CollectBag(p, i) then n = n + 1 end
@@ -1675,18 +2015,69 @@ function PStash_StatValue(k)
 	if not c then return '' end
 	if k == 0 then return tostring(c.AC.current) end
 	if k == 1 then return c.HP.current .. '/' .. c.HP.max end
-	if k == 2 then return tostring(getInventoryTHAC0()) end
-	return tostring(getInventoryDamage())
+	-- read from characters[id] (Infinity UI++ rewrites getInventoryTHAC0 / getInventoryDamage on its own rgInvId)
+	if k == 2 then return tostring(c.THAC0.current) .. (c.THAC0.offhand and ('\n' .. c.THAC0.offhand) or '') end
+	local d = c.damage
+	local s = d.min .. ' - ' .. d.max
+	if d.minOffhand and d.maxOffhand then s = s .. '\n' .. d.minOffhand .. ' - ' .. d.maxOffhand end
+	return s
+end
+
+-- Two weapons (John 2026-10-21): the lines both hands share once, then what differs, "Main: ..." / "Off: ...".
+-- Lines are compared once shortened, the off-hand's "Weapon 2:" counting as "Weapon:"; a per-hand line loses its
+-- "THAC0 main hand -" style prefix (the hand is said in front).
+local function splitLines(s)
+	local out = {}
+	for l in string.gmatch(s, '[^\n]+') do if string.find(l, '%S') then out[#out + 1] = l end end
+	return out
+end
+local function bothHands(main, off)
+	-- each line: no "THAC0 main hand -" prefix, the off hand's "Weapon 2:" read as "Weapon:"
+	local function clean(l) return (string.gsub(string.gsub(l, '^[^:]-%-%s*', ''), '^([^:]-) 2%s*:', '%1:')) end
+	local m, o = splitLines(short(main)), splitLines(short(off))
+	for i, l in ipairs(m) do m[i] = clean(l) end
+	for i, l in ipairs(o) do o[i] = clean(l) end
+	local function parts(l) return string.match(l, '^([^:]-)%s*:%s*([%+%-]?%d+)%s*$') end
+	-- The engine folds the off hand's strength into its weapon line (THAC0: main "Str: -3" + "Weapon: -3", off
+	-- "Weapon: -6"): with no strength line of its own, the off hand's weapon line gives it back (John 2026-10-21).
+	local strLabel, str, offStr = attr('str'), nil, false
+	for _, l in ipairs(m) do local a, v = parts(l) if a == strLabel then str = tonumber(v) end end
+	for _, l in ipairs(o) do if parts(l) == strLabel then offStr = true end end
+	if str and str ~= 0 and not offStr then
+		local mainLabels = {}
+		for _, l in ipairs(m) do local a = parts(l) if a then mainLabels[a] = true end end
+		for i, l in ipairs(o) do
+			local a, v = parts(l)
+			if a and a ~= strLabel and mainLabels[a] and string.find(a, escapePattern(T('slot_weapon'))) then
+				local n = tonumber(v) - str
+				o[i] = a .. ': ' .. (n > 0 and '+' or '') .. n
+				o[#o + 1] = strLabel .. ': ' .. (str > 0 and '+' or '') .. str
+				break
+			end
+		end
+	end
+	local left = {}
+	for _, l in ipairs(o) do left[l] = (left[l] or 0) + 1 end
+	local common, onlyMain = {}, {}
+	for _, l in ipairs(m) do
+		if (left[l] or 0) > 0 then left[l] = left[l] - 1 common[#common + 1] = l
+		else onlyMain[#onlyMain + 1] = l end
+	end
+	local out = common
+	for _, l in ipairs(onlyMain) do out[#out + 1] = T('ab_main_hand') .. ': ' .. l end
+	for _, l in ipairs(o) do
+		if (left[l] or 0) > 0 then left[l] = left[l] - 1 out[#out + 1] = T('ab_off_hand') .. ': ' .. l end
+	end
+	return table.concat(out, '\n')
 end
 
 -- The UI.MENU helper when it exists, else the same text built here (LeUI's UI.MENU has no
--- getInventoryTHAC0Details / getInventoryDamageDetails).
+-- getInventoryTHAC0Details / getInventoryDamageDetails); two weapons: factorized (bothHands).
 local function statDetails(c, key, helper)
-	if type(helper) == 'function' then return helper() end
 	local s = c[key]
-	if not s then return '' end
-	if s.detailsOffhand == nil or s.detailsOffhand == '' then return s.details end
-	return tostring(s.details) .. '\n\n' .. s.detailsOffhand
+	if s and s.detailsOffhand ~= nil and s.detailsOffhand ~= '' then return bothHands(tostring(s.details), s.detailsOffhand) end
+	if type(helper) == 'function' then return helper() end
+	return s and s.details or ''
 end
 
 -- Compared value as the vanilla getTempStat: "-" when unchanged, red when worse, green when better.
@@ -1724,7 +2115,15 @@ function PStash_StatText(k)
 	if k == 0 then return short(c.AC.details) end
 	if k == 1 then return hpDetails(c) end
 	if k == 2 then return short(statDetails(c, 'THAC0', getInventoryTHAC0Details)) end
-	return short(statDetails(c, 'damage', getInventoryDamageDetails))
+	-- damage block: the engine's attacks per round with what is equipped, last line (John 2026-10-21)
+	local text = short(statDetails(c, 'damage', getInventoryDamageDetails))
+	local sp = EEex_Sprite_GetInPortrait(shownPortrait())
+	if sp then
+		local apr = aprCode(EEex_Sprite_GetStat(sp, 8))
+		local shown = string.format('%g', apr) -- 1, 1.5, 2... (John: decimals, not 3/2)
+		text = text .. '\n' .. T('st_apr', shown)
+	end
+	return text
 end
 
 -----------------
@@ -1735,7 +2134,9 @@ end
 local function storable(it)
 	local res = string.upper(it.pRes.resref:get())
 	local info = PStash_ItemInfo(res)
+	-- valuable items stay where the player put them (John 2026-10-22: not moved by Store all or any other system)
 	return info and EEex_BAnd(it.m_flags, 1) ~= 0 and not botKeep(res) and not info.critical and info.type ~= 36
+		and not PStash_IsValuable(res)
 end
 
 -- An item dropped on the stash grid: hand it to the shown character like a drop on his portrait
@@ -1866,18 +2267,26 @@ end
 
 -- John: Ctrl + click on a stash item marks it "to sell" (all of that kind); a merchant's "Sell marked" button sells
 -- them, and the bot sells them at Nashkel. Saved in the game (a global per item).
+-- Marks, per item type (global PSTS_<RES>, kept in the save): 1 = to sell, 2 = valuable (never sold, John 2026-10-22).
 local function markKey(res) return 'PSTS_' .. string.upper(res) end
-function PStash_IsMarked(res) return EEex_GameState_GetGlobalInt(markKey(res)) == 1 end
+local function markOf(res) return EEex_GameState_GetGlobalInt(markKey(res)) end
+function PStash_IsMarked(res) return markOf(res) == 1 end
+function PStash_IsValuable(res) return res ~= nil and markOf(res) == 2 end
 local function setMarked(res, on) EEex_GameState_SetGlobalInt(markKey(res), on and 1 or 0) end
 
 P.hoverCell = P.hoverCell or -1
 P.gtop = P.gtop or 0
 function PStash_Hover(i) P.hoverCell = i end
 
-function PStash_ToggleMark(res) setMarked(res, not PStash_IsMarked(res)) end
+-- Ctrl + click cycles: nothing -> to sell -> valuable -> nothing.
+function PStash_ToggleMark(res) EEex_GameState_SetGlobalInt(markKey(res), (markOf(res) + 1) % 3) end
 
 -- Space in the inventory (John 2026-10-19): "Store all", wherever the mouse is (marking is Ctrl + click now).
 function PStash_OnKey(key)
+	if P.dump and not P.dump.target and key == EEex_Key_GetFromName('Escape') then
+		P.dumpCancel(true)
+		return false
+	end
 	if key ~= EEex_Key_GetFromName('Space') or not Infinity_IsMenuOnStack('INVENTORY') then return false end
 	if heldItem() then return true end
 	PStash_StoreAll()
@@ -1983,7 +2392,7 @@ function PStash_CanSellMarked()
 	return #list > 0
 end
 
--- Party gold (CInfGame +0x7988 on v2.7.3.0, checked against GetPartyGold). Script actions run instantly while the
+-- Party gold (CInfGame +0x7988 on v2.7.3.0 and v2.6.6.0, checked against GetPartyGold / AddPartyGold). Script actions run instantly while the
 -- store screen is live crash the game: if the field does not match, the gold waits for the store to close.
 local GOLD_OFF = 0x7988
 local function addGold(n)
@@ -2018,7 +2427,11 @@ function PStash_SellMarked()
 			if taken >= it.count then setMarked(it.res, false) end
 		end
 	end
-	if gold > 0 then addGold(gold) end
+	if gold > 0 then
+		addGold(gold)
+		-- the game's own gold pickup sound (CBaldurEngine::RESREF_SOUND_EQUIP_TAKE_GOLD), John 2026-10-21
+		pcall(Infinity_PlaySound, 'GAM_37A')
+	end
 	P.list = PStash_List(P.RES)
 	P.saleCache = {} -- the button's total drops at once
 	P.dirty = true
@@ -2035,7 +2448,7 @@ end
 P.snapshot = P.snapshot or nil
 local function takeSnapshot()
 	if EEex_GameState_GetGlobalInt('SOD_fromimport') == 1 then return end -- frozen during the transition
-	local snap = { items = {}, bags = {} }
+	local snap = { items = {}, bags = {}, gold = game:GetPartyGold() }
 	for _, e in ipairs(PStash_List(P.RES)) do
 		snap.items[#snap.items + 1] = { res = e.res, count = e.count, uses = e.uses, identified = e.identified }
 	end
@@ -2080,15 +2493,45 @@ local function campaignWatch()
 	if EEex_GameState_GetGlobalInt('SOD_fromimport') == 1 and EEex_GameState_GetGlobalInt('PSTASH_SODDONE') == 0
 		and P.snapshot and #PStash_List(P.RES) == 0 then
 		EEex_GameState_SetGlobalInt('PSTASH_SODDONE', 1)
-		for res, n in pairs(P.snapshot.bags) do setBagCount(res, n) end
-		P.restore = P.snapshot.items
+		if opt('keepgold') and P.snapshot.gold and game:GetPartyGold() < P.snapshot.gold then
+			addGold(P.snapshot.gold - game:GetPartyGold())
+		end
+		if not opt('losestash') then
+			for res, n in pairs(P.snapshot.bags) do setBagCount(res, n) end
+			P.restore = P.snapshot.items
+		end
 		P.snapshot = nil
 	end
+	-- EET, SoD -> BG2 (chapter 12 -> 13: Irenicus takes everything): the stash store lives on in the save; the options
+	-- give the gold back (the most the party had in the last minute: the move takes it before the chapter changes)
+	-- or empty the stash too.
+	local chapter = EEex_GameState_GetGlobalInt('CHAPTER')
+	if P.lastChapter and P.lastChapter >= 7 and P.lastChapter <= 12 and chapter >= 13 then
+		if opt('keepgold') then
+			local best = 0
+			for _, v in ipairs(P.goldHistory or {}) do best = math.max(best, v) end
+			if best > game:GetPartyGold() then addGold(best - game:GetPartyGold()) end
+		end
+		if opt('losestash') then
+			local g = gamePtr()
+			for _, e in ipairs(PStash_List(P.RES)) do
+				PStash_Eng_TakeItemFromStore(g, resRef(P.RES), resRef(e.res, 32), math.max(1, e.count))
+			end
+			for _, res in ipairs(P.BAG_RES or {}) do setBagCount(res, 0) end
+			P.list, P.dirty = nil, true
+		end
+	end
+	P.lastChapter = chapter
 	if P.restore then restoreStep() return end
 	local now = Infinity_GetClockTicks()
 	if not P.snapNext or now >= P.snapNext then
 		P.snapNext = now + 5000
 		takeSnapshot()
+		if chapter <= 12 then -- the last minute of party gold, for the EET move (see above)
+			P.goldHistory = P.goldHistory or {}
+			table.insert(P.goldHistory, game:GetPartyGold())
+			if #P.goldHistory > 12 then table.remove(P.goldHistory, 1) end
+		end
 	end
 end
 
@@ -2184,10 +2627,136 @@ function PStash_BagClick()
 	Infinity_PushMenu('POPUP_TWOBUTTON')
 end
 
+-----------------
+-- Dump        --
+-----------------
+
+-- Right click on the weight bag (John 2026-10-22): put things away into a container. The inventory closes and the
+-- game waits for the party to open a container (WORLD_CONTAINER; the open one is m_pObjectGame.m_iContainer); a
+-- three-button popup then asks what goes in: the shown character's backpack, or the stash page shown when the bag
+-- was clicked (its tab), or nothing. Never moved: the stash item, valuable items, quest items (and bags from the
+-- stash). Items move a few per tick: a backpack item off its slot (SwapItemPersonal); a stash item first out of the
+-- stash into a backpack (PStash_Take); then onto the container's item list (m_lstItems:AddTail). Esc cancels.
+P.dump = nil
+local function dumpable(it)
+	local res = string.upper(it.pRes.resref:get())
+	local info = PStash_ItemInfo(res)
+	return res ~= P.RES and info ~= nil and not info.critical and not PStash_IsValuable(res)
+end
+local function dumpSlots(p)
+	local sp, out = EEex_Sprite_GetInPortrait(p), {}
+	if not sp then return out end
+	for i = 18, 32 do
+		local it = sp.m_equipment.m_items:get(i)
+		if it and dumpable(it) then out[#out + 1] = i end
+	end
+	return out
+end
+function PStash_DumpArm()
+	local page = {}
+	for _, c in ipairs(P.view or {}) do
+		local info = not c.bag and PStash_ItemInfo(c.res)
+		if info and not info.critical and not PStash_IsValuable(c.res) then page[#page + 1] = c.res end
+	end
+	local p = shownPortrait()
+	if #page == 0 and #dumpSlots(p) == 0 then P.msg = T('dump_none') return end
+	P.dump = { portrait = p, page = page }
+	pcall(function() e:SelectEngine(worldScreen) end)
+	Infinity_DisplayString(T('dump_armed'))
+end
+
+local function dumpCancel(say)
+	P.dump = nil
+	if say then Infinity_DisplayString(T('dump_cancel')) end
+end
+P.dumpCancel = dumpCancel
+
+-- An item in backpack `slot` of portrait `p` -> the container. Returns true when it moved.
+local function slotToContainer(p, slot, container)
+	local buf = P.scratch
+	EEex_Write64(buf + 16, 0)
+	EEex_Write32(buf + 24, -1)
+	PStash_Eng_SwapItemPersonal(gamePtr(), p, buf + 16, slot, buf + 24, 0xFFFF, 0, 1, 0)
+	local ptr = EEex_ReadU64(buf + 16)
+	if ptr == 0 then return false end
+	container.m_lstItems:AddTail(EEex_PtrToUD(ptr, 'CItem'))
+	return true
+end
+
+-- One stash stack -> a backpack with room -> the container. Returns true when something moved.
+local function stashToContainer(res, container)
+	for p = 0, 5 do
+		local sp = EEex_Sprite_GetInPortrait(p)
+		if sp and freeSlot(sp) then
+			local slot = PStash_Take(p, res)
+			return slot ~= nil and slotToContainer(p, slot, container)
+		end
+	end
+	return false
+end
+
+local function inStash(res)
+	for _, e in ipairs(PStash_List(P.RES)) do if e.res == res then return true end end
+	return false
+end
+
+-- Called by the tick: waits for a container, asks, then moves up to 6 items per tick.
+local function dumpStep()
+	local d = P.dump
+	if not d or not PStash_Ready() then return end
+	local g = EEex_EngineGlobal_CBaldurChitin.m_pObjectGame
+	if not d.target then
+		if d.asking or not Infinity_IsMenuOnStack('WORLD_CONTAINER') or Infinity_IsMenuOnStack('POPUP_THREEBUTTON') then return end
+		local id = g.m_iContainer
+		if not id or id <= 0 then return end
+		d.asking = true
+		Popup3Button = {
+			info = T('dump_confirm', #dumpSlots(d.portrait), #d.page),
+			leftText = 'CANCEL_BUTTON',
+			leftFunc = function() dumpCancel(false) end,
+			midText = T('dump_backpack'),
+			midFunc = function() d.asking, d.target, d.source, d.moved = false, id, 'backpack', 0 end,
+			rightText = T('dump_stashpage'),
+			rightFunc = function() d.asking, d.target, d.source, d.moved = false, id, 'stash', 0 end,
+		}
+		Infinity_PushMenu('POPUP_THREEBUTTON')
+		return
+	end
+	local ob = EEex_GameObject_Get(d.target)
+	if not ob then dumpCancel(true) return end
+	local c = EEex_GameObject_CastUserType(ob)
+	local steps, finished = 0, false
+	if d.source == 'backpack' then
+		local slots = dumpSlots(d.portrait)
+		for _, slot in ipairs(slots) do
+			if steps >= 6 then break end
+			if slotToContainer(d.portrait, slot, c) then d.moved, steps = d.moved + 1, steps + 1 end
+		end
+		finished = steps == 0 or #slots <= steps
+	else
+		while #d.page > 0 and steps < 6 do
+			local res = d.page[1]
+			if inStash(res) and stashToContainer(res, c) then
+				d.moved, steps = d.moved + 1, steps + 1
+			else
+				table.remove(d.page, 1) -- all of it moved, or no room in any backpack: next one
+			end
+		end
+		finished = #d.page == 0
+	end
+	if finished then
+		Infinity_DisplayString(T('dump_done', d.moved))
+		P.dump, P.list, P.dirty = nil, nil, true
+	end
+end
+P.dumpStep = dumpStep
+
 function PStash_Tick()
 	-- The game's Lua heap is not collected on its own between screens (it grew to 4 GB at a store and the game ran
 	-- out of memory): a small collection step every frame keeps it flat.
 	collectgarbage('step', 200)
+	-- Infinity UI++ reads characters[rgInvId], set by its own inventory page: follow the shown character
+	if rgInvId ~= nil and id ~= nil and rgInvId ~= id then rgInvId = id end
 	local atStore = e:GetActiveEngine() == storeScreen
 	-- Character creation: the sprite being built is in portrait 0, leave it alone (no CreateItem on it).
 	if createCharScreen and e:GetActiveEngine() == createCharScreen then return false end
@@ -2202,6 +2771,10 @@ function PStash_Tick()
 	if P.CARRY and (eng == worldScreen or eng == inventoryScreen) then pcall(placeStashItems) end
 	pcall(storeMenu)
 	pcall(payGoldDue)
+	if P.dump and eng == worldScreen then
+		local ok, err = pcall(dumpStep)
+		if not ok then print('PStash dump: ' .. tostring(err)) P.dump = nil end
+	end
 	if not atStore then pcall(campaignWatch) end
 	if next(P.pour) and e:GetActiveEngine() ~= storeScreen then pcall(pourLeftovers) end
 	-- Shared weight: refreshed every 2 s.
@@ -2243,6 +2816,7 @@ if not P.pushWrapped then
 end
 
 EEex_Menu_AddMainFileLoadedListener(function() EEex_Menu_LoadFile('PSTASH') end)
+
 EEex_Sprite_AddLoadedListener(function() pcall(pushTick) end)
 EEex_GameState_AddInitializedListener(pushTick)
 -- A loaded save has its own stash: forget the previous game's list.

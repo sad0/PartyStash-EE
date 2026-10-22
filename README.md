@@ -16,12 +16,21 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 - **New inventory page**: your backpack and the stash in one scrollable grid, a ground column, and the stats shown
   as compact 2×2 blocks (attributes in 3 letters: Str, Dex, Con…).
 - **Tabs**: All, Weapons, Armor, Gear, Ammo, Gems, Scrolls, Potions, Quest, Misc, Bags.
-- **Smart sorting**: *Auto* (each tab has its own order: weapons and armor by quality, then AC and value, scrolls by
-  class and level…), plus Date, Quality, Type, Price and Value/weight.
+- **Smart sorting**: *Auto* (each tab has its own order: weapons by damage per round for the shown character, armor
+  by AC, scrolls by class and level…), plus Date, Quality, Type, Price and Value/weight. **Right-click** the sort
+  button to reverse it.
 - **Colour hints**: red = unusable by the shown character, blue = unidentified, **+** = an upgrade for him (or a
   scroll a party mage can still learn).
-- **Sell marked**: **Ctrl + click** items in the stash, then sell them all at once from any merchant, straight from the
-  stash, with the total shown on the button.
+- **Marks**: **Ctrl + click** an item (in the stash, the backpack or equipped) to mark it **for sale** (darkened),
+  again to make it **valuable** (golden), again to clear it. **Sell Marked** sells everything marked for sale at once
+  from any merchant, straight from the stash, with the total shown on the button.
+- **Valuable items** are never sold, skipped by Store all and by the merchants' selection, and cannot be dropped on
+  the ground. A backpack item marked for sale goes straight to the stash.
+- **Damage per round**: weapon tooltips show the damage per round and THAC0 for the shown character (strength,
+  proficiencies, attacks per round, both hands when dual-wielding); the stats show the attacks per round.
+- **Charges**: wands and other charged items show their charges in the corner of their cell.
+- **Put away**: **right-click** the big bag next to the weight, then open a container, and choose to put the
+  backpack or the shown stash page in it (valuable and quest items stay).
 - **Bags**: put a gem bag, scroll case, potion case… in the stash. It is emptied into the stash and kept in the Bags
   tab, and the stash items it can hold weigh nothing. A Bag of Holding makes the whole stash weightless.
 - **Weight**: the stash counts against the sum of the members' weight allowances; above it, the party is slowed.
@@ -29,6 +38,8 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
   matching your game).
 - **Sorted loot** (optional component): ground piles, containers and the quick loot bar list quest items first,
   then weightless items, then the rest by value/weight.
+- **Options** (optional components): the stash weighs nothing; keep the party gold through the campaign changes
+  (BG1 to SoD, SoD to BG2 in EET); hardcore: those changes empty the stash too.
 - **15 languages**: English, French, German, Spanish, Italian, Polish, Russian, Portuguese (Brazil), Czech,
   Hungarian, Turkish, Ukrainian, Simplified Chinese, Japanese, Korean.
 
@@ -38,10 +49,11 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 ## Requirements
 
 - **Baldur's Gate: Enhanced Edition** (with or without **Siege of Dragonspear**), **Baldur's Gate II: Enhanced Edition**
-  (**EET** should work but is untested), game version **v2.7.x** (the mod calls the game engine directly; on another version the stash disables
-  itself instead of crashing).
+  or **EET**, game version **v2.6.6** or **v2.7.x** (the mod calls the game engine directly; on another version the
+  stash disables itself instead of crashing).
 - **[EEex](https://github.com/Bubb13/EEex)**, installed first.
 - **LeUI** works with Party Stash: install LeUI first, then pick the **Baldur's Gate II look** (see below).
+- **Infinity UI++** installs and runs in our tests; feedback welcome.
 - Another mod that replaces the inventory screen (**Dragonspear UI++**…) will conflict with the new inventory page.
 
 ### With LeUI
@@ -57,7 +69,8 @@ Party Stash with the Baldur's Gate II look on top of **LeUI** (BG:EE):
    `setup-PartyStash.exe`.
 3. Run `setup-PartyStash.exe`, pick your language, then:
    - **Party Stash**: choose the Baldur's Gate 1 or Baldur's Gate II look;
-   - **Sorted loot**: optional.
+   - **Sorted loot**: optional;
+   - **Options**: weightless stash, keep the gold through campaign changes, hardcore (optional).
 4. Launch the game through `InfinityLoader.exe` (**EEex**).
 
 ## Controls (inventory page)
@@ -67,9 +80,11 @@ Party Stash with the Baldur's Gate II look on top of **LeUI** (BG:EE):
 | Take an item from the stash | Click it (double-click: take and equip) |
 | Store a backpack item | **Shift + double-click** it, or drop it on the stash grid |
 | Store the whole backpack | **Store all** button, or **Space** |
-| Mark / unmark for sale | **Ctrl + click** a stash item, then **Sell Marked** at a merchant |
+| Mark for sale / valuable / clear | **Ctrl + click** an item (stash, backpack or equipped) |
 | Item description | Right-click |
 | Scroll the grid, the tabs, the ground | Mouse wheel, arrows |
+| Reverse the sort | **Right-click** the sort button |
+| Put the backpack or a stash page in a container | **Right-click** the big bag, then open the container |
 | Store a bag | **Shift + double-click** it, or Store all (asks first) |
 | **Empty the stash** (before uninstalling) | **Ctrl + left click** on the big bag next to the weight |
 
@@ -82,8 +97,8 @@ until the mod is reinstalled.
 
 ## FAQ
 
-**How does sorting work?** Each tab has its own default sort (**Auto**: weapons and armor by quality, scrolls by
-class and level...), or you pick **Date**, **Quality**, **Type**, **Price** or **Value/weight**.
+**How does sorting work?** Each tab has its own default sort (**Auto**: weapons by damage per round, armor by AC,
+scrolls by class and level...), or you pick **Date**, **Quality**, **Type**, **Price** or **Value/weight**.
 
 **What about bags, even bags of holding?** There is no nesting. A bag put in the stash is emptied into it and kept
 in the **Bags** tab, so the stash stays one flat list. Each collected bag makes the stash items it could hold
@@ -103,7 +118,8 @@ cost. Here is the Ducal Palace in **Siege of Dragonspear**, with hundreds of NPC
 
 - Moving from Baldur's Gate to **Siege of Dragonspear**: the stash is carried over as long as the game is not closed
   between the end of BG1 and the start of SoD.
-- **EET** (Enhanced Edition Trilogy): it should work (it installs like on **BG2:EE**) but has not been tested yet. Feedback welcome.
+- **EET** (Enhanced Edition Trilogy): tested on v2.6.6. The stash survives the move from **Siege of Dragonspear** to
+  Baldur's Gate II.
 - Translations other than English and French were made by the author: corrections are welcome (`PartyStash/tra/`).
 
 ## Download and discussion
@@ -132,12 +148,22 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 - **Nouvelle page d'inventaire** : sac à dos et coffre dans une seule grille défilante, une colonne pour le sol, et
   les stats en blocs 2×2 (caractéristiques en 3 lettres : For, Dex, Con…).
 - **Onglets** : Tout, Armes, Armure, Équipement, Munitions, Gemmes, Parchemins, Potions, Quête, Divers, Sacs.
-- **Tri intelligent** : *Auto* (chaque onglet a son ordre : armes et armures par qualité puis CA et valeur,
-  parchemins par classe et niveau…), plus Date, Qualité, Type, Prix et Valeur/poids.
+- **Tri intelligent** : *Auto* (chaque onglet a son ordre : armes par dégâts par round pour le perso affiché,
+  armures par CA, parchemins par classe et niveau…), plus Date, Qualité, Type, Prix et Valeur/poids. **Clic droit**
+  sur le bouton de tri pour l'inverser.
 - **Couleurs** : rouge = inutilisable par le perso affiché, bleu = non identifié, **+** = une amélioration pour lui
   (ou un parchemin qu'un mage du groupe peut encore apprendre).
-- **Vendre cochés** : **Ctrl + clic** sur des objets du coffre, puis vente groupée chez n'importe quel marchand,
-  directement depuis le coffre, avec le total affiché sur le bouton.
+- **Marques** : **Ctrl + clic** sur un objet (coffre, sac à dos ou équipé) pour le cocher **pour la vente**
+  (assombri), encore pour le rendre **précieux** (doré), encore pour l'effacer. **Vendre cochés** vend d'un coup tout
+  ce qui est coché chez n'importe quel marchand, directement depuis le coffre, avec le total affiché sur le bouton.
+- **Objets précieux** : jamais vendus, ignorés par Tout ranger et par la sélection des marchands, impossibles à
+  poser au sol. Un objet du sac à dos coché pour la vente part directement au coffre.
+- **Dégâts par round** : les infobulles des armes affichent les dégâts par round et le TAC0 pour le perso affiché
+  (force, compétences, attaques par round, les deux mains en combat à deux armes) ; les stats affichent les attaques
+  par round.
+- **Charges** : les baguettes et autres objets à charges affichent leurs charges dans le coin de leur case.
+- **Dépôt** : **clic droit** sur le gros sac à côté du poids, puis ouvrez un conteneur, et choisissez d'y déposer le
+  sac à dos ou la page du coffre affichée (les objets précieux et de quête restent).
 - **Sacs** : rangez un sac à gemmes, un étui à parchemins, une boîte à potions… dans le coffre. Il y est vidé et
   gardé dans l'onglet Sacs, et les objets du coffre qu'il peut contenir ne pèsent plus rien. Un Sac de contenance
   rend tout le coffre sans poids.
@@ -146,20 +172,24 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
   votre jeu).
 - **Butin trié** (composant optionnel) : au sol, dans les contenants et dans la barre de butin, les objets de
   quête d'abord, puis les objets sans poids, puis le reste par valeur/poids.
+- **Options** (composants optionnels) : le coffre ne pèse rien ; garder l'or du groupe aux changements de campagne
+  (BG1 vers SoD, SoD vers BG2 dans EET) ; hardcore : ces changements vident aussi le coffre.
 - **15 langues**.
 
 ### Prérequis
 
-- **BG:EE** (avec ou sans **Siege of Dragonspear**) ou **BG2:EE**, version **v2.7.x**. **EET** devrait marcher mais n'est pas encore testé.
+- **BG:EE** (avec ou sans **Siege of Dragonspear**), **BG2:EE** ou **EET**, version **v2.6.6** ou **v2.7.x**.
 - **[EEex](https://github.com/Bubb13/EEex)**, installé avant.
 - **LeUI** fonctionne avec Party Stash : installez LeUI avant, puis choisissez le **look Baldur's Gate II**.
+- **Infinity UI++** s'installe et tourne dans nos tests ; les retours sont les bienvenus.
 - Un autre mod qui remplace l'écran d'inventaire (**Dragonspear UI++**…) entre en conflit avec la nouvelle page.
 
 ### Installation
 
 1. Installez **EEex**.
 2. Décompressez l'archive dans le dossier du jeu (là où se trouve `chitin.key`).
-3. Lancez `setup-PartyStash.exe`, choisissez la langue, puis le look (BG1 ou BG2) et, si vous voulez, Butin trié.
+3. Lancez `setup-PartyStash.exe`, choisissez la langue, puis le look (BG1 ou BG2) et, si vous voulez, Butin trié et
+   les options (coffre sans poids, garder l'or, hardcore).
 4. Lancez le jeu avec `InfinityLoader.exe` (**EEex**).
 
 ### Commandes (page d'inventaire)
@@ -169,9 +199,11 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 | Prendre un objet du coffre | Clic (double-clic : prendre et équiper) |
 | Ranger un objet du sac à dos | **Maj + double-clic**, ou le déposer sur la grille du coffre |
 | Tout ranger | Bouton **Tout ranger**, ou **Espace** |
-| Cocher / décocher pour la vente | **Ctrl + clic** sur un objet du coffre, puis **Vendre cochés** chez un marchand |
+| Cocher pour la vente / précieux / effacer | **Ctrl + clic** sur un objet (coffre, sac à dos ou équipé) |
 | Description | Clic droit |
 | Faire défiler la grille, les onglets, le sol | Molette, flèches |
+| Inverser le tri | **Clic droit** sur le bouton de tri |
+| Déposer le sac à dos ou une page du coffre dans un conteneur | **Clic droit** sur le gros sac, puis ouvrir le conteneur |
 | Ranger un sac | **Maj + double-clic**, ou Tout ranger (avec confirmation) |
 | **Vider le coffre** (avant de désinstaller) | **Ctrl + clic gauche** sur le gros sac à côté du poids |
 
@@ -184,8 +216,8 @@ inaccessible jusqu'à la réinstallation du mod.
 
 ### FAQ
 
-**Comment marche le tri ?** Chaque onglet a son tri par défaut (**Auto** : armes et armures par qualité, parchemins
-par classe et niveau...), ou bien vous choisissez **Date**, **Qualité**, **Type**, **Prix** ou **po/lb**.
+**Comment marche le tri ?** Chaque onglet a son tri par défaut (**Auto** : armes par dégâts par round, armures par
+CA, parchemins par classe et niveau...), ou bien vous choisissez **Date**, **Qualité**, **Type**, **Prix** ou **po/lb**.
 
 **Et les sacs, même les sacs sans fond ?** Pas d'imbrication. Un sac mis dans le coffre y est vidé puis rangé dans
 l'onglet **Sacs** : le coffre reste une seule liste. Chaque sac collectionné rend sans poids les objets du coffre qu'il
@@ -198,6 +230,12 @@ capacité cumulée du groupe (au-delà, tout le monde est ralenti). **Tout range
 **Est-ce que ça ralentit le jeu ?** Aucun hook par créature (ni opcode, ni script, ni action) : le travail est espacé
 (une vérification toutes les 500 ms, le poids du groupe toutes les 2 s), donc le nombre de créatures à l'écran ne
 change pas son coût.
+
+### Remarques
+
+- De Baldur's Gate à **Siege of Dragonspear**, le coffre suit tant que le jeu n'est pas fermé entre la fin de BG1 et
+  le début de SoD.
+- **EET** : testé en v2.6.6. Le coffre survit au passage de **Siege of Dragonspear** à Baldur's Gate II.
 
 ### Téléchargement et discussion
 

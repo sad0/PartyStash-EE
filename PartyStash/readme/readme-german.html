@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>Eine unendliche Truhe für die ganze Gruppe im Stil von <strong>Pillars of Eternity</strong>, eingebaut in eine neu gestaltete Inventarseite. Für <strong>Baldur's Gate: Enhanced Edition</strong> (mit oder ohne <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> und <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventar, Aussehen Baldur&#x27;s Gate 1"></p>
 <h2>Funktionen</h2><ul>
 <li><strong>Gemeinsame Truhe</strong>: Alle Gruppenmitglieder erreichen dieselbe unendliche Truhe auf der Inventarseite. Quests sehen die darin gelagerten Gegenstände weiterhin.</li>
 <li><strong>Neue Inventarseite</strong>: Rucksack und Truhe in einem scrollbaren Raster, eine Bodenspalte, kompakte 2×2-Werte (Attribute mit 3 Buchstaben).</li>
 <li><strong>Reiter</strong>: Alle, Waffen, Rüstung, Ausrüstung, Munition, Edelsteine, Schriftrollen, Tränke, Quest, Sonstiges, Beutel.</li>
-<li><strong>Sortierung</strong>: Auto (jeder Reiter mit eigener Reihenfolge: Waffen und Rüstungen nach Qualität, dann RK und Wert; Schriftrollen nach Klasse und Grad…), Datum, Qualität, Typ, Preis, Wert/Gewicht.</li>
+<li><strong>Sortierung</strong>: Auto (jeder Reiter mit eigener Reihenfolge: Waffen nach Schaden pro Runde für die gezeigte Figur, Rüstungen nach RK, Schriftrollen nach Klasse und Grad…), Datum, Qualität, Typ, Preis, Wert/Gewicht. Rechtsklick auf die Sortier-Schaltfläche kehrt sie um.</li>
 <li><strong>Hinweise</strong>: rot = für den gezeigten Charakter unbenutzbar, blau = nicht identifiziert, + = eine Verbesserung für ihn (oder eine Schriftrolle, die ein Magier der Gruppe noch lernen kann).</li>
-<li><strong>Markierte verkaufen</strong>: <strong>Strg + Klick</strong> auf Truhengegenstände, dann alle auf einmal bei jedem Händler verkaufen, mit der Summe auf der Schaltfläche.</li>
+<li><strong>Markierungen</strong>: <strong>Strg + Klick</strong> auf einen Gegenstand (Truhe, Rucksack oder angelegt) markiert ihn zum Verkauf (abgedunkelt), nochmals als wertvoll (golden), nochmals hebt es auf. Markierte verk. verkauft alle zum Verkauf markierten Gegenstände auf einmal bei jedem Händler, mit der Summe auf der Schaltfläche.</li>
+<li><strong>Schaden pro Runde</strong>: Waffen-Tooltips zeigen den Schaden pro Runde und die ETW0 für die gezeigte Figur (Stärke, Fertigkeiten, Angriffe pro Runde, beide Hände beim Kampf mit zwei Waffen); die Werte zeigen die Angriffe pro Runde.</li>
+<li><strong>Ladungen</strong>: Zauberstäbe und andere aufladbare Gegenstände zeigen ihre Ladungen in der Ecke ihres Feldes.</li>
+<li><strong>Wertvolle Gegenstände</strong>: nie verkauft, von Alles einl. und von der Händlerauswahl übergangen, und sie können nicht auf den Boden gelegt werden. Ein zum Verkauf markierter Rucksackgegenstand wandert direkt in die Truhe.</li>
+<li><strong>Ablegen</strong>: Rechtsklick auf den großen Beutel neben dem Gewicht, dann einen Behälter öffnen und wählen, ob der Rucksack oder die gezeigte Truhenseite hineinkommt (wertvolle und Questgegenstände bleiben).</li>
+<li><strong>Optionen (eigene Komponenten)</strong>: die Truhe wiegt nichts; das Gold der Gruppe bei Kampagnenwechseln behalten (BG1 zu SoD, SoD zu BG2 in <strong>EET</strong>); Hardcore: diese Wechsel leeren auch die Truhe.</li>
 <li><strong>Beutel</strong>: Ein in die Truhe gelegter Beutel wird in sie geleert und im Reiter Beutel behalten; die Truhengegenstände, die er aufnehmen kann, wiegen nichts (ein Nimmervoller Beutel: die ganze Truhe).</li>
 <li><strong>Gewicht</strong>: Die Truhe zählt zur Summe der Traglasten der Mitglieder; darüber wird die Gruppe verlangsamt.</li>
 <li><strong>Zwei Aussehen</strong>: Stil von Baldur's Gate 1 oder Baldur's Gate II, in beiden Spielen.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="Händler: Markierte verkaufen"><br><em>Händler: Markierte verkaufen</em></p>
 <p><img src="bags.png" alt="Reiter Beutel"><br><em>Reiter Beutel</em></p>
-<h2>Voraussetzungen</h2><p>Spielversion <strong>v2.7.x</strong> und <strong>EEex</strong> (zuerst installiert). Ein Mod, der den Inventarbildschirm ersetzt (<strong>Dragonspear UI++</strong>…), verträgt sich nicht mit der neuen Seite. <strong>LeUI</strong> funktioniert mit <strong>Party Stash</strong>: wählen Sie den Baldur's Gate II-Look.</p>
+<h2>Voraussetzungen</h2><p>Spielversion <strong>v2.6.6</strong> oder <strong>v2.7.x</strong> und <strong>EEex</strong> (zuerst installiert). Ein Mod, der den Inventarbildschirm ersetzt (<strong>Dragonspear UI++</strong>…), verträgt sich nicht mit der neuen Seite. <strong>LeUI</strong> funktioniert mit <strong>Party Stash</strong>: wählen Sie den Baldur's Gate II-Look. <strong>Infinity UI++</strong> lässt sich in unseren Tests installieren und läuft; Rückmeldungen sind willkommen.</p>
 <h2>Installation</h2><ol>
 <li><strong>EEex</strong> installieren.</li>
 <li>Das Archiv in den Spielordner entpacken (dort, wo <strong>chitin.key</strong> liegt).</li>
@@ -31,20 +36,22 @@
 <tr><td>Gegenstand aus der Truhe nehmen</td><td><strong>Klick (Doppelklick: nehmen und ausrüsten)</strong></td></tr>
 <tr><td>Rucksackgegenstand einlagern</td><td><strong>Umschalt + Doppelklick oder auf das Truhenraster ziehen</strong></td></tr>
 <tr><td>Ganzen Rucksack einlagern</td><td><strong>Schaltfläche Alles einl. oder Leertaste</strong></td></tr>
-<tr><td>Zum Verkauf markieren</td><td><strong>Strg + Klick auf einen Truhengegenstand, dann Markierte verk. beim Händler</strong></td></tr>
+<tr><td>Zum Verkauf / wertvoll markieren / aufheben</td><td><strong>Strg + Klick auf einen Gegenstand (Truhe, Rucksack oder angelegt)</strong></td></tr>
 <tr><td>Beschreibung</td><td><strong>Rechtsklick</strong></td></tr>
 <tr><td>Raster, Reiter, Boden scrollen</td><td><strong>Mausrad, Pfeile</strong></td></tr>
+<tr><td>Sortierung umkehren</td><td><strong>Rechtsklick auf die Sortier-Schaltfläche</strong></td></tr>
+<tr><td>Rucksack oder eine Truhenseite in einen Behälter legen</td><td><strong>Rechtsklick auf den großen Beutel, dann den Behälter öffnen</strong></td></tr>
 <tr><td>Beutel einlagern</td><td><strong>Umschalt + Doppelklick oder Alles einl. (mit Rückfrage)</strong></td></tr>
 <tr><td>Truhe leeren (vor der Deinstallation)</td><td><strong>Strg + Linksklick auf den großen Beutel neben dem Gewicht</strong></td></tr>
 </table>
 <h2>Deinstallation</h2><p><strong>Leert zuerst die Truhe im Spiel</strong>: <strong>Strg + Linksklick</strong> auf den großen Beutel neben dem Gewicht. Eure gesammelten Beutel kommen gefüllt mit den Gegenständen zurück, die sie aufnehmen können; alles andere fällt auf den Boden. Dann <strong>setup-PartyStash.exe</strong> starten und deinstallieren. Sonst bleibt der Truheninhalt in den Spielständen, ist aber bis zur Neuinstallation unerreichbar.</p>
 <h2>FAQ</h2>
-<p><strong>Wie funktioniert das Sortieren?</strong> Jeder Reiter hat seine eigene Standardsortierung (<strong>Auto</strong>: Waffen und Rüstungen nach Qualität, Schriftrollen nach Klasse und Stufe…), oder Sie wählen <strong>Datum</strong>, <strong>Qualität</strong>, <strong>Typ</strong>, <strong>Preis</strong> oder <strong>GM/Pfd</strong>.</p>
+<p><strong>Wie funktioniert das Sortieren?</strong> Jeder Reiter hat seine eigene Standardsortierung (<strong>Auto</strong>: Waffen nach Schaden pro Runde, Rüstungen nach RK, Schriftrollen nach Klasse und Stufe…), oder Sie wählen <strong>Datum</strong>, <strong>Qualität</strong>, <strong>Typ</strong>, <strong>Preis</strong> oder <strong>GM/Pfd</strong>.</p>
 <p><strong>Und Beutel, sogar Nimmervolle Beutel?</strong> Es gibt keine Verschachtelung. Ein Beutel im Lager wird hinein geleert und im Reiter <strong>Beutel</strong> aufbewahrt, das Lager bleibt also eine einzige Liste. Jeder gesammelte Beutel macht die Gegenstände im Lager, die er aufnehmen könnte, gewichtslos. Ein Nimmervoller Beutel deckt alle Arten ab: damit wiegt das ganze Lager nichts.</p>
 <p><strong>Ich hebe wirklich alles auf. Ist das ein Problem?</strong> Das Lager ist unendlich. Ohne Nimmervollen Beutel zählt sein Gewicht gegen die gemeinsame Tragkraft der Gruppe (darüber werden alle langsamer). <strong>Alles einl.</strong> leert einen Rucksack mit einem Klick, und <strong>Markierte verk.</strong> verkauft alles Markierte auf einmal bei jedem Händler.</p>
 <p><strong>Verlangsamt es das Spiel?</strong> Keine Hooks pro Kreatur (keine Opcode-, Skript- oder Aktions-Hooks): die Arbeit ist verteilt (eine kurze Prüfung alle 500 ms, das Gruppengewicht alle 2 s), die Zahl der Kreaturen auf dem Bildschirm ändert also nichts an den Kosten.</p>
 <h2>Hinweise</h2><ul>
 <li>Von Baldur's Gate zu <strong>Siege of Dragonspear</strong> wird die Truhe übernommen, solange das Spiel zwischen dem Ende von BG1 und dem Beginn von SoD nicht geschlossen wird.</li>
 <li>Verbesserungen der Übersetzung sind willkommen: PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy): sollte funktionieren (Installation wie bei <strong>BG2:EE</strong>), ist aber noch nicht getestet. Rückmeldungen sind willkommen.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy): mit <strong>v2.6.6</strong> getestet. Die Truhe übersteht den Wechsel von <strong>Siege of Dragonspear</strong> zu Baldur's Gate II.</li>
 </ul><h2>Lizenz</h2><p>MIT. Autor: sad0.</p></body></html>

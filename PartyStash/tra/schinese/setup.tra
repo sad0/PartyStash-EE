@@ -11,3 +11,7 @@
 @11 = ~Party Stash：全队共享的无限储物箱（需要 EEex）。卸载前：按住 Ctrl 左键单击重量旁的包袋以清空储物箱~
 @12 = ~仅适用于 Baldur's Gate: Enhanced Edition。~
 @13 = ~仅适用于 Baldur's Gate II: Enhanced Edition / EET。~
+@14 = ~选项：储物箱没有重量~
+@15 = ~选项：战役切换时保留队伍金币（BG1 到 SoD，EET 中 SoD 到 BG2）~
+@16 = ~选项（硬核）：战役切换时也清空储物箱，就像队伍携带的一切~
+@17 = ~需要 Party Stash。~

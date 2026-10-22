@@ -85,4 +85,15 @@ OUTER_SPRINT ps_t_help_sort @176
 OUTER_SPRINT ps_t_help_bags @177
 OUTER_SPRINT ps_t_help_sell @178
 OUTER_SPRINT ps_t_stash_slot_tip @179
+OUTER_SPRINT ps_t_dps_line @180
+OUTER_SPRINT ps_t_st_apr @181
+OUTER_SPRINT ps_t_sort_rev @182
+OUTER_SPRINT ps_t_msg_valuable_ground @183
+OUTER_SPRINT ps_t_dump_armed @184
+OUTER_SPRINT ps_t_dump_confirm @185
+OUTER_SPRINT ps_t_dump_done @186
+OUTER_SPRINT ps_t_dump_none @187
+OUTER_SPRINT ps_t_dump_cancel @188
+OUTER_SPRINT ps_t_dump_backpack @189
+OUTER_SPRINT ps_t_dump_stashpage @190
 COPY ~PartyStash/lib/M_PSTXT.lua~ ~override~ EVALUATE_BUFFER

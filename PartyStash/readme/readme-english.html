@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>One infinite stash shared by the whole party, <strong>Pillars of Eternity</strong> style, built into a redesigned inventory page. For <strong>Baldur's Gate: Enhanced Edition</strong> (with or without <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> and <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventory, Baldur&#x27;s Gate 1 look"></p>
 <h2>Features</h2><ul>
 <li><strong>Shared stash</strong>: every party member reaches the same infinite stash on the inventory page. Quests still see the items stored in it.</li>
 <li><strong>New inventory page</strong>: backpack and stash in one scrollable grid, a ground column, compact 2×2 stats (attributes in 3 letters).</li>
 <li><strong>Tabs</strong>: All, Weapons, Armor, Gear, Ammo, Gems, Scrolls, Potions, Quest, Misc, Bags.</li>
-<li><strong>Sorting</strong>: Auto (each tab its own order: weapons and armor by quality, then AC and value; scrolls by class and level…), Date, Quality, Type, Price, Value/weight.</li>
+<li><strong>Sorting</strong>: Auto (each tab its own order: weapons by damage per round for the shown character, armor by AC, scrolls by class and level…), Date, Quality, Type, Price, Value/weight. Right-click the sort button to reverse it.</li>
 <li><strong>Hints</strong>: red = unusable by the shown character, blue = unidentified, + = an upgrade for him (or a scroll a party mage can still learn).</li>
-<li><strong>Sell Marked</strong>: <strong>Ctrl + click</strong> stash items, then sell them all at once at any merchant, with the total on the button.</li>
+<li><strong>Marks</strong>: <strong>Ctrl + click</strong> an item (stash, backpack or equipped) to mark it for sale (darkened), again to make it valuable (golden), again to clear it. Sell Marked sells all the items marked for sale at once at any merchant, with the total on the button.</li>
+<li><strong>Damage per round</strong>: weapon tooltips show the damage per round and THAC0 for the shown character (strength, proficiencies, attacks per round, both hands when dual-wielding); the stats show the attacks per round.</li>
+<li><strong>Charges</strong>: wands and other charged items show their charges in the corner of their cell.</li>
+<li><strong>Valuable items</strong>: never sold, skipped by Store all and by the merchants' selection, and they cannot be dropped on the ground. A backpack item marked for sale goes straight to the stash.</li>
+<li><strong>Put away</strong>: right-click the big bag next to the weight, then open a container, and choose to put the backpack or the shown stash page in it (valuable and quest items stay).</li>
+<li><strong>Options (separate components)</strong>: the stash weighs nothing; keep the party gold through the campaign changes (BG1 to SoD, SoD to BG2 in <strong>EET</strong>); hardcore: those changes empty the stash too.</li>
 <li><strong>Bags</strong>: a bag put in the stash is emptied into it and kept in the Bags tab; the stash items it can hold weigh nothing (a Bag of Holding: the whole stash).</li>
 <li><strong>Weight</strong>: the stash counts against the sum of the members' weight allowances; above it, the party is slowed down.</li>
 <li><strong>Two looks</strong>: Baldur's Gate 1 or Baldur's Gate II style, on either game.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="Merchant: Sell Marked"><br><em>Merchant: Sell Marked</em></p>
 <p><img src="bags.png" alt="Bags tab"><br><em>Bags tab</em></p>
-<h2>Requirements</h2><p>Game version <strong>v2.7.x</strong> and <strong>EEex</strong> (installed first). A mod that replaces the inventory screen (<strong>Dragonspear UI++</strong>…) conflicts with the new page. <strong>LeUI</strong> works with <strong>Party Stash</strong>: pick the Baldur's Gate II look.</p>
+<h2>Requirements</h2><p>Game version <strong>v2.6.6</strong> or <strong>v2.7.x</strong>, and <strong>EEex</strong> (installed first). A mod that replaces the inventory screen (<strong>Dragonspear UI++</strong>…) conflicts with the new page. <strong>LeUI</strong> works with <strong>Party Stash</strong>: pick the Baldur's Gate II look. <strong>Infinity UI++</strong> installs and runs in our tests; feedback welcome.</p>
 <h2>Installation</h2><ol>
 <li>Install <strong>EEex</strong>.</li>
 <li>Extract the archive into the game folder (where <strong>chitin.key</strong> is).</li>
@@ -31,20 +36,22 @@
 <tr><td>Take an item from the stash</td><td><strong>Click (double-click: take and equip)</strong></td></tr>
 <tr><td>Store a backpack item</td><td><strong>Shift + double-click, or drop it on the stash grid</strong></td></tr>
 <tr><td>Store the whole backpack</td><td><strong>Store all button, or Space</strong></td></tr>
-<tr><td>Mark / unmark for sale</td><td><strong>Ctrl + click a stash item, then Sell Marked at a merchant</strong></td></tr>
+<tr><td>Mark for sale / valuable / clear</td><td><strong>Ctrl + click an item (stash, backpack or equipped)</strong></td></tr>
 <tr><td>Description</td><td><strong>Right-click</strong></td></tr>
 <tr><td>Scroll the grid, tabs, ground</td><td><strong>Mouse wheel, arrows</strong></td></tr>
+<tr><td>Reverse the sort</td><td><strong>Right-click the sort button</strong></td></tr>
+<tr><td>Put the backpack or a stash page in a container</td><td><strong>Right-click the big bag, then open the container</strong></td></tr>
 <tr><td>Store a bag</td><td><strong>Shift + double-click it, or Store all (asks first)</strong></td></tr>
 <tr><td>Empty the stash (before uninstalling)</td><td><strong>Ctrl + left click on the big bag next to the weight</strong></td></tr>
 </table>
 <h2>Uninstalling</h2><p><strong>Empty the stash first, in game</strong>: <strong>Ctrl + left click</strong> on the big bag next to the weight. Your collected bags come back filled with the items they can hold; everything else drops on the ground. Then run <strong>setup-PartyStash.exe</strong> and uninstall. Otherwise the stash contents stay in your saves but cannot be reached until the mod is reinstalled.</p>
 <h2>FAQ</h2>
-<p><strong>How does sorting work?</strong> Each tab has its own default sort (<strong>Auto</strong>: weapons and armor by quality, scrolls by class and level…), or you pick <strong>Date</strong>, <strong>Quality</strong>, <strong>Type</strong>, <strong>Price</strong> or <strong>Gp/lb</strong>.</p>
+<p><strong>How does sorting work?</strong> Each tab has its own default sort (<strong>Auto</strong>: weapons by damage per round, armor by AC, scrolls by class and level…), or you pick <strong>Date</strong>, <strong>Quality</strong>, <strong>Type</strong>, <strong>Price</strong> or <strong>Gp/lb</strong>.</p>
 <p><strong>What about bags, even bags of holding?</strong> There is no nesting. A bag put in the stash is emptied into it and kept in the <strong>Bags</strong> tab, so the stash stays one flat list. Each collected bag makes the stash items it could hold weightless. A bag of holding covers every type: with one, the whole stash weighs nothing.</p>
 <p><strong>I pick up every single thing. Is that a problem?</strong> The stash is infinite. Without a bag of holding, its weight counts against the party's combined allowance (above it, everyone slows down). <strong>Store all</strong> empties a backpack in one click, and <strong>Sell Marked</strong> sells everything you marked at any merchant in one go.</p>
 <p><strong>Does it slow the game down?</strong> No per-creature hooks (no opcode, script or action hooks): its work is spaced out (a quick check every 500 ms, the party weight every 2 s), so the number of creatures on screen does not change its cost.</p>
 <h2>Notes</h2><ul>
 <li>From Baldur's Gate to <strong>Siege of Dragonspear</strong>, the stash is carried over as long as the game is not closed between the end of BG1 and the start of SoD.</li>
 <li>Translations are welcome: PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy): it should work (it installs like on <strong>BG2:EE</strong>) but has not been tested yet. Feedback welcome.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy): tested on <strong>v2.6.6</strong>. The stash survives the move from <strong>Siege of Dragonspear</strong> to Baldur's Gate II.</li>
 </ul><h2>License</h2><p>MIT. Author: sad0.</p></body></html>

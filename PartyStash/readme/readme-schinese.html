@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>全队共享的无限储物箱，仿照《永恒之柱》，内置于重新设计的物品栏页面。适用于 <strong>Baldur's Gate: Enhanced Edition</strong>（含或不含 <strong>Siege of Dragonspear</strong>）、<strong>Baldur's Gate II: Enhanced Edition</strong> 和 <strong>EET</strong>。</p>
 <p><img src="inventory_bg1.png" alt="物品栏，博德之门 1 外观"></p>
 <h2>功能</h2><ul>
 <li><strong>共享储物箱</strong>：所有队员都能在物品栏页面使用同一个无限储物箱。任务依然能识别存放在里面的物品。</li>
 <li><strong>全新物品栏页面</strong>：背包和储物箱合为一个可滚动的网格，另有地面栏和紧凑的 2×2 属性（属性名取 3 个字）。</li>
 <li><strong>分页</strong>：全部、武器、护甲、装备、弹药、宝石、卷轴、药水、任务、杂项、包袋。</li>
-<li><strong>排序</strong>：自动（每页有自己的顺序：武器和护甲按品质，再按 AC 和价值；卷轴按职业和等级……）、日期、品质、类型、价格、价值/重量。</li>
+<li><strong>排序</strong>：自动（每页有自己的顺序：武器按当前角色的每轮伤害，护甲按 AC，卷轴按职业和等级……）、日期、品质、类型、价格、价值/重量。右键单击排序按钮可反转顺序。</li>
 <li><strong>提示</strong>：红色 = 当前角色无法使用，蓝色 = 未鉴定，+ = 对其是升级（或队中法师仍可学习的卷轴）。</li>
-<li><strong>出售标记</strong>：按住 Ctrl 单击储物箱中的物品，然后在任意商人处一次性全部出售，按钮上显示总价。</li>
+<li><strong>标记</strong>：按住 Ctrl 单击物品（储物箱、背包或已装备）标记为出售（变暗），再按一次设为贵重（金色），再按一次清除。“出售标记”可在任意商人处一次性卖出所有标记出售的物品，按钮上显示总价。</li>
+<li><strong>每轮伤害</strong>：武器提示显示当前角色的每轮伤害和 THAC0（力量、熟练度、每轮攻击次数、双持时两只手）；属性栏显示每轮攻击次数。</li>
+<li><strong>充能</strong>：魔杖等带充能的物品在格子角落显示剩余充能。</li>
+<li><strong>贵重物品</strong>：永不出售，“全部存放”和商人的选择会跳过它们，且不能丢在地上。背包中标记出售的物品会直接进入储物箱。</li>
+<li><strong>放入容器</strong>：右键单击重量旁的大包袋，然后打开一个容器，选择放入背包或当前储物箱页面（贵重物品和任务物品保留）。</li>
+<li><strong>选项（独立组件）</strong>：储物箱没有重量；战役切换时保留队伍金币（BG1 到 SoD，<strong>EET</strong> 中 SoD 到 BG2）；硬核：这些切换也会清空储物箱。</li>
 <li><strong>包袋</strong>：放入储物箱的包袋会被倒空并保留在“包袋”页中；它能容纳的储物箱物品不计重量（次元袋：整个储物箱）。</li>
 <li><strong>重量</strong>：储物箱计入成员负重上限之和；超过后全队减速。</li>
 <li><strong>两种外观</strong>：博德之门 1 或博德之门 II 风格，两款游戏都可用。</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="商人：出售标记"><br><em>商人：出售标记</em></p>
 <p><img src="bags.png" alt="包袋页"><br><em>包袋页</em></p>
-<h2>需求</h2><p>游戏版本 <strong>v2.7.x</strong> 以及 <strong>EEex</strong>（需先安装）。替换物品栏界面的模组（<strong>Dragonspear UI++</strong>……）会与新页面冲突。<strong>LeUI</strong> 可与 <strong>Party Stash</strong> 一起使用：请选择 Baldur's Gate II 外观。</p>
+<h2>需求</h2><p>游戏版本 <strong>v2.6.6</strong> 或 <strong>v2.7.x</strong>，以及 <strong>EEex</strong>（需先安装）。替换物品栏界面的模组（<strong>Dragonspear UI++</strong>……）会与新页面冲突。<strong>LeUI</strong> 可与 <strong>Party Stash</strong> 一起使用：请选择 Baldur's Gate II 外观。<strong>Infinity UI++</strong> 在我们的测试中可安装并运行；欢迎反馈。</p>
 <h2>安装</h2><ol>
 <li>安装 <strong>EEex</strong>。</li>
 <li>将压缩包解压到游戏文件夹（<strong>chitin.key</strong> 所在处）。</li>
@@ -31,20 +36,22 @@
 <tr><td>从储物箱取出物品</td><td><strong>单击（双击：取出并装备）</strong></td></tr>
 <tr><td>存放背包物品</td><td><strong>Shift + 双击，或拖到储物箱网格上</strong></td></tr>
 <tr><td>存放整个背包</td><td><strong>“全部存放”按钮，或空格键</strong></td></tr>
-<tr><td>标记/取消标记出售</td><td><strong>Ctrl + 单击储物箱中的物品，再在商人处点“出售标记”</strong></td></tr>
+<tr><td>标记出售/贵重/清除</td><td><strong>Ctrl + 单击物品（储物箱、背包或已装备）</strong></td></tr>
 <tr><td>说明</td><td><strong>右键</strong></td></tr>
 <tr><td>滚动网格、分页、地面</td><td><strong>鼠标滚轮、箭头</strong></td></tr>
+<tr><td>反转排序</td><td><strong>右键单击排序按钮</strong></td></tr>
+<tr><td>把背包或一页储物箱放入容器</td><td><strong>右键单击大包袋，再打开容器</strong></td></tr>
 <tr><td>存放包袋</td><td><strong>Shift + 双击，或“全部存放”（会先确认）</strong></td></tr>
 <tr><td>清空储物箱（卸载前）</td><td><strong>按住 Ctrl 左键单击重量旁的大包袋</strong></td></tr>
 </table>
 <h2>卸载</h2><p><strong>先在游戏中清空储物箱</strong>：按住 Ctrl 左键单击重量旁的大包袋。已收集的包袋会装着它们能容纳的物品还给你，其余物品都会掉在地上。然后运行 <strong>setup-PartyStash.exe</strong> 卸载。否则储物箱内容会留在存档中，但在重新安装前无法取用。</p>
 <h2>常见问题</h2>
-<p><strong>排序是怎么工作的？</strong> 每个标签页都有自己的默认排序（<strong>自动</strong>：武器和护甲按品质，卷轴按职业和等级……），也可以选择<strong>日期</strong>、<strong>品质</strong>、<strong>类型</strong>、<strong>价格</strong>或<strong>金/磅</strong>。</p>
+<p><strong>排序是怎么工作的？</strong> 每个标签页都有自己的默认排序（<strong>自动</strong>：武器按每轮伤害，护甲按 AC，卷轴按职业和等级……），也可以选择<strong>日期</strong>、<strong>品质</strong>、<strong>类型</strong>、<strong>价格</strong>或<strong>金/磅</strong>。</p>
 <p><strong>那包袋呢，连次元袋也行？</strong> 不会嵌套。放入储物箱的包袋会被倒空进储物箱，并保存在“<strong>包袋</strong>”标签页中，因此储物箱始终是一个列表。每个收集到的包袋都会让储物箱中它能装下的物品不计重量。次元袋涵盖所有类型：有了它，整个储物箱都没有重量。</p>
 <p><strong>我什么都捡。这是问题吗？</strong> 储物箱是无限的。没有次元袋时，它的重量计入队伍的合计负重（超过后全员减速）。“<strong>全部存放</strong>”一键清空背包，“<strong>出售标记</strong>”可在任何商人处一次卖掉所有标记的物品。</p>
 <p><strong>会拖慢游戏吗？</strong> 没有针对每个生物的钩子（没有 opcode、脚本或动作钩子）：工作是分散进行的（每 500 毫秒快速检查一次，每 2 秒计算一次队伍重量），所以屏幕上的生物数量不会改变它的开销。</p>
 <h2>说明</h2><ul>
 <li>从博德之门进入 <strong>Siege of Dragonspear</strong> 时，只要在 BG1 结束与 SoD 开始之间不关闭游戏，储物箱就会保留。</li>
 <li>欢迎改进翻译：PartyStash/tra/。</li>
-<li><strong>EET</strong>（Enhanced Edition Trilogy）：理应可用（按 <strong>BG2:EE</strong> 方式安装），但尚未测试。欢迎反馈。</li>
+<li><strong>EET</strong>（Enhanced Edition Trilogy）：已在 <strong>v2.6.6</strong> 上测试。储物箱可在从 <strong>Siege of Dragonspear</strong> 进入 Baldur's Gate II 时保留。</li>
 </ul><h2>许可证</h2><p>MIT。作者：sad0。</p></body></html>

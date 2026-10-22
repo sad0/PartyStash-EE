@@ -1,6 +1,6 @@
 BACKUP ~weidu_external/backup/PartyStash~
 AUTHOR ~sad0~
-VERSION ~v1.1~
+VERSION ~v1.2~
 README ~PartyStash/readme/readme-%LANGUAGE%.html~ ~PartyStash/readme/readme-english.html~
 
 // One source for BGEE and BG2EE (John 2026-10-19): the same folder installs on both. The main component comes in two
@@ -120,3 +120,37 @@ PRINT ~PartyStash sorted loot: %sq_n% quest items.~
 COPY ~PartyStash/M_SQSORT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~SQ_SORT_QUEST_LIST~ ~%sq_list%~
 COPY ~PartyStash/SQSORT.menu~ ~override~
+
+// Install options (John 2026-10-22), off unless chosen. Each writes a tiny override Lua file that sets one flag of
+// PStash_Opt, read by M_PSTASH.lua at run time. They need the stash (any look).
+// #5 the stash weighs nothing; #6 the party gold survives the campaign moves (BG1 -> SoD, EET SoD -> BG2);
+// #7 "hardcore": those moves empty the stash too (by default it is kept).
+BEGIN @14 DESIGNATED 5
+LABEL ~PARTYSTASH-OPT-WEIGHTLESS~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~PartyStash.tp2~ 0 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 2 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 3 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 4) @17
+<<<<<<<< .../PartyStash-inlined/M_PSOPTW.lua
+-- Party Stash install option (PartyStash.tp2 #5): the stash weighs nothing.
+PStash_Opt = PStash_Opt or {}
+PStash_Opt.weightless = true
+>>>>>>>>
+COPY ~.../PartyStash-inlined/M_PSOPTW.lua~ ~override~
+
+BEGIN @15 DESIGNATED 6
+LABEL ~PARTYSTASH-OPT-KEEPGOLD~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~PartyStash.tp2~ 0 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 2 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 3 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 4) @17
+<<<<<<<< .../PartyStash-inlined/M_PSOPTG.lua
+-- Party Stash install option (PartyStash.tp2 #6): the party gold survives the campaign moves.
+PStash_Opt = PStash_Opt or {}
+PStash_Opt.keepgold = true
+>>>>>>>>
+COPY ~.../PartyStash-inlined/M_PSOPTG.lua~ ~override~
+
+BEGIN @16 DESIGNATED 7
+LABEL ~PARTYSTASH-OPT-LOSESTASH~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~PartyStash.tp2~ 0 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 2 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 3 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 4) @17
+<<<<<<<< .../PartyStash-inlined/M_PSOPTL.lua
+-- Party Stash install option (PartyStash.tp2 #7): the campaign moves empty the stash too.
+PStash_Opt = PStash_Opt or {}
+PStash_Opt.losestash = true
+>>>>>>>>
+COPY ~.../PartyStash-inlined/M_PSOPTL.lua~ ~override~

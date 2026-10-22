@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>Um baú infinito compartilhado por todo o grupo, no estilo de <strong>Pillars of Eternity</strong>, integrado a uma página de inventário redesenhada. Para <strong>Baldur's Gate: Enhanced Edition</strong> (com ou sem <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> e <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventário, visual Baldur&#x27;s Gate 1"></p>
 <h2>Recursos</h2><ul>
 <li><strong>Baú compartilhado</strong>: todos os membros do grupo acessam o mesmo baú infinito na página de inventário. As missões continuam vendo os itens guardados nele.</li>
 <li><strong>Nova página de inventário</strong>: mochila e baú em uma única grade rolável, uma coluna para o chão e atributos compactos em 2×2 (atributos em 3 letras).</li>
 <li><strong>Abas</strong>: Tudo, Armas, Armadura, Equipamento, Munição, Gemas, Pergaminhos, Poções, Missão, Diversos, Bolsas.</li>
-<li><strong>Ordenação</strong>: Auto (cada aba com sua ordem: armas e armaduras por qualidade, depois CA e valor; pergaminhos por classe e nível…), Data, Qualidade, Tipo, Preço, Valor/peso.</li>
+<li><strong>Ordenação</strong>: Auto (cada aba com sua ordem: armas por dano por rodada para o personagem mostrado, armaduras por CA, pergaminhos por classe e nível…), Data, Qualidade, Tipo, Preço, Valor/peso. Clique direito no botão de ordenação para invertê-la.</li>
 <li><strong>Indicações</strong>: vermelho = inutilizável pelo personagem mostrado, azul = não identificado, + = uma melhoria para ele (ou um pergaminho que um mago do grupo ainda pode aprender).</li>
-<li><strong>Vender marcados</strong>: <strong>Ctrl + clique</strong> em itens do baú e venda todos de uma vez em qualquer mercador, com o total no botão.</li>
+<li><strong>Marcas</strong>: <strong>Ctrl + clique</strong> em um item (baú, mochila ou equipado) o marca para venda (escurecido), de novo o torna valioso (dourado), de novo desmarca. Vender marcados vende de uma vez todos os itens marcados para venda em qualquer mercador, com o total no botão.</li>
+<li><strong>Dano por rodada</strong>: as dicas das armas mostram o dano por rodada e o TAC0 para o personagem mostrado (força, perícias, ataques por rodada, as duas mãos ao lutar com duas armas); as estatísticas mostram os ataques por rodada.</li>
+<li><strong>Cargas</strong>: varinhas e outros itens com cargas mostram as cargas no canto da sua casa.</li>
+<li><strong>Itens valiosos</strong>: nunca são vendidos, Guardar tudo e a seleção dos mercadores os ignoram, e não podem ser largados no chão. Um item da mochila marcado para venda vai direto para o baú.</li>
+<li><strong>Depositar</strong>: clique direito na bolsa grande ao lado do peso, depois abra um contêiner e escolha colocar nele a mochila ou a página do baú mostrada (itens valiosos e de missão ficam).</li>
+<li><strong>Opções (componentes separados)</strong>: o baú não pesa nada; manter o ouro do grupo nas mudanças de campanha (BG1 para SoD, SoD para BG2 no <strong>EET</strong>); hardcore: essas mudanças também esvaziam o baú.</li>
 <li><strong>Bolsas</strong>: uma bolsa guardada no baú é esvaziada nele e mantida na aba Bolsas; os itens do baú que ela comporta não pesam nada (uma Bolsa Devoradora: o baú inteiro).</li>
 <li><strong>Peso</strong>: o baú conta na soma das cargas máximas dos membros; acima disso, o grupo fica lento.</li>
 <li><strong>Dois visuais</strong>: estilo Baldur's Gate 1 ou Baldur's Gate II, nos dois jogos.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="Mercador: Vender marcados"><br><em>Mercador: Vender marcados</em></p>
 <p><img src="bags.png" alt="Aba Bolsas"><br><em>Aba Bolsas</em></p>
-<h2>Requisitos</h2><p>Versão do jogo <strong>v2.7.x</strong> e <strong>EEex</strong> (instalado antes). Um mod que substitua a tela de inventário (<strong>Dragonspear UI++</strong>…) entra em conflito com a nova página. O <strong>LeUI</strong> funciona com o <strong>Party Stash</strong>: escolha o visual Baldur's Gate II.</p>
+<h2>Requisitos</h2><p>Versão do jogo <strong>v2.6.6</strong> ou <strong>v2.7.x</strong>, e <strong>EEex</strong> (instalado antes). Um mod que substitua a tela de inventário (<strong>Dragonspear UI++</strong>…) entra em conflito com a nova página. O <strong>LeUI</strong> funciona com o <strong>Party Stash</strong>: escolha o visual Baldur's Gate II. O <strong>Infinity UI++</strong> instala e funciona nos nossos testes; comentários são bem-vindos.</p>
 <h2>Instalação</h2><ol>
 <li>Instale o <strong>EEex</strong>.</li>
 <li>Extraia o arquivo na pasta do jogo (onde fica o <strong>chitin.key</strong>).</li>
@@ -31,20 +36,22 @@
 <tr><td>Pegar um item do baú</td><td><strong>Clique (clique duplo: pegar e equipar)</strong></td></tr>
 <tr><td>Guardar um item da mochila</td><td><strong>Shift + clique duplo, ou soltá-lo na grade do baú</strong></td></tr>
 <tr><td>Guardar a mochila inteira</td><td><strong>Botão Guardar tudo, ou Espaço</strong></td></tr>
-<tr><td>Marcar / desmarcar para venda</td><td><strong>Ctrl + clique em um item do baú, depois Vender marcados em um mercador</strong></td></tr>
+<tr><td>Marcar para venda / valioso / desmarcar</td><td><strong>Ctrl + clique em um item (baú, mochila ou equipado)</strong></td></tr>
 <tr><td>Descrição</td><td><strong>Clique direito</strong></td></tr>
 <tr><td>Rolar a grade, abas, chão</td><td><strong>Roda do mouse, setas</strong></td></tr>
+<tr><td>Inverter a ordenação</td><td><strong>Clique direito no botão de ordenação</strong></td></tr>
+<tr><td>Colocar a mochila ou uma página do baú em um contêiner</td><td><strong>Clique direito na bolsa grande, depois abrir o contêiner</strong></td></tr>
 <tr><td>Guardar uma bolsa</td><td><strong>Shift + clique duplo, ou Guardar tudo (pede confirmação)</strong></td></tr>
 <tr><td>Esvaziar o baú (antes de desinstalar)</td><td><strong>Ctrl + clique esquerdo na bolsa grande ao lado do peso</strong></td></tr>
 </table>
 <h2>Desinstalação</h2><p><strong>Esvazie primeiro o baú no jogo</strong>: <strong>Ctrl + clique esquerdo</strong> na bolsa grande ao lado do peso. Suas bolsas colecionadas voltam cheias dos itens que comportam; todo o resto cai no chão. Depois execute <strong>setup-PartyStash.exe</strong> e desinstale. Caso contrário, o conteúdo do baú fica nos seus saves, mas inacessível até reinstalar o mod.</p>
 <h2>Perguntas frequentes</h2>
-<p><strong>Como funciona a ordenação?</strong> Cada aba tem sua própria ordenação padrão (<strong>Auto</strong>: armas e armaduras por qualidade, pergaminhos por classe e nível…), ou escolha <strong>Data</strong>, <strong>Qualidade</strong>, <strong>Tipo</strong>, <strong>Preço</strong> ou <strong>po/lb</strong>.</p>
+<p><strong>Como funciona a ordenação?</strong> Cada aba tem sua própria ordenação padrão (<strong>Auto</strong>: armas por dano por rodada, armaduras por CA, pergaminhos por classe e nível…), ou escolha <strong>Data</strong>, <strong>Qualidade</strong>, <strong>Tipo</strong>, <strong>Preço</strong> ou <strong>po/lb</strong>.</p>
 <p><strong>E as bolsas, até as bolsas devoradoras?</strong> Não há aninhamento. Uma bolsa posta no baú é esvaziada nele e guardada na aba <strong>Bolsas</strong>, então o baú continua sendo uma lista só. Cada bolsa coletada faz os itens do baú que ela poderia conter não pesarem nada. Uma bolsa devoradora cobre todos os tipos: com ela, o baú inteiro não pesa nada.</p>
 <p><strong>Eu pego absolutamente tudo. Isso é um problema?</strong> O baú é infinito. Sem bolsa devoradora, seu peso conta contra a capacidade somada do grupo (acima dela, todos ficam lentos). <strong>Guardar tudo</strong> esvazia uma mochila com um clique, e <strong>Vender marcados</strong> vende de uma vez tudo o que você marcou, em qualquer comerciante.</p>
 <p><strong>Isso deixa o jogo lento?</strong> Nenhum hook por criatura (nem de opcode, nem de script, nem de ação): o trabalho é espaçado (uma checagem rápida a cada 500 ms, o peso do grupo a cada 2 s), então o número de criaturas na tela não muda o seu custo.</p>
 <h2>Observações</h2><ul>
 <li>De Baldur's Gate para <strong>Siege of Dragonspear</strong>, o baú é mantido desde que o jogo não seja fechado entre o fim de BG1 e o início de SoD.</li>
 <li>Correções de tradução são bem-vindas: PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy): deve funcionar (instala como no <strong>BG2:EE</strong>), mas ainda não foi testado. Comentários são bem-vindos.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy): testado na <strong>v2.6.6</strong>. O baú sobrevive à passagem de <strong>Siege of Dragonspear</strong> para Baldur's Gate II.</li>
 </ul><h2>Licença</h2><p>MIT. Autor: sad0.</p></body></html>

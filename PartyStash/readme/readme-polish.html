@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>Nieskończona skrzynia wspólna dla całej drużyny, w stylu <strong>Pillars of Eternity</strong>, wbudowana w przeprojektowaną stronę ekwipunku. Dla <strong>Baldur's Gate: Enhanced Edition</strong> (z <strong>Siege of Dragonspear</strong> lub bez), <strong>Baldur's Gate II: Enhanced Edition</strong> i <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Ekwipunek, wygląd Baldur&#x27;s Gate 1"></p>
 <h2>Funkcje</h2><ul>
 <li><strong>Wspólna skrzynia</strong>: każdy członek drużyny ma dostęp do tej samej nieskończonej skrzyni na stronie ekwipunku. Zadania nadal widzą przedmioty w niej schowane.</li>
 <li><strong>Nowa strona ekwipunku</strong>: plecak i skrzynia w jednej przewijanej siatce, kolumna ziemi i zwięzłe statystyki 2×2 (atrybuty skrócone do 3 liter).</li>
 <li><strong>Karty</strong>: Wszystko, Broń, Pancerz, Ekwipunek, Amunicja, Klejnoty, Zwoje, Mikstury, Zadania, Inne, Torby.</li>
-<li><strong>Sortowanie</strong>: Auto (każda karta ma własną kolejność: broń i pancerze według jakości, potem KP i wartości; zwoje według klasy i poziomu…), Data, Jakość, Typ, Cena, Wartość/waga.</li>
+<li><strong>Sortowanie</strong>: Auto (każda karta ma własną kolejność: broń według obrażeń na rundę dla pokazanej postaci, pancerze według KP, zwoje według klasy i poziomu…), Data, Jakość, Typ, Cena, Wartość/waga. Prawy przycisk na przycisku sortowania odwraca je.</li>
 <li><strong>Oznaczenia</strong>: czerwony = bezużyteczne dla wybranej postaci, niebieski = niezidentyfikowane, + = ulepszenie dla niej (lub zwój, którego mag z drużyny może się jeszcze nauczyć).</li>
-<li><strong>Sprzedaj zaznaczone</strong>: <strong>Ctrl + kliknięcie</strong> przedmiotów w skrzyni, a potem sprzedaż wszystkich naraz u dowolnego kupca, z sumą na przycisku.</li>
+<li><strong>Znaczniki</strong>: <strong>Ctrl + kliknięcie</strong> przedmiotu (skrzynia, plecak lub założony) zaznacza go do sprzedaży (przyciemniony), ponownie czyni go cennym (złoty), ponownie usuwa znacznik. Sprzedaj zaznaczone sprzedaje naraz wszystkie przedmioty zaznaczone do sprzedaży u dowolnego kupca, z sumą na przycisku.</li>
+<li><strong>Obrażenia na rundę</strong>: podpowiedzi broni pokazują obrażenia na rundę i THAC0 dla pokazanej postaci (siła, biegłości, ataki na rundę, obie ręce przy walce dwiema brońmi); statystyki pokazują ataki na rundę.</li>
+<li><strong>Ładunki</strong>: różdżki i inne przedmioty z ładunkami pokazują ładunki w rogu swojego pola.</li>
+<li><strong>Cenne przedmioty</strong>: nigdy nie są sprzedawane, Schowaj wszystko i wybór u kupców je pomijają, i nie można ich położyć na ziemi. Przedmiot z plecaka zaznaczony do sprzedaży trafia prosto do skrzyni.</li>
+<li><strong>Odkładanie</strong>: prawy przycisk na dużej torbie obok wagi, potem otwórz pojemnik i wybierz, czy włożyć do niego plecak, czy pokazaną stronę skrzyni (cenne i questowe przedmioty zostają).</li>
+<li><strong>Opcje (osobne komponenty)</strong>: skrzynia nic nie waży; zachowaj złoto drużyny przy zmianach kampanii (BG1 do SoD, SoD do BG2 w <strong>EET</strong>); hardcore: te zmiany opróżniają też skrzynię.</li>
 <li><strong>Torby</strong>: torba schowana w skrzyni zostaje do niej opróżniona i zachowana w karcie Torby; przedmioty ze skrzyni, które może pomieścić, nic nie ważą (Torba przechowywania: cała skrzynia).</li>
 <li><strong>Waga</strong>: skrzynia liczy się do sumy udźwigów członków; powyżej drużyna zwalnia.</li>
 <li><strong>Dwa wyglądy</strong>: styl Baldur's Gate 1 lub Baldur's Gate II, w obu grach.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="Kupiec: Sprzedaj zaznaczone"><br><em>Kupiec: Sprzedaj zaznaczone</em></p>
 <p><img src="bags.png" alt="Karta Torby"><br><em>Karta Torby</em></p>
-<h2>Wymagania</h2><p>Wersja gry <strong>v2.7.x</strong> i <strong>EEex</strong> (zainstalowany wcześniej). Mod zastępujący ekran ekwipunku (<strong>Dragonspear UI++</strong>…) jest niezgodny z nową stroną. <strong>LeUI</strong> działa z <strong>Party Stash</strong>: wybierz wygląd Baldur's Gate II.</p>
+<h2>Wymagania</h2><p>Wersja gry <strong>v2.6.6</strong> lub <strong>v2.7.x</strong> oraz <strong>EEex</strong> (zainstalowany wcześniej). Mod zastępujący ekran ekwipunku (<strong>Dragonspear UI++</strong>…) jest niezgodny z nową stroną. <strong>LeUI</strong> działa z <strong>Party Stash</strong>: wybierz wygląd Baldur's Gate II. <strong>Infinity UI++</strong> instaluje się i działa w naszych testach; uwagi mile widziane.</p>
 <h2>Instalacja</h2><ol>
 <li>Zainstaluj <strong>EEex</strong>.</li>
 <li>Rozpakuj archiwum do folderu gry (tam, gdzie jest <strong>chitin.key</strong>).</li>
@@ -31,20 +36,22 @@
 <tr><td>Wyjąć przedmiot ze skrzyni</td><td><strong>Kliknięcie (podwójne: wyjąć i założyć)</strong></td></tr>
 <tr><td>Schować przedmiot z plecaka</td><td><strong>Shift + podwójne kliknięcie lub upuszczenie na siatkę skrzyni</strong></td></tr>
 <tr><td>Schować cały plecak</td><td><strong>Przycisk Schowaj wszystko lub Spacja</strong></td></tr>
-<tr><td>Zaznaczyć / odznaczyć do sprzedaży</td><td><strong>Ctrl + kliknięcie przedmiotu w skrzyni, potem Sprzedaj zazn. u kupca</strong></td></tr>
+<tr><td>Zaznaczyć do sprzedaży / cenny / usunąć</td><td><strong>Ctrl + kliknięcie przedmiotu (skrzynia, plecak lub założony)</strong></td></tr>
 <tr><td>Opis</td><td><strong>Prawy przycisk</strong></td></tr>
 <tr><td>Przewijanie siatki, kart, ziemi</td><td><strong>Kółko myszy, strzałki</strong></td></tr>
+<tr><td>Odwrócić sortowanie</td><td><strong>Prawy przycisk na przycisku sortowania</strong></td></tr>
+<tr><td>Włożyć plecak lub stronę skrzyni do pojemnika</td><td><strong>Prawy przycisk na dużej torbie, potem otworzyć pojemnik</strong></td></tr>
 <tr><td>Schować torbę</td><td><strong>Shift + podwójne kliknięcie lub Schowaj wszystko (z potwierdzeniem)</strong></td></tr>
 <tr><td>Opróżnić skrzynię (przed odinstalowaniem)</td><td><strong>Ctrl + lewy przycisk na dużej torbie obok wagi</strong></td></tr>
 </table>
 <h2>Odinstalowanie</h2><p><strong>Najpierw opróżnij skrzynię w grze</strong>: <strong>Ctrl + lewy przycisk</strong> na dużej torbie obok wagi. Zebrane torby wracają wypełnione przedmiotami, które mogą pomieścić; cała reszta spada na ziemię. Potem uruchom <strong>setup-PartyStash.exe</strong> i odinstaluj. W przeciwnym razie zawartość skrzyni zostaje w zapisach, ale jest niedostępna do ponownej instalacji moda.</p>
 <h2>Najczęstsze pytania</h2>
-<p><strong>Jak działa sortowanie?</strong> Każda zakładka ma własne domyślne sortowanie (<strong>Auto</strong>: broń i zbroje według jakości, zwoje według klasy i poziomu…), albo wybierz <strong>Data</strong>, <strong>Jakość</strong>, <strong>Typ</strong>, <strong>Cena</strong> lub <strong>szt/fnt</strong>.</p>
+<p><strong>Jak działa sortowanie?</strong> Każda zakładka ma własne domyślne sortowanie (<strong>Auto</strong>: broń według obrażeń na rundę, zbroje według KP, zwoje według klasy i poziomu…), albo wybierz <strong>Data</strong>, <strong>Jakość</strong>, <strong>Typ</strong>, <strong>Cena</strong> lub <strong>szt/fnt</strong>.</p>
 <p><strong>A torby, nawet torby przechowywania?</strong> Nie ma zagnieżdżania. Torba włożona do skrytki zostaje do niej opróżniona i trafia do zakładki <strong>Torby</strong>, więc skrytka pozostaje jedną listą. Każda zebrana torba sprawia, że przedmioty w skrytce, które mogłaby pomieścić, nic nie ważą. Torba przechowywania obejmuje wszystkie typy: z nią cała skrytka nic nie waży.</p>
 <p><strong>Zbieram absolutnie wszystko. Czy to problem?</strong> Skrytka jest nieskończona. Bez torby przechowywania jej waga liczy się do łącznego udźwigu drużyny (powyżej wszyscy zwalniają). <strong>Schowaj wszystko</strong> opróżnia plecak jednym kliknięciem, a <strong>Sprzedaj zazn.</strong> sprzedaje naraz wszystko, co zaznaczono, u dowolnego kupca.</p>
 <p><strong>Czy to spowalnia grę?</strong> Żadnych hooków na stworzenie (ani opcode, ani skryptów, ani akcji): praca jest rozłożona w czasie (szybkie sprawdzenie co 500 ms, waga drużyny co 2 s), więc liczba stworzeń na ekranie nie zmienia jej kosztu.</p>
 <h2>Uwagi</h2><ul>
 <li>Z Baldur's Gate do <strong>Siege of Dragonspear</strong> skrzynia przechodzi, o ile gra nie zostanie zamknięta między końcem BG1 a początkiem SoD.</li>
 <li>Poprawki tłumaczenia są mile widziane: PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy): powinno działać (instaluje się jak w <strong>BG2:EE</strong>), ale nie zostało jeszcze przetestowane. Uwagi mile widziane.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy): przetestowane na <strong>v2.6.6</strong>. Skrzynia przetrwa przejście z <strong>Siege of Dragonspear</strong> do Baldur's Gate II.</li>
 </ul><h2>Licencja</h2><p>MIT. Autor: sad0.</p></body></html>

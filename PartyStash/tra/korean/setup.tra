@@ -11,3 +11,7 @@
 @11 = ~Party Stash: 파티 전체가 공유하는 무한 보관함 (EEex 필요). 제거 전: 무게 가방을 Ctrl + 왼쪽 클릭해 보관함 비우기~
 @12 = ~Baldur's Gate: Enhanced Edition 전용입니다.~
 @13 = ~Baldur's Gate II: Enhanced Edition / EET 전용입니다.~
+@14 = ~옵션: 보관함은 무게가 없음~
+@15 = ~옵션: 캠페인 전환 시 파티 골드 유지 (BG1에서 SoD, EET에서 SoD에서 BG2)~
+@16 = ~옵션 (하드코어): 캠페인 전환 시 파티가 지닌 모든 것처럼 보관함도 비워짐~
+@17 = ~Party Stash가 필요합니다.~

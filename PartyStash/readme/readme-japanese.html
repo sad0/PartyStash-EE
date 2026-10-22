@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>パーティ全員で共有する無限の収納箱を、<strong>Pillars of Eternity</strong> 風に、作り直したインベントリ画面に組み込みます。<strong>Baldur's Gate: Enhanced Edition</strong>（<strong>Siege of Dragonspear</strong> の有無を問わず）、<strong>Baldur's Gate II: Enhanced Edition</strong>、<strong>EET</strong> 用。</p>
 <p><img src="inventory_bg1.png" alt="インベントリ、バルダーズ・ゲート 1 の外観"></p>
 <h2>機能</h2><ul>
 <li><strong>共有の収納箱</strong>：パーティの全員がインベントリ画面で同じ無限の収納箱を使えます。クエストは収納箱の中のアイテムも認識します。</li>
 <li><strong>新しいインベントリ画面</strong>：バックパックと収納箱を一つのスクロール式グリッドに、地面の列、コンパクトな 2×2 の能力値（能力名は 3 文字）。</li>
 <li><strong>タブ</strong>：全て、武器、鎧、装備、矢弾、宝石、巻物、薬、クエスト、その他、袋。</li>
-<li><strong>並べ替え</strong>：自動（タブごとの順序：武器と鎧は品質、次に AC と価値。巻物はクラスとレベル…）、日付、品質、種類、価格、価値/重さ。</li>
+<li><strong>並べ替え</strong>：自動（タブごとの順序：武器は表示中のキャラクターの 1 ラウンドあたりのダメージ、鎧は AC、巻物はクラスとレベル…）、日付、品質、種類、価格、価値/重さ。並べ替えボタンを右クリックすると逆順になります。</li>
 <li><strong>表示</strong>：赤 = 表示中のキャラクターは使用不可、青 = 未鑑定、+ = そのキャラクターにとっての上位品（またはパーティの魔法使いがまだ覚えられる巻物）。</li>
-<li><strong>印を売る</strong>：収納箱のアイテムを <strong>Ctrl＋クリックし</strong>、どの商人でもまとめて売却。合計額がボタンに表示されます。</li>
+<li><strong>印</strong>：アイテム（収納箱、バックパック、装備中）を <strong>Ctrl＋クリックすると売却の印</strong>（暗く表示）、もう一度で貴重品（金色）、もう一度で解除。「印を売る」で売却の印が付いたアイテムをどの商人でもまとめて売却。合計額がボタンに表示されます。</li>
+<li><strong>1 ラウンドあたりのダメージ</strong>：武器のツールチップに、表示中のキャラクターの 1 ラウンドあたりのダメージと THAC0 を表示（筋力、熟練、攻撃回数、二刀流では両手）。ステータスには 1 ラウンドの攻撃回数を表示。</li>
+<li><strong>チャージ</strong>：ワンドなどチャージのあるアイテムは、マスの隅に残りチャージを表示。</li>
+<li><strong>貴重品</strong>：売却されず、「全て収納」と商人での選択から除外され、地面に置けません。売却の印を付けたバックパックのアイテムはそのまま収納箱へ。</li>
+<li><strong>容器にしまう</strong>：重量の横の大きな袋を右クリックしてから容器を開き、バックパックか表示中の収納箱ページのどちらを入れるか選択（貴重品とクエストアイテムは残ります）。</li>
+<li><strong>オプション（別コンポーネント）</strong>：収納箱の重さはゼロ。キャンペーン移行時にパーティーの所持金を保持（BG1→SoD、<strong>EET</strong> の SoD→BG2）。ハードコア：移行時に収納箱も空になる。</li>
 <li><strong>袋</strong>：収納箱に入れた袋は中身が収納箱に移され、袋タブに残ります。その袋に入る収納箱のアイテムは重さ0（ホールディングの袋なら収納箱全体）。</li>
 <li><strong>重量</strong>：収納箱はメンバーの最大積載量の合計に数えられ、超えるとパーティが遅くなります。</li>
 <li><strong>二つの外観</strong>：バルダーズ・ゲート 1 風かバルダーズ・ゲート II 風。どちらのゲームでも使えます。</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="商人：印を売る"><br><em>商人：印を売る</em></p>
 <p><img src="bags.png" alt="袋タブ"><br><em>袋タブ</em></p>
-<h2>必要環境</h2><p>ゲームのバージョン <strong>v2.7.x</strong> と <strong>EEex</strong>（先にインストール）。インベントリ画面を置き換える MOD（<strong>Dragonspear UI++</strong> など）は新しい画面と競合します。<strong>LeUI</strong> は <strong>Party Stash</strong> と併用できます。Baldur's Gate II の外観を選んでください。</p>
+<h2>必要環境</h2><p>ゲームのバージョン <strong>v2.6.6</strong> または <strong>v2.7.x</strong> と <strong>EEex</strong>（先にインストール）。インベントリ画面を置き換える MOD（<strong>Dragonspear UI++</strong> など）は新しい画面と競合します。<strong>LeUI</strong> は <strong>Party Stash</strong> と併用できます。Baldur's Gate II の外観を選んでください。<strong>Infinity UI++</strong> は私たちのテストではインストールでき、動作しています。報告を歓迎します。</p>
 <h2>インストール</h2><ol>
 <li><strong>EEex</strong> をインストールします。</li>
 <li>アーカイブをゲームフォルダ（<strong>chitin.key</strong> がある場所）に展開します。</li>
@@ -31,20 +36,22 @@
 <tr><td>収納箱からアイテムを取り出す</td><td><strong>クリック（ダブルクリック：取り出して装備）</strong></td></tr>
 <tr><td>バックパックのアイテムを収納</td><td><strong>Shift＋ダブルクリック、または収納箱のグリッドにドロップ</strong></td></tr>
 <tr><td>バックパックを全て収納</td><td><strong>「全て収納」ボタン、またはスペース</strong></td></tr>
-<tr><td>売却の印を付ける/外す</td><td><strong>収納箱のアイテムを Ctrl＋クリックし、商人で「印を売る」</strong></td></tr>
+<tr><td>売却の印/貴重品/解除</td><td><strong>アイテムを Ctrl＋クリック（収納箱、バックパック、装備中）</strong></td></tr>
 <tr><td>説明</td><td><strong>右クリック</strong></td></tr>
 <tr><td>グリッド、タブ、地面のスクロール</td><td><strong>マウスホイール、矢印</strong></td></tr>
+<tr><td>並べ替えを逆にする</td><td><strong>並べ替えボタンを右クリック</strong></td></tr>
+<tr><td>バックパックか収納箱の 1 ページを容器に入れる</td><td><strong>大きな袋を右クリックしてから容器を開く</strong></td></tr>
 <tr><td>袋を収納</td><td><strong>Shift＋ダブルクリック、または「全て収納」（確認あり）</strong></td></tr>
 <tr><td>収納箱を空にする（アンインストール前）</td><td><strong>重量の横の大きな袋を Ctrl＋左クリック</strong></td></tr>
 </table>
 <h2>アンインストール</h2><p><strong>先にゲーム内で収納箱を空にしてください</strong>：重量の横の大きな袋を <strong>Ctrl＋左クリック</strong>。集めた袋は入るアイテムを詰めて戻り、残りは全て地面に落ちます。その後 <strong>setup-PartyStash.exe</strong> を実行してアンインストールします。そうしないと、収納箱の中身はセーブに残りますが、再インストールするまで取り出せません。</p>
 <h2>よくある質問</h2>
-<p><strong>並べ替えはどう動きますか？</strong> タブごとに既定の並べ替えがあります（<strong>自動</strong>：武器と防具は品質順、スクロールはクラスとレベル順……）。<strong>日付</strong>、<strong>品質</strong>、<strong>種類</strong>、<strong>価格</strong>、<strong>GP/lb</strong> も選べます。</p>
+<p><strong>並べ替えはどう動きますか？</strong> タブごとに既定の並べ替えがあります（<strong>自動</strong>：武器は 1 ラウンドのダメージ順、防具は AC 順、スクロールはクラスとレベル順……）。<strong>日付</strong>、<strong>品質</strong>、<strong>種類</strong>、<strong>価格</strong>、<strong>GP/lb</strong> も選べます。</p>
 <p><strong>袋は？ バッグ・オブ・ホールディングでも？</strong> 入れ子にはなりません。保管庫に入れた袋は中身が保管庫に移され、「<strong>袋</strong>」タブに収められるので、保管庫はひとつのリストのままです。集めた袋は、その袋が入れられる保管庫のアイテムを重さゼロにします。バッグ・オブ・ホールディングはすべての種類に対応するので、それがあれば保管庫全体の重さがゼロになります。</p>
 <p><strong>何でも拾ってしまいます。問題ありますか？</strong> 保管庫は無限です。バッグ・オブ・ホールディングがなければ、その重さはパーティーの合計積載量に数えられます（超えると全員が遅くなります）。「<strong>全て収納</strong>」でバックパックをワンクリックで空にでき、「<strong>印を売る</strong>」で印を付けたものをどの商人でも一度に売れます。</p>
 <p><strong>ゲームが重くなりますか？</strong> クリーチャーごとのフック（オペコード、スクリプト、アクションのフック）はありません。処理は間隔を空けて行われます（500 ミリ秒ごとの簡単なチェック、2 秒ごとのパーティー重量）。そのため画面上のクリーチャーの数はコストに影響しません。</p>
 <h2>備考</h2><ul>
 <li>バルダーズ・ゲートから <strong>Siege of Dragonspear</strong> へ進むとき、BG1 の終わりから SoD の始まりまでゲームを閉じなければ収納箱は引き継がれます。</li>
 <li>翻訳の改善を歓迎します：PartyStash/tra/。</li>
-<li><strong>EET</strong>（Enhanced Edition Trilogy）：動作するはずです（<strong>BG2:EE</strong> と同じくインストール）が、まだテストしていません。報告を歓迎します。</li>
+<li><strong>EET</strong>（Enhanced Edition Trilogy）：<strong>v2.6.6</strong> でテスト済み。<strong>Siege of Dragonspear</strong> から Baldur's Gate II への移行でも収納箱は残ります。</li>
 </ul><h2>ライセンス</h2><p>MIT。作者：sad0。</p></body></html>

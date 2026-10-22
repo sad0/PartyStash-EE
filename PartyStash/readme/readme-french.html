@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>Un coffre infini partagé par tout le groupe, façon <strong>Pillars of Eternity</strong>, intégré à une page d'inventaire repensée. Pour <strong>Baldur's Gate: Enhanced Edition</strong> (avec ou sans <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> et <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventaire, look Baldur&#x27;s Gate 1"></p>
 <h2>Fonctionnalités</h2><ul>
 <li><strong>Coffre partagé</strong> : tous les membres du groupe accèdent au même coffre infini sur la page d'inventaire. Les quêtes voient toujours les objets rangés dedans.</li>
 <li><strong>Nouvelle page d'inventaire</strong> : sac à dos et coffre dans une seule grille défilante, une colonne pour le sol, des stats compactes en 2×2 (caractéristiques en 3 lettres).</li>
 <li><strong>Onglets</strong> : Tout, Armes, Armure, Équipement, Munitions, Gemmes, Parchemins, Potions, Quête, Divers, Sacs.</li>
-<li><strong>Tri</strong> : Auto (chaque onglet a son ordre : armes et armures par qualité puis CA et valeur ; parchemins par classe et niveau…), Date, Qualité, Type, Prix, Valeur/poids.</li>
+<li><strong>Tri</strong> : Auto (chaque onglet a son ordre : armes par dégâts par round pour le perso affiché, armures par CA, parchemins par classe et niveau…), Date, Qualité, Type, Prix, Valeur/poids. Clic droit sur le bouton de tri pour l'inverser.</li>
 <li><strong>Repères</strong> : rouge = inutilisable par le perso affiché, bleu = non identifié, + = une amélioration pour lui (ou un parchemin qu'un mage du groupe peut encore apprendre).</li>
-<li><strong>Vendre cochés</strong> : <strong>Ctrl + clic</strong> sur des objets du coffre, puis vente groupée chez n'importe quel marchand, avec le total sur le bouton.</li>
+<li><strong>Marques</strong> : <strong>Ctrl + clic</strong> sur un objet (coffre, sac à dos ou équipé) pour le cocher pour la vente (assombri), encore pour le rendre précieux (doré), encore pour l'effacer. Vendre cochés vend d'un coup tous les objets cochés chez n'importe quel marchand, avec le total sur le bouton.</li>
+<li><strong>Dégâts par round</strong> : les infobulles des armes affichent les dégâts par round et le TAC0 pour le perso affiché (force, compétences, attaques par round, les deux mains en combat à deux armes) ; les stats affichent les attaques par round.</li>
+<li><strong>Charges</strong> : les baguettes et autres objets à charges affichent leurs charges dans le coin de leur case.</li>
+<li><strong>Objets précieux</strong> : jamais vendus, ignorés par Tout ranger et par la sélection des marchands, et impossibles à poser au sol. Un objet du sac à dos coché pour la vente part directement au coffre.</li>
+<li><strong>Dépôt</strong> : clic droit sur le gros sac à côté du poids, puis ouvrez un conteneur, et choisissez d'y déposer le sac à dos ou la page du coffre affichée (les objets précieux et de quête restent).</li>
+<li><strong>Options (composants séparés)</strong> : le coffre ne pèse rien ; garder l'or du groupe aux changements de campagne (BG1 vers SoD, SoD vers BG2 dans <strong>EET</strong>) ; hardcore : ces changements vident aussi le coffre.</li>
 <li><strong>Sacs</strong> : un sac rangé dans le coffre y est vidé et gardé dans l'onglet Sacs ; les objets du coffre qu'il peut contenir ne pèsent rien (un Sac de contenance : tout le coffre).</li>
 <li><strong>Poids</strong> : le coffre compte dans la somme des charges maximales des membres ; au-delà, le groupe est ralenti.</li>
 <li><strong>Deux looks</strong> : style Baldur's Gate 1 ou Baldur's Gate II, sur les deux jeux.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Aide au survol : raccourcis en vert"><br><em>Aide au survol : raccourcis en vert</em></p>
 <p><img src="merchant.png" alt="Marchand : Vendre cochés"><br><em>Marchand : Vendre cochés</em></p>
 <p><img src="bags.png" alt="Onglet Sacs"><br><em>Onglet Sacs</em></p>
-<h2>Prérequis</h2><p>Jeu en version <strong>v2.7.x</strong> et <strong>EEex</strong> (installé avant). Un mod qui remplace l'écran d'inventaire (<strong>Dragonspear UI++</strong>…) entre en conflit avec la nouvelle page. <strong>LeUI</strong> fonctionne avec <strong>Party Stash</strong> : choisissez le look Baldur's Gate II.</p>
+<h2>Prérequis</h2><p>Jeu en version <strong>v2.6.6</strong> ou <strong>v2.7.x</strong>, et <strong>EEex</strong> (installé avant). Un mod qui remplace l'écran d'inventaire (<strong>Dragonspear UI++</strong>…) entre en conflit avec la nouvelle page. <strong>LeUI</strong> fonctionne avec <strong>Party Stash</strong> : choisissez le look Baldur's Gate II. <strong>Infinity UI++</strong> s'installe et tourne dans nos tests ; les retours sont les bienvenus.</p>
 <h2>Installation</h2><ol>
 <li>Installez <strong>EEex</strong>.</li>
 <li>Décompressez l'archive dans le dossier du jeu (là où se trouve <strong>chitin.key</strong>).</li>
@@ -31,20 +36,22 @@
 <tr><td>Prendre un objet du coffre</td><td><strong>Clic (double-clic : prendre et équiper)</strong></td></tr>
 <tr><td>Ranger un objet du sac à dos</td><td><strong>Maj + double-clic, ou le déposer sur la grille du coffre</strong></td></tr>
 <tr><td>Tout ranger</td><td><strong>Bouton Tout ranger, ou Espace</strong></td></tr>
-<tr><td>Cocher / décocher pour la vente</td><td><strong>Ctrl + clic sur un objet du coffre, puis Vendre cochés chez un marchand</strong></td></tr>
+<tr><td>Cocher pour la vente / précieux / effacer</td><td><strong>Ctrl + clic sur un objet (coffre, sac à dos ou équipé)</strong></td></tr>
 <tr><td>Description</td><td><strong>Clic droit</strong></td></tr>
 <tr><td>Faire défiler la grille, les onglets, le sol</td><td><strong>Molette, flèches</strong></td></tr>
+<tr><td>Inverser le tri</td><td><strong>Clic droit sur le bouton de tri</strong></td></tr>
+<tr><td>Déposer le sac à dos ou une page du coffre dans un conteneur</td><td><strong>Clic droit sur le gros sac, puis ouvrir le conteneur</strong></td></tr>
 <tr><td>Ranger un sac</td><td><strong>Maj + double-clic, ou Tout ranger (avec confirmation)</strong></td></tr>
 <tr><td>Vider le coffre (avant de désinstaller)</td><td><strong>Ctrl + clic gauche sur le gros sac à côté du poids</strong></td></tr>
 </table>
 <h2>Désinstallation</h2><p><strong>Videz d'abord le coffre en jeu</strong> : <strong>Ctrl + clic gauche</strong> sur le gros sac à côté du poids. Vos sacs collectionnés reviennent remplis des objets qu'ils peuvent contenir ; tout le reste tombe au sol. Puis lancez <strong>setup-PartyStash.exe</strong> et désinstallez. Sinon, le contenu du coffre reste dans vos sauvegardes mais devient inaccessible jusqu'à la réinstallation du mod.</p>
 <h2>FAQ</h2>
-<p><strong>Comment marche le tri ?</strong> Chaque onglet a son tri par défaut (<strong>Auto</strong> : armes et armures par qualité, parchemins par classe et niveau…), ou bien vous choisissez <strong>Date</strong>, <strong>Qualité</strong>, <strong>Type</strong>, <strong>Prix</strong> ou <strong>po/lb</strong>.</p>
+<p><strong>Comment marche le tri ?</strong> Chaque onglet a son tri par défaut (<strong>Auto</strong> : armes par dégâts par round, armures par CA, parchemins par classe et niveau…), ou bien vous choisissez <strong>Date</strong>, <strong>Qualité</strong>, <strong>Type</strong>, <strong>Prix</strong> ou <strong>po/lb</strong>.</p>
 <p><strong>Et les sacs, même les sacs sans fond ?</strong> Pas d'imbrication. Un sac mis dans le coffre y est vidé puis rangé dans l'onglet <strong>Sacs</strong> : le coffre reste une seule liste. Chaque sac collectionné rend sans poids les objets du coffre qu'il pourrait contenir. Un sac sans fond couvre tous les types : avec lui, le coffre entier ne pèse rien.</p>
 <p><strong>Je ramasse absolument tout. C&#x27;est un problème ?</strong> Le coffre est infini. Sans sac sans fond, son poids compte dans la capacité cumulée du groupe (au-delà, tout le monde est ralenti). <strong>Tout ranger</strong> vide un sac à dos en un clic, et <strong>Vendre cochés</strong> vend d'un coup tout ce que vous avez marqué, chez n'importe quel marchand.</p>
 <p><strong>Est-ce que ça ralentit le jeu ?</strong> Aucun hook par créature (ni opcode, ni script, ni action) : le travail est espacé (une vérification toutes les 500 ms, le poids du groupe toutes les 2 s), donc le nombre de créatures à l'écran ne change pas son coût.</p>
 <h2>Remarques</h2><ul>
 <li>De Baldur's Gate à <strong>Siege of Dragonspear</strong>, le coffre suit tant que le jeu n'est pas fermé entre la fin de BG1 et le début de SoD.</li>
 <li>Les traductions sont les bienvenues : PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy) : ça devrait marcher (installation comme sur <strong>BG2:EE</strong>) mais ce n'est pas encore testé. Les retours sont les bienvenus.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy) : testé en <strong>v2.6.6</strong>. Le coffre survit au passage de <strong>Siege of Dragonspear</strong> à Baldur's Gate II.</li>
 </ul><h2>Licence</h2><p>MIT. Auteur : sad0.</p></body></html>

@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
-<title>Party Stash v1.1</title>
+<title>Party Stash v1.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}</style></head><body>
-<h1>Party Stash <span class="v">v1.1</span></h1>
+<h1>Party Stash <span class="v">v1.2</span></h1>
 <p>파티 전체가 공유하는 무한 보관함을 <strong>Pillars of Eternity</strong> 방식으로, 새로 디자인한 인벤토리 화면에 넣었습니다. <strong>Baldur's Gate: Enhanced Edition</strong>(<strong>Siege of Dragonspear</strong> 포함 여부 무관), <strong>Baldur's Gate II: Enhanced Edition</strong>, <strong>EET</strong>용.</p>
 <p><img src="inventory_bg1.png" alt="인벤토리, 발더스 게이트 1 외형"></p>
 <h2>기능</h2><ul>
 <li><strong>공유 보관함</strong>: 모든 파티원이 인벤토리 화면에서 같은 무한 보관함을 사용합니다. 퀘스트는 보관함 안의 아이템도 인식합니다.</li>
 <li><strong>새 인벤토리 화면</strong>: 배낭과 보관함을 하나의 스크롤 격자로, 바닥 열, 간결한 2×2 능력치(능력치 이름은 3글자).</li>
 <li><strong>탭</strong>: 전체, 무기, 갑옷, 장비, 탄약, 보석, 두루마리, 물약, 퀘스트, 기타, 가방.</li>
-<li><strong>정렬</strong>: 자동(탭마다 고유 순서: 무기와 갑옷은 품질, 그다음 AC와 가치; 두루마리는 직업과 레벨…), 날짜, 품질, 종류, 가격, 가치/무게.</li>
+<li><strong>정렬</strong>: 자동(탭마다 고유 순서: 무기는 표시된 캐릭터의 라운드당 피해, 갑옷은 AC, 두루마리는 직업과 레벨…), 날짜, 품질, 종류, 가격, 가치/무게. 정렬 버튼을 오른쪽 클릭하면 순서가 뒤집힙니다.</li>
 <li><strong>표시</strong>: 빨강 = 선택한 캐릭터가 사용 불가, 파랑 = 미감정, + = 그 캐릭터에게 업그레이드(또는 파티 마법사가 아직 배울 수 있는 두루마리).</li>
-<li><strong>표시 판매</strong>: 보관함 아이템을 <strong>Ctrl + 클릭한</strong> 뒤 아무 상인에게서나 한꺼번에 판매하며, 버튼에 합계가 표시됩니다.</li>
+<li><strong>표시</strong>: 아이템(보관함, 배낭 또는 장착)을 <strong>Ctrl + 클릭하면</strong> 판매 표시(어둡게), 한 번 더 하면 귀중품(금색), 한 번 더 하면 해제됩니다. "표시 판매"는 판매 표시된 모든 아이템을 아무 상인에게서나 한꺼번에 팔며, 버튼에 합계가 표시됩니다.</li>
+<li><strong>라운드당 피해</strong>: 무기 툴팁에 표시된 캐릭터의 라운드당 피해와 THAC0이 나옵니다(근력, 숙련, 라운드당 공격 횟수, 쌍수 전투 시 양손); 능력치에는 라운드당 공격 횟수가 나옵니다.</li>
+<li><strong>충전</strong>: 완드 등 충전식 아이템은 칸 모서리에 남은 충전 수를 표시합니다.</li>
+<li><strong>귀중품</strong>: 절대 팔리지 않고, "모두 보관"과 상인 선택에서 제외되며, 땅에 내려놓을 수 없습니다. 판매 표시된 배낭 아이템은 바로 보관함으로 갑니다.</li>
+<li><strong>넣어 두기</strong>: 무게 옆의 큰 가방을 오른쪽 클릭한 뒤 용기를 열고, 배낭과 표시된 보관함 페이지 중 무엇을 넣을지 고릅니다(귀중품과 퀘스트 아이템은 남습니다).</li>
+<li><strong>옵션(별도 구성 요소)</strong>: 보관함은 무게가 없음; 캠페인 전환 시 파티 골드 유지(BG1에서 SoD, <strong>EET</strong>에서 SoD에서 BG2); 하드코어: 이 전환 시 보관함도 비워짐.</li>
 <li><strong>가방</strong>: 보관함에 넣은 가방은 내용물이 보관함으로 옮겨지고 가방 탭에 남습니다. 그 가방이 담을 수 있는 보관함 아이템은 무게가 없습니다(소지의 가방: 보관함 전체).</li>
 <li><strong>무게</strong>: 보관함은 구성원 최대 적재량의 합에 포함되며, 이를 넘으면 파티가 느려집니다.</li>
 <li><strong>두 가지 외형</strong>: 두 게임 모두에서 발더스 게이트 1 또는 발더스 게이트 II 스타일.</li>
@@ -20,7 +25,7 @@
 <p><img src="help.png" alt="Hover help: keybinds in green"><br><em>Hover help: keybinds in green</em></p>
 <p><img src="merchant.png" alt="상인: 표시 판매"><br><em>상인: 표시 판매</em></p>
 <p><img src="bags.png" alt="가방 탭"><br><em>가방 탭</em></p>
-<h2>요구 사항</h2><p>게임 버전 <strong>v2.7.x</strong>와 <strong>EEex</strong>(먼저 설치). 인벤토리 화면을 교체하는 모드(<strong>Dragonspear UI++</strong> 등)는 새 화면과 충돌합니다. <strong>LeUI</strong>는 <strong>Party Stash</strong>와 함께 작동합니다: Baldur's Gate II 외형을 선택하세요.</p>
+<h2>요구 사항</h2><p>게임 버전 <strong>v2.6.6</strong> 또는 <strong>v2.7.x</strong>와 <strong>EEex</strong>(먼저 설치). 인벤토리 화면을 교체하는 모드(<strong>Dragonspear UI++</strong> 등)는 새 화면과 충돌합니다. <strong>LeUI</strong>는 <strong>Party Stash</strong>와 함께 작동합니다: Baldur's Gate II 외형을 선택하세요. <strong>Infinity UI++</strong>는 저희 테스트에서 설치되고 작동합니다. 의견 환영합니다.</p>
 <h2>설치</h2><ol>
 <li><strong>EEex</strong>를 설치합니다.</li>
 <li>압축 파일을 게임 폴더(<strong>chitin.key</strong>가 있는 곳)에 풉니다.</li>
@@ -31,20 +36,22 @@
 <tr><td>보관함에서 아이템 꺼내기</td><td><strong>클릭(더블클릭: 꺼내서 장착)</strong></td></tr>
 <tr><td>배낭 아이템 보관</td><td><strong>Shift + 더블클릭, 또는 보관함 격자에 놓기</strong></td></tr>
 <tr><td>배낭 전체 보관</td><td><strong>&quot;모두 보관&quot; 버튼 또는 스페이스</strong></td></tr>
-<tr><td>판매 표시/해제</td><td><strong>보관함 아이템을 Ctrl + 클릭한 뒤 상인에게서 &quot;표시 판매&quot;</strong></td></tr>
+<tr><td>판매/귀중품 표시/해제</td><td><strong>아이템을 Ctrl + 클릭(보관함, 배낭 또는 장착)</strong></td></tr>
 <tr><td>설명</td><td><strong>오른쪽 클릭</strong></td></tr>
 <tr><td>격자, 탭, 바닥 스크롤</td><td><strong>마우스 휠, 화살표</strong></td></tr>
+<tr><td>정렬 뒤집기</td><td><strong>정렬 버튼을 오른쪽 클릭</strong></td></tr>
+<tr><td>배낭이나 보관함 한 페이지를 용기에 넣기</td><td><strong>큰 가방을 오른쪽 클릭한 뒤 용기 열기</strong></td></tr>
 <tr><td>가방 보관</td><td><strong>Shift + 더블클릭 또는 &quot;모두 보관&quot;(확인 후)</strong></td></tr>
 <tr><td>보관함 비우기(제거 전)</td><td><strong>무게 옆의 큰 가방을 Ctrl + 왼쪽 클릭</strong></td></tr>
 </table>
 <h2>제거</h2><p><strong>먼저 게임에서 보관함을 비우세요</strong>: 무게 옆의 큰 가방을 <strong>Ctrl + 왼쪽</strong> 클릭. 모은 가방은 담을 수 있는 아이템으로 채워져 돌아오고, 나머지는 모두 바닥에 떨어집니다. 그다음 <strong>setup-PartyStash.exe</strong>를 실행해 제거하세요. 그렇지 않으면 보관함 내용은 저장 파일에 남지만 다시 설치할 때까지 꺼낼 수 없습니다.</p>
 <h2>자주 묻는 질문</h2>
-<p><strong>정렬은 어떻게 작동하나요?</strong> 탭마다 기본 정렬이 있습니다(<strong>자동</strong>: 무기와 방어구는 품질순, 두루마리는 직업과 레벨순…). <strong>날짜</strong>, <strong>품질</strong>, <strong>종류</strong>, <strong>가격</strong>, <strong>골드/lb</strong> 중에서 고를 수도 있습니다.</p>
+<p><strong>정렬은 어떻게 작동하나요?</strong> 탭마다 기본 정렬이 있습니다(<strong>자동</strong>: 무기는 라운드당 피해순, 방어구는 AC순, 두루마리는 직업과 레벨순…). <strong>날짜</strong>, <strong>품질</strong>, <strong>종류</strong>, <strong>가격</strong>, <strong>골드/lb</strong> 중에서 고를 수도 있습니다.</p>
 <p><strong>가방은요, 소지의 가방도요?</strong> 중첩은 없습니다. 보관함에 넣은 가방은 보관함으로 비워지고 <strong>가방</strong> 탭에 보관되므로, 보관함은 하나의 목록으로 유지됩니다. 모은 가방마다 그 가방이 담을 수 있는 보관함 아이템의 무게가 0이 됩니다. 소지의 가방은 모든 종류를 담으므로, 그것이 있으면 보관함 전체의 무게가 0입니다.</p>
 <p><strong>저는 정말 전부 줍습니다. 문제가 되나요?</strong> 보관함은 무한합니다. 소지의 가방이 없으면 그 무게가 파티의 합산 적재량에 포함됩니다(초과하면 모두 느려집니다). <strong>모두 보관</strong>은 배낭을 한 번에 비우고, <strong>표시 판매</strong>는 표시한 모든 것을 어느 상인에게서나 한 번에 팝니다.</p>
 <p><strong>게임이 느려지나요?</strong> 생물별 후크가 없습니다(옵코드, 스크립트, 행동 후크 없음). 작업은 간격을 두고 실행되므로(500ms마다 빠른 확인, 2초마다 파티 무게), 화면의 생물 수가 비용을 바꾸지 않습니다.</p>
 <h2>참고</h2><ul>
 <li>발더스 게이트에서 <strong>Siege of Dragonspear</strong>로 넘어갈 때, BG1 끝과 SoD 시작 사이에 게임을 닫지 않으면 보관함이 이어집니다.</li>
 <li>번역 개선을 환영합니다: PartyStash/tra/.</li>
-<li><strong>EET</strong> (Enhanced Edition Trilogy): 작동할 것입니다 (<strong>BG2:EE</strong>처럼 설치됨) 하지만 아직 테스트하지 않았습니다. 의견 환영합니다.</li>
+<li><strong>EET</strong> (Enhanced Edition Trilogy): <strong>v2.6.6</strong>에서 테스트했습니다. <strong>Siege of Dragonspear</strong>에서 Baldur's Gate II로 넘어갈 때도 보관함이 유지됩니다.</li>
 </ul><h2>라이선스</h2><p>MIT. 제작자: sad0.</p></body></html>
