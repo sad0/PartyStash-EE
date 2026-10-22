@@ -97,4 +97,12 @@ OUTER_SPRINT ps_t_dump_cancel @188
 OUTER_SPRINT ps_t_dump_backpack @189
 OUTER_SPRINT ps_t_dump_stashpage @190
 OUTER_SPRINT ps_t_container_tip @191
+OUTER_SPRINT ps_t_help_btn_tip @195
+OUTER_SPRINT ps_t_bubble_weight_t @196
+OUTER_SPRINT ps_t_bubble_tabs_t @197
+OUTER_SPRINT ps_t_bubble_tabs @198
+OUTER_SPRINT ps_t_bubble_sort_t @199
+OUTER_SPRINT ps_t_bubble_ground_t @200
+OUTER_SPRINT ps_t_bubble_ground @201
+OUTER_SPRINT ps_t_bubble_close @202
 COPY ~PartyStash/lib/M_PSTXT.lua~ ~override~ EVALUATE_BUFFER

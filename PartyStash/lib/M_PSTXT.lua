@@ -93,4 +93,12 @@ PStash_Strings = {
 	dump_backpack = [==[%ps_t_dump_backpack%]==],
 	dump_stashpage = [==[%ps_t_dump_stashpage%]==],
 	container_tip = [==[%ps_t_container_tip%]==],
+	help_btn_tip = [==[%ps_t_help_btn_tip%]==],
+	bubble_weight_t = [==[%ps_t_bubble_weight_t%]==],
+	bubble_tabs_t = [==[%ps_t_bubble_tabs_t%]==],
+	bubble_tabs = [==[%ps_t_bubble_tabs%]==],
+	bubble_sort_t = [==[%ps_t_bubble_sort_t%]==],
+	bubble_ground_t = [==[%ps_t_bubble_ground_t%]==],
+	bubble_ground = [==[%ps_t_bubble_ground%]==],
+	bubble_close = [==[%ps_t_bubble_close%]==],
 }

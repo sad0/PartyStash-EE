@@ -32,6 +32,8 @@ COPY ~PartyStash/pages/%ps_look%_%ps_game%/PSTASH.menu~ ~override~   // the new 
      ~PartyStash/art/PSTASHSL.BAM~   ~override~   // the "to sell" marker (the game's gold pile)
      ~PartyStash/art/PSTASHOR.BAM~   ~override~   // the "valuable" cell tint (old gold ~25 %, art/build_tints.py)
      ~PartyStash/art/PSTASHDK.BAM~   ~override~   // the "to sell" cell tint (black ~75 %)
+     ~PartyStash/art/PSARROW.BAM~    ~override~   // the help overlay's arrows (art/build_arrows.py)
+     ~PartyStash/art/PSHELP.BAM~     ~override~   // its "?" button (art/build_help_icon.py)
 // The game's own STONSLOT (art/build_slot.py) under another name: a UI mod replacing STONSLOT (Infinity UI++ ships an
 // opaque one) leaves the page's slots alone.
 COPY ~PartyStash/art/PSSLOT_%ps_game%.BAM~ ~override/PSSLOT.BAM~

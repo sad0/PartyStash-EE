@@ -54,13 +54,15 @@ P.EN = {
 	container_tip = 'Put the backpack or the last stash page shown into this container (not the valuable or quest items)',
 	help_stash_title = 'This is your stash',
 	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant); again: valuable (golden, never sold)\n'
-		.. 'Right-click: description. Mouse wheel: scroll\nTabs: filter the stash by category (wheel or arrows to see them all)',
-	help_pack_title = "This is your character's inventory",
+		.. 'Right-click: description. Mouse wheel: scroll\n*Tabs: filter the stash by category (wheel or arrows to see them all)\n'
+		.. '*Weapons: damage per round in the tooltip',
+	help_pack_title = "This is your character's inventory (the 2 top rows)",
 	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack\n'
-		.. 'The chest in the last slot: your stash; the game counts its items as carried (quests).',
+		.. '*The chest in the last slot: your stash; the game counts its items as carried (quests).\n'
+		.. 'Ctrl + click: mark for sale (it goes to the stash); again: valuable; again: clear',
 	help_storeall = 'Space: store the whole backpack.\nQuest items stay in the backpack; bags ask first.',
-	help_sort = 'Click to change the sort, right-click to reverse it.\nAuto: each tab its own order (weapons by damage '
-		.. 'per round for the shown character, armor by AC, scrolls by class and level...).\nAlso: Date, Quality, Type, Price, '
+	help_sort = 'Click: change the sort\nRight-click: reverse it\n*Auto: each tab its own order (weapons by damage '
+		.. 'per round for the shown character, armor by AC, scrolls by class and level...).\n*Also: Date, Quality, Type, Price, '
 		.. 'Value/weight.', sort_rev = ' (rev.)',
 	help_bags = 'Store a bag (Shift + double-click or Store all): it is emptied into the stash and kept here.\n'
 		.. 'Stash items it can hold weigh nothing.',
@@ -69,11 +71,24 @@ P.EN = {
 	empty_confirm = 'Empty the stash? Your collected bags come back filled with the items they can hold; '
 		.. 'everything else drops on the ground. Do this before uninstalling Party Stash.',
 	bag_tip = 'Ctrl + left click: empty the stash into your bags and onto the ground (before uninstalling)\nRight click: '
-		.. 'put the backpack or this stash page (not the valuable or quest items) into the next container you open',
+		.. 'put the backpack or this stash page (not the valuable or quest items) into the next container you open\n'
+		.. '*Container panel: the red button at the bottom right does the same',
+	help_btn_tip = 'Help: what Party Stash adds to this page', bubble_weight_t = 'Weight bag', bubble_tabs_t = 'Tabs',
+	bubble_tabs = 'Filter the stash by category\nWheel or arrows: see all the tabs\n*Bags: your collected bags; the stash '
+		.. 'items they can hold weigh nothing',
+	bubble_sort_t = 'Sort', bubble_ground_t = 'Ground',
+	bubble_ground = 'Items on the ground around the party\nDrag: put items down or pick them up\nValuable items cannot be '
+		.. 'dropped here',
+	bubble_close = 'Click anywhere to close',
 }
-function PStash_T(k, ...)
+-- A line starting with '*' is a label, not a keybind ("*Tabs: ..."): greenKeys colours it gold instead of green
+-- (John: green is for keybinds only). TRaw keeps the marks for greenKeys; T drops them.
+local function TRaw(k)
 	local s = (PStash_Strings and PStash_Strings[k]) or P.EN[k] or k
-	s = string.gsub(s, '\\n', '\n') -- tra texts write a line break as \n
+	return (string.gsub(s, '\\n', '\n')) -- tra texts write a line break as \n
+end
+function PStash_T(k, ...)
+	local s = string.gsub(string.gsub(TRaw(k), '^%*', ''), '\n%*', '\n')
 	if select('#', ...) > 0 then return string.format(s, ...) end
 	return s
 end
@@ -885,30 +900,35 @@ local function compare(p, info)
 		return dAc + dSaves / 2, lines
 	end
 	if info.ability and info.prof > 0 then
-		local hit, dmg, pips = weaponScore(sp, info)
-		if pips == 0 then return 0, lines end
-		local score = hit + dmg
-		local launcher = info.ability.kind == 4
-		-- John: against the BEST equipped weapon of the same kind (bow vs bow, melee vs melee) among the main hand
-		-- and the quick weapon slots (35-38); none of that kind -> no "+".
+		-- John 2026-10-22: by damage per round (the tooltip's figure). Melee: against the best melee weapon among the
+		-- quick weapon slots, or the fist when there is none; dual wielding: against the weaker hand (one-handed
+		-- weapons only). Ranged: against the best ranged weapon there; none -> every ranged weapon is an upgrade.
+		local mine = weaponDps(p, info)
+		if not mine then return 0, lines end
+		local function ranged(i) return i.ability.kind == 4 or i.ability.kind == 2 end
+		local isRanged = ranged(info)
 		local best
 		for slot = MAIN_HAND, MAIN_HAND + 3 do
 			local it = items:get(slot)
 			local ci = it and PStash_ItemInfo(it.pRes.resref:get())
-			if ci and ci.ability and ci.prof > 0 and (ci.ability.kind == 4) == launcher then
-				local h, d = weaponScore(sp, ci)
-				if not best or h + d > best then best = h + d end
+			if ci and ci.ability and ranged(ci) == isRanged then
+				local d = weaponDps(p, ci)
+				if d and (not best or d.round > best) then best = d.round end
 			end
 		end
-		local gain = best and (score - best) or 0
-		-- Dual wielding (a weapon already in the off hand): a one-handed melee weapon better than it is an upgrade.
-		local off = items:get(9)
-		local oi = off and PStash_ItemInfo(off.pRes.resref:get())
-		if oi and oi.ability and oi.prof > 0 and oi.ability.kind ~= 4 and not launcher and not info.twoHanded then
-			local h, d = weaponScore(sp, oi)
-			gain = math.max(gain, score - (h + d))
+		if not isRanged then
+			if not best then -- the fist: 1d2 + strength damage, the character's own attacks per round
+				local _, d = strBonus(sp)
+				best = math.max(1, 1.5 + d) * math.max(1, aprCode(EEex_Sprite_GetStat(sp, 8)))
+			end
+			local off = items:get(9)
+			local oi = off and PStash_ItemInfo(off.pRes.resref:get())
+			if oi and oi.ability and oi.ability.kind == 1 and not info.twoHanded then
+				local d = weaponDps(p, oi)
+				if d then best = math.min(best, d.round) end
+			end
 		end
-		return gain, lines
+		return mine.round - (best or 0), lines
 	end
 	return 0, lines
 end
@@ -1308,15 +1328,43 @@ function PStash_TabHover(i)
 	local t = P.TABS[i + P.tabTop]
 	P.help = t and t.bags and 'bags' or nil
 end
+-- Help overlay (John 2026-10-22): the "?" button shows bubbles with arrows over the whole page, one per zone; a
+-- click anywhere (or the button again) closes it. Bubble texts: a gold title, then one bullet per line, keys in green.
+P.helpAll = false
+function PStash_ToggleHelp() P.helpAll = not P.helpAll P.help = nil end
+function PStash_HelpAll() return P.helpAll == true end
+local BUBBLE = {
+	weight = { 'bubble_weight_t', function()
+		return T('weight_tip') .. '\n' .. TRaw('bag_tip')
+	end },
+	pack = { 'help_pack_title', function() return TRaw('help_pack') end },
+	stash = { 'help_stash_title', function() return TRaw('help_stash') end },
+	tabs = { 'bubble_tabs_t', function() return TRaw('bubble_tabs') end },
+	sort = { 'bubble_sort_t', function() return TRaw('help_sort') end },
+	ground = { 'bubble_ground_t', function() return TRaw('bubble_ground') end },
+}
+function PStash_BubbleTitle(k) return BUBBLE[k] and (PStash_Gold .. T(BUBBLE[k][1]) .. '^-') or '' end
+function PStash_BubbleText(k)
+	if not BUBBLE[k] then return '' end
+	local out = {}
+	for line in string.gmatch(PStash_GreenKeys(BUBBLE[k][2]()) .. '\n', '(.-)\n') do
+		if string.find(line, '%S') then out[#out + 1] = '• ' .. line end
+	end
+	return table.concat(out, '\n')
+end
+
 -- older menus (a hot reload over an older page)
 function PStash_BagHover(on) P.help = on and 'bag' or nil end
 function PStash_BagHovering() return PStash_HelpIs('bag') end
 -- Keybinds in green (John): in each sentence, what comes before its colon ("Ctrl + click: ..."), or only the
 -- part in brackets when there is one ("Store a bag (Shift + double-click or Store all): ..."). ^G...^- is the
 -- game's colour markup (it renders in button texts: the help panels are buttons).
+local GOLD = '^0xff5cc3e6' -- labels ('*' lines) and the help bubbles' titles; the engine reads 0xAABBGGRR
 local function greenKeys(text)
 	local out = {}
 	for line in string.gmatch(text .. '\n', '(.-)\n') do
+		local colour = '^G'
+		if string.sub(line, 1, 1) == '*' then colour, line = GOLD, string.sub(line, 2) end
 		local parts = {}
 		for raw, sep in string.gmatch(line .. '. ', '(.-)(%. )') do
 			local sentence = raw
@@ -1325,11 +1373,11 @@ local function greenKeys(text)
 				local key, rest = string.sub(sentence, 1, cut - 1), string.sub(sentence, cut)
 				local o, c = string.find(key, '%b()')
 				if o then
-					key = string.sub(key, 1, o) .. '^G' .. string.sub(key, o + 1, c - 1) .. '^-' .. string.sub(key, c)
+					key = string.sub(key, 1, o) .. colour .. string.sub(key, o + 1, c - 1) .. '^-' .. string.sub(key, c)
 				else
 					local lead, body = string.match(key, '^(%s*)(.-)%s*$')
 					local tail = string.sub(key, #lead + #body + 1)
-					key = lead .. '^G' .. body .. '^-' .. tail
+					key = lead .. colour .. body .. '^-' .. tail
 				end
 				sentence = key .. rest
 			end
@@ -1340,12 +1388,17 @@ local function greenKeys(text)
 	end
 	return table.concat(out, '\n')
 end
+PStash_GreenKeys = greenKeys -- the help overlay's bubbles, defined above
+PStash_Gold = GOLD
 
 function PStash_HelpText(k)
-	if k == 'weight' then return wrap(T('weight_tip'), 55) .. '\n' .. greenKeys(wrap(T('bag_tip'), 55)) end
-	if k == 'pack' then return T('help_pack_title') .. '\n' .. greenKeys(T('help_pack')) end
-	if k == 'stash' then return T('help_stash_title') .. '\n' .. greenKeys(T('help_stash')) end
-	if k == 'storeall' or k == 'bags' then return greenKeys(T('help_' .. k)) end
+	-- no manual wrap here: the panel's text wraps by itself (wrap() cut the "Key: text" lines, John)
+	if k == 'weight' then
+		return T('weight_tip') .. '\n' .. greenKeys(TRaw('bag_tip'))
+	end
+	if k == 'pack' then return T('help_pack_title') .. '\n' .. greenKeys(TRaw('help_pack')) end
+	if k == 'stash' then return T('help_stash_title') .. '\n' .. greenKeys(TRaw('help_stash')) end
+	if k == 'storeall' or k == 'bags' then return greenKeys(TRaw('help_' .. k)) end
 	if k == 'sell' and PStash_SellHelp then return PStash_SellHelp() end
 	return T('help_' .. k)
 end
@@ -1539,7 +1592,19 @@ function PStash_DecorateTooltips()
 				line = d and T('dps_line', string.format('%.1f', d.round), d.thac0) or false
 				P.tipLine[res] = line
 			end
-			if line and not string.find(s.tooltip, line, 1, true) then s.tooltip = s.tooltip .. '\n' .. line end
+			-- the engine keeps its slot table: the line added before goes first when the figure changed (John: two DPS
+			-- lines once the off hand was filled)
+			P.tipAdded = P.tipAdded or {}
+			local old = P.tipAdded[name]
+			if old and old ~= line then
+				local cut = '\n' .. old
+				if string.sub(s.tooltip, -#cut) == cut then s.tooltip = string.sub(s.tooltip, 1, #s.tooltip - #cut) end
+				P.tipAdded[name] = nil
+			end
+			if line and not string.find(s.tooltip, line, 1, true) then
+				s.tooltip = s.tooltip .. '\n' .. line
+				P.tipAdded[name] = line
+			end
 		end
 	end
 	return false
@@ -2859,6 +2924,7 @@ end
 
 -- The quick-loot bar stays as the player left it (its toggle in the action bar).
 function PStash_OnInventoryClose()
+	P.helpAll = false
 	if P.selSaved and P.groundFor then
 		pcall(function()
 			local g = EEex_EngineGlobal_CBaldurChitin.m_pObjectGame

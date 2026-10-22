@@ -4358,53 +4358,6 @@ menu
 	}
 	label
 	{
-		enabled "PStash_HelpIs('bag')"
-		area 616 2 356 86
-		rectangle 0
-		rectangle opacity 235
-	}
-	button
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 624 6 340 78
-		text lua "PStash_HelpText('weight')"
-		text style "normal"
-		text align center center
-	}
-	label
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 540 130 432 138
-		rectangle 0
-		rectangle opacity 235
-	}
-	button
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 548 134 416 130
-		text lua "PStash_HelpText('pack')"
-		text style "normal"
-		text point 12
-		text align center center
-	}
-	label
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 540 286 432 170
-		rectangle 0
-		rectangle opacity 235
-	}
-	button
-	{
-		enabled "PStash_HelpIs('bag')"
-		area 548 290 416 162
-		text lua "PStash_HelpText('stash')"
-		text style "normal"
-		text point 12
-		text align center center
-	}
-	label
-	{
 		enabled "PStash_HelpIs('storeall')"
 		area 540 540 432 86
 		rectangle 0
@@ -4447,6 +4400,214 @@ menu
 		text lua "PStash_HelpText('bags')"
 		text style "normal"
 		text align center center
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 0 0 1120 710
+		rectangle 0
+		rectangle opacity 120
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 0 0 1120 710
+		action "PStash_ToggleHelp()"
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 20 8 470 200
+		rectangle 0
+		rectangle opacity 240
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 30 12 450 24
+		text lua "PStash_BubbleTitle('weight')"
+		text style "label"
+		text align left center
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 30 38 450 164
+		text lua "PStash_BubbleText('weight')"
+		text style "normal"
+		text point 12
+		text align left top
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 492 11 48 48
+		bam PSARROW
+		sequence 0
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 20 214 470 156
+		rectangle 0
+		rectangle opacity 240
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 30 218 450 24
+		text lua "PStash_BubbleTitle('pack')"
+		text style "label"
+		text align left center
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 30 244 450 120
+		text lua "PStash_BubbleText('pack')"
+		text style "normal"
+		text point 12
+		text align left top
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 492 190 48 48
+		bam PSARROW
+		sequence 0
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 20 376 470 200
+		rectangle 0
+		rectangle opacity 240
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 30 380 450 24
+		text lua "PStash_BubbleTitle('stash')"
+		text style "label"
+		text align left center
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 30 406 450 164
+		text lua "PStash_BubbleText('stash')"
+		text style "normal"
+		text point 12
+		text align left top
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 492 390 48 48
+		bam PSARROW
+		sequence 0
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 690 175 410 300
+		rectangle 0
+		rectangle opacity 240
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 700 179 390 24
+		text lua "PStash_BubbleTitle('tabs')"
+		text style "label"
+		text align left center
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 700 205 390 94
+		text lua "PStash_BubbleText('tabs')"
+		text style "normal"
+		text point 12
+		text align left top
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 700 309 390 24
+		text lua "PStash_BubbleTitle('sort')"
+		text style "label"
+		text align left center
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 700 335 390 134
+		text lua "PStash_BubbleText('sort')"
+		text style "normal"
+		text point 12
+		text align left top
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 750 127 48 48
+		bam PSARROW
+		sequence 2
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 900 72 48 48
+		bam PSARROW
+		sequence 2
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 660 490 270 110
+		rectangle 0
+		rectangle opacity 240
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 670 494 250 24
+		text lua "PStash_BubbleTitle('ground')"
+		text style "label"
+		text align left center
+	}
+	button
+	{
+		enabled "PStash_HelpAll()"
+		area 670 520 250 74
+		text lua "PStash_BubbleText('ground')"
+		text style "normal"
+		text point 12
+		text align left top
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 934 520 48 48
+		bam PSARROW
+		sequence 0
+	}
+	label
+	{
+		enabled "PStash_HelpAll()"
+		area 580 684 400 22
+		text lua "PStash_T('bubble_close')"
+		text style "normal"
+		text align center center
+	}
+	button
+	{
+		area 1066 46 40 40
+		bam PSHELP
+		sequence 0
+		tooltip lua "PStash_T('help_btn_tip')"
+		action "PStash_ToggleHelp()"
 	}
 	label --this has to be last so it draws over top of everything.
 	{

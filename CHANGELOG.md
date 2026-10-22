@@ -7,6 +7,10 @@
 - Damage per round and THAC0 in the weapon tooltips (stash, backpack and equipped), for the shown character; attacks
   per round in the stats. Auto sorts weapons by damage per round.
 - Charges shown on wands and other charged items.
+- Help overlay: a gold ? button at the top right explains each part of the page (bubbles and arrows); keybinds
+  in green, labels in gold.
+- Weapon upgrade "+" by damage per round: melee against the best quick weapon (or the fist; dual wielding: the
+  weaker hand), ranged against the best ranged one (none: every ranged weapon is an upgrade).
 - Marks cycle with Ctrl + click: for sale (darkened) → valuable (golden) → none, on stash, backpack and equipped items.
   Valuable items are never sold, skipped by Store all and the merchants' selection, and cannot be dropped on the
   ground. A backpack item marked for sale goes straight to the stash.
