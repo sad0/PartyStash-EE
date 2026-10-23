@@ -56,7 +56,7 @@ G.EN = {
 	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock', gm_from = 'From: %s', gm_wished = 'Wishlist',
 	gm_items = '%d items', gm_empty = 'Nothing here yet: visit stores to fill the camp merchant.',
 	gm_no_gold = 'Not enough gold', gm_full = 'Backpack full: select another character', gm_cannot_buy = 'Cannot buy that now', gm_bought = 'Bought: %s x%d',
-	gm_select = 'Click an item. Ctrl + click: wishlist. Right click: description.',
+	gm_select = 'Click: choose\nCtrl + click: wishlist\nRight click: description',
 	gm_total = 'Total: %d gp',
 	gm_skin = 'Board: %s', gm_skin_1 = 'pinned notices', gm_skin_2 = 'painted',
 	gm_sell_marked = 'Sell marked: %s gp', gm_sell_none = 'Nothing marked', gm_sold = 'Sold from the stash: %d gp',
