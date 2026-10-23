@@ -712,7 +712,16 @@ local function usableBy(sp, info)
 end
 G.usableBy = usableBy
 
+-- The buyer: the character chosen in the store screen (its portraits), not the one selected in the world
+-- (EEex_Sprite_GetSelected stays on the world's: John 2026-10-23, the DPS order ignored the store's choice).
 local function selectedSprite()
+	local name = Infinity_GetSelectedCharacterName and Infinity_GetSelectedCharacterName()
+	if name and name ~= '' then
+		for p = 0, (PSXP7_LastPortrait and PSXP7_LastPortrait() or 5) do
+			local sp = EEex_Sprite_GetInPortrait(p)
+			if sp and sp:getName() == name then return sp end
+		end
+	end
 	local ok, sp = pcall(EEex_Sprite_GetSelected)
 	if ok and sp then return sp end
 	return EEex_Sprite_GetInPortrait(0)
