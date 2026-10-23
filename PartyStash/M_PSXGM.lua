@@ -321,9 +321,14 @@ local function aggregate()
 end
 G.aggregate = aggregate
 
+-- The camp store's own markup: 300 %, so the vanilla view is never a cheaper way to buy (the page switches it to the
+-- source store's while buying). Forced at each opening: a save keeps the camp store it was made with.
+G.CAMP_MARKUP = 300
+
 -- The camp store gets exactly the aggregated stock: missing items added, gone ones emptied, then compressed
 -- (CStore::CompressItems drops the entries with no stock that are not unlimited).
 local function syncCamp(campPtr)
+	EEex_Write32(campPtr + STO_SELL, G.CAMP_MARKUP)
 	local agg = aggregate()
 	G.agg = agg
 	for _, e in ipairs(storeEntries(campPtr)) do
