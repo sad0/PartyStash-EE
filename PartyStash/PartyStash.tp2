@@ -154,3 +154,29 @@ PStash_Opt = PStash_Opt or {}
 PStash_Opt.losestash = true
 >>>>>>>>
 COPY ~.../PartyStash-inlined/M_PSOPTL.lua~ ~override~
+
+// #8 Camp merchant (grand marchand, John 2026-10-23): the store PSXCAMP sells every item seen at the stores already
+// visited (best price seen, infinite stock, uniques once). M_PSXGM.lua records the stores and draws the page
+// (PSXGM.menu); a camp creature opens it with StartStore("PSXCAMP", LastTalkedToBy()) (SadoQoL's camp).
+BEGIN @18 DESIGNATED 8
+LABEL ~PARTYSTASH-CAMP-MERCHANT~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~PartyStash.tp2~ 0 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 2 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 3 OR MOD_IS_INSTALLED ~PartyStash.tp2~ 4) @17
+COPY ~PartyStash/PSXCAMP.STO~ ~override~
+	SAY 0x0C @19
+COPY ~PartyStash/M_PSXGM.lua~ ~override~
+COPY ~PartyStash/PSXGM.menu~ ~override~
+// the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
+COPY ~PartyStash/PSXGMBA.MOS~ ~override~
+     ~PartyStash/PSXGMBB.MOS~ ~override~
+// paper ticket buttons and the pencil circle of the chosen category
+COPY ~PartyStash/PSXGMBN1.BAM~ ~override~
+     ~PartyStash/PSXGMBN2.BAM~ ~override~
+     ~PartyStash/PSXGMBN3.BAM~ ~override~
+     ~PartyStash/PSXGMBN4.BAM~ ~override~
+     ~PartyStash/PSXGMCIR.BAM~ ~override~
+// the title in charcoal is drawn, not typed: French or English lettering (other languages: English for now)
+ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~french~ BEGIN
+	COPY ~PartyStash/PSXGMTFR.BAM~ ~override/PSXGMTT.BAM~
+END ELSE BEGIN
+	COPY ~PartyStash/PSXGMTEN.BAM~ ~override/PSXGMTT.BAM~
+END
