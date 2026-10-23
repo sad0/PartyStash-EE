@@ -169,7 +169,7 @@ COPY ~PartyStash/PSXGM.menu~ ~override~
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
 // the title in charcoal is drawn, not typed: French or English lettering (other languages: English for now)
-ACTION_IF STRING_EQUAL_CASE ~%LANGUAGE%~ ~french~ BEGIN
+ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~french~ BEGIN
 	COPY ~PartyStash/PSXGMTFR.BAM~ ~override/PSXGMTT.BAM~
 END ELSE BEGIN
 	COPY ~PartyStash/PSXGMTEN.BAM~ ~override/PSXGMTT.BAM~
