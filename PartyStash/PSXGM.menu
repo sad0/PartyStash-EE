@@ -46,6 +46,18 @@ menu
 		rectangle 0
 		rectangle opacity 255
 	}
+	label
+	{
+		enabled "PSXGM_Skin() == 1"
+		area 0 0 864 710
+		mosaic PSXGMBA
+	}
+	label
+	{
+		enabled "PSXGM_Skin() == 2"
+		area 0 0 864 710
+		mosaic PSXGMBB
+	}
 	button
 	{
 		area 0 0 864 710
@@ -58,16 +70,10 @@ menu
 	}
 	label
 	{
-		area 0 12 864 40
+		area 236 16 432 40
 		text lua "PSXGM_T('gm_title')"
 		text style "title"
 		text align center center
-	}
-	label
-	{
-		area 16 56 208 588
-		rectangle 1
-		rectangle opacity 120
 	}
 	list
 	{
@@ -78,11 +84,11 @@ menu
 			{
 				area 6 0 -1 -1
 				text lua "PSXGM_TreeText(rowNumber)"
-				text style "normal"
+				text style "normal_parchment"
 				text align left center
 			}
 		}
-		area 20 60 200 580
+		area 26 68 184 580
 		rowheight 26
 		table "PSXGM.treeRows"
 		var PSXGM_treeVar
@@ -94,7 +100,7 @@ menu
 		var PSXGM_search
 		text style "edit"
 		maxlines 1
-		fill 112 111 111 64
+		fill 40 25 10 170
 		action "PSXGM.page = 1 return 1"
 	}
 	label
@@ -116,7 +122,7 @@ menu
 	{
 		area 438 60 112 32
 		text lua "PSXGM_FilterText('usable')"
-		text style "label"
+		text style "label_parchment"
 		text align right center
 		action "PSXGM_ToggleUsable()"
 	}
@@ -131,7 +137,7 @@ menu
 	{
 		area 554 60 114 32
 		text lua "PSXGM_FilterText('afford')"
-		text style "label"
+		text style "label_parchment"
 		text align right center
 		action "PSXGM_ToggleAfford()"
 	}
@@ -1320,7 +1326,7 @@ menu
 	{
 		area 236 488 40 30
 		text lua "'<'"
-		text style "title"
+		text style "label_parchment"
 		text align center center
 		clickable lua "PSXGM_CanPage(-1)"
 		action "PSXGM_Page(-1)"
@@ -1329,29 +1335,23 @@ menu
 	{
 		area 276 488 100 30
 		text lua "PSXGM_PageText()"
-		text style "label"
+		text style "label_parchment"
 		text align center center
 	}
 	button
 	{
 		area 376 488 40 30
 		text lua "'>'"
-		text style "title"
+		text style "label_parchment"
 		text align center center
 		clickable lua "PSXGM_CanPage(1)"
 		action "PSXGM_Page(1)"
-	}
-	label
-	{
-		area 426 488 120 30
-		rectangle 1
-		rectangle opacity 120
 	}
 	button
 	{
 		area 426 488 120 30
 		text lua "PSXGM_SortText()"
-		text style "button"
+		text style "label_parchment"
 		text align center center
 		action "PSXGM_NextSort()"
 	}
@@ -1359,28 +1359,15 @@ menu
 	{
 		area 552 488 116 30
 		text lua "PSXGM_CountText()"
-		text style "normal"
+		text style "normal_parchment"
 		text align right center
 	}
 	label
 	{
-		area 236 528 432 60
+		area 246 536 412 48
 		text lua "PSXGM_MsgText()"
-		text style "label"
-		text align left top
-	}
-	label
-	{
-		area 680 56 168 588
-		rectangle 1
-		rectangle opacity 120
-	}
-	label
-	{
-		area 684 64 160 30
-		text lua "Infinity_GetSelectedCharacterName()"
-		text style "label"
-		text align center center
+		text style "normal_parchment"
+		text align left center
 	}
 	button
 	{
@@ -1391,96 +1378,93 @@ menu
 	}
 	label
 	{
-		area 684 164 160 64
+		area 690 162 148 66
 		text lua "PSXGM_SelName()"
-		text style "normal"
+		text style "normal_parchment"
 		text align center top
 	}
 	label
 	{
-		area 684 232 160 48
+		area 690 230 148 48
 		text lua "PSXGM_SelInfo()"
-		text style "label"
+		text style "label_parchment"
 		text align center top
 	}
 	button
 	{
-		area 694 288 34 30
+		area 698 288 34 30
 		text lua "'-'"
-		text style "title"
+		text style "label_parchment"
 		text align center center
 		action "PSXGM_Qty(-1)"
 	}
 	label
 	{
-		area 728 288 72 30
+		area 732 288 64 30
 		text lua "PSXGM_QtyText()"
-		text style "label"
+		text style "label_parchment"
 		text align center center
 	}
 	button
 	{
-		area 800 288 34 30
+		area 796 288 34 30
 		text lua "'+'"
-		text style "title"
+		text style "label_parchment"
 		text align center center
 		action "PSXGM_Qty(1)"
 	}
 	label
 	{
-		area 684 322 160 30
+		area 692 320 144 30
 		text lua "PSXGM_TotalText()"
-		text style "label"
+		text style "normal_parchment"
 		text align center center
-	}
-	label
-	{
-		area 694 358 140 40
-		rectangle 1
-		rectangle opacity 120
 	}
 	button
 	{
-		area 694 358 140 40
+		area 706 360 116 32
 		text lua "PSXGM_T('gm_buy')"
-		text style "button"
+		text style "label_parchment"
 		text align center center
 		clickable lua "PSXGM_CanBuy()"
 		action "PSXGM_BuySelected()"
 	}
 	label
 	{
-		area 684 408 160 30
+		area 706 394 116 22
+		text lua "Infinity_GetSelectedCharacterName()"
+		text style "normal_parchment"
+		text align center center
+	}
+	label
+	{
+		area 706 416 116 26
 		text lua "PSXGM_GoldText()"
 		text style "gold"
 		text align center center
 	}
-	label
-	{
-		area 684 560 160 36
-		rectangle 1
-		rectangle opacity 120
-	}
 	button
 	{
-		area 684 560 160 36
+		area 684 564 160 34
 		text lua "PSXGM_T('gm_vanilla')"
-		text style "button"
+		text style "label_parchment"
 		text align center center
 		action "PSXGM_Vanilla()"
 	}
-	label
+	button
 	{
-		area 684 604 160 36
-		rectangle 1
-		rectangle opacity 120
+		area 684 604 160 34
+		text lua "PSXGM_T('gm_done')"
+		text style "label_parchment"
+		text align center center
+		action "PSXGM_Done()"
 	}
 	button
 	{
-		area 684 604 160 36
-		text lua "PSXGM_T('gm_done')"
-		text style "button"
+		area 20 674 196 26
+		text lua "PSXGM_SkinText()"
+		text style "label"
 		text align center center
-		action "PSXGM_Done()"
+		action "PSXGM_NextSkin()"
 	}
 }

@@ -56,13 +56,18 @@ def frame(area, opacity=120):
 
 
 def page():
+    # Background: a notice board (art/build_gm_board.py), two versions swapped by a button: PSXGMBA = assembled
+    # (board + papers), PSXGMBB = the same redrawn by SwarmUI. Each notice sits under one part of the page, so the
+    # texts on paper use the game's dark parchment styles (BG1 and BG2 both have label_ / normal_parchment).
+    P, PN = 'label_parchment', 'normal_parchment'
     items = []
     items.append(label((0, 0, W, H), extra='\t\trectangle 0\n\t\trectangle opacity 255'))
+    items.append(label((0, 0, W, H), enabled='PSXGM_Skin() == 1', extra='\t\tmosaic PSXGMBA'))
+    items.append(label((0, 0, W, H), enabled='PSXGM_Skin() == 2', extra='\t\tmosaic PSXGMBB'))
     items.append(button((0, 0, W, H), extra='\t\taction ""'))  # eats the clicks meant for STORE_BUYSELL underneath
     items.append(label((0, 0, 0, 0), enabled='PSXGM_Tick()'))  # the tick also runs from the page itself
-    items.append(label((0, 12, W, 40), "PSXGM_T('gm_title')", style='title', align='center center'))
-    # category tree
-    items.append(frame((16, 56, 208, 588)))
+    items.append(label((GX, 16, COLS * PITCH, 40), "PSXGM_T('gm_title')", style='title', align='center center'))
+    # category tree (the tall notice on the left)
     items.append('''\tlist
 \t{
 \t\tcolumn
@@ -72,24 +77,24 @@ def page():
 \t\t\t{
 \t\t\t\tarea 6 0 -1 -1
 \t\t\t\ttext lua "PSXGM_TreeText(rowNumber)"
-\t\t\t\ttext style "normal"
+\t\t\t\ttext style "%s"
 \t\t\t\ttext align left center
 \t\t\t}
 \t\t}
-\t\tarea 20 60 200 580
+\t\tarea 26 68 184 580
 \t\trowheight 26
 \t\ttable "PSXGM.treeRows"
 \t\tvar PSXGM_treeVar
 \t\taction "PSXGM_TreeClick()"
-\t}''')
-    # search + filters + sort
+\t}''' % PN)
+    # search + filters (top of the big notice)
     items.append('''\tedit
 \t{
 \t\tarea %d 60 196 32
 \t\tvar PSXGM_search
 \t\ttext style "edit"
 \t\tmaxlines 1
-\t\tfill 112 111 111 64
+\t\tfill 40 25 10 170
 \t\taction "PSXGM.page = 1 return 1"
 \t}''' % GX)
     items.append(label((GX + 6, 60, 190, 32), "PSXGM_T('gm_search') .. '...'", enabled="PSXGM_search == ''"))
@@ -99,7 +104,7 @@ def page():
         items.append(label((fx + 2, 64, 24, 24), extra='\n'.join([
             '\t\tbam ROUNDBUT', '\t\tscaleToClip', f'\t\tframe lua "PSXGM_FilterFrame(\'{which}\')"'])))
         items.append(button((fx, 60, fw, 32), extra='\n'.join([
-            f'\t\ttext lua "PSXGM_FilterText(\'{which}\')"', '\t\ttext style "label"', '\t\ttext align right center',
+            f'\t\ttext lua "PSXGM_FilterText(\'{which}\')"', f'\t\ttext style "{P}"', '\t\ttext align right center',
             f'\t\taction "{act}"'])))
     # grid
     items.append(label((GX, GY, COLS * PITCH, ROWS * PITCH), extra='\t\tactionScroll "PSXGM_Wheel()"'))
@@ -118,33 +123,35 @@ def page():
         items.append(label((x + 36, y + 1, 16, 18), "'*'", style='title', align='center center',
                            enabled=f'PSXGM_CellWished({i})'))
     py = GY + ROWS * PITCH + 6
-    items.append(button((GX, py, 40, 30), "'<'", 'PSXGM_Page(-1)', style='title', clickable='PSXGM_CanPage(-1)'))
-    items.append(label((GX + 40, py, 100, 30), 'PSXGM_PageText()', style='label', align='center center'))
-    items.append(button((GX + 140, py, 40, 30), "'>'", 'PSXGM_Page(1)', style='title', clickable='PSXGM_CanPage(1)'))
-    items.append(frame((GX + 190, py, 120, 30)))
-    items.append(button((GX + 190, py, 120, 30), 'PSXGM_SortText()', 'PSXGM_NextSort()'))
-    items.append(label((GX + 316, py, 116, 30), 'PSXGM_CountText()', align='right center'))
-    items.append(label((GX, py + 40, COLS * PITCH, 60), 'PSXGM_MsgText()', style='label', align='left top'))
-    # right panel: the selected item
-    items.append(frame((RX - 4, 56, RW + 8, 588)))
-    items.append(label((RX, 64, RW, 30), 'Infinity_GetSelectedCharacterName()', style='label', align='center center'))
+    items.append(button((GX, py, 40, 30), "'<'", 'PSXGM_Page(-1)', style=P, clickable='PSXGM_CanPage(-1)'))
+    items.append(label((GX + 40, py, 100, 30), 'PSXGM_PageText()', style=P, align='center center'))
+    items.append(button((GX + 140, py, 40, 30), "'>'", 'PSXGM_Page(1)', style=P, clickable='PSXGM_CanPage(1)'))
+    items.append(button((GX + 190, py, 120, 30), 'PSXGM_SortText()', 'PSXGM_NextSort()', style=P))
+    items.append(label((GX + 316, py, 116, 30), 'PSXGM_CountText()', style=PN, align='right center'))
+    # messages: the torn strip under the big notice
+    items.append(label((GX + 10, 536, COLS * PITCH - 20, 48), 'PSXGM_MsgText()', style=PN, align='left center'))
+    # the selected item (wanted poster, top right)
     items.append(button((RX + (RW - CELL) // 2, GY, CELL, CELL), extra='\n'.join([
         '\t\tbam PSSLOT', '\t\ticon lua "PSXGM_SelIcon()"', '\t\tactionAlt "PSXGM_SelDesc()"'])))
-    items.append(label((RX, GY + 60, RW, 64), 'PSXGM_SelName()', align='center top'))
-    items.append(label((RX, GY + 128, RW, 48), 'PSXGM_SelInfo()', style='label', align='center top'))
+    items.append(label((RX + 6, GY + 58, RW - 12, 66), 'PSXGM_SelName()', style=PN, align='center top'))
+    items.append(label((RX + 6, GY + 126, RW - 12, 48), 'PSXGM_SelInfo()', style=P, align='center top'))
+    # quantity ticket
     qy = GY + 184
-    items.append(button((RX + 10, qy, 34, 30), "'-'", 'PSXGM_Qty(-1)', style='title'))
-    items.append(label((RX + 44, qy, RW - 88, 30), 'PSXGM_QtyText()', style='label', align='center center'))
-    items.append(button((RX + RW - 44, qy, 34, 30), "'+'", 'PSXGM_Qty(1)', style='title'))
-    items.append(label((RX, qy + 34, RW, 30), 'PSXGM_TotalText()', style='label', align='center center'))
-    items.append(frame((RX + 10, qy + 70, RW - 20, 40)))
-    items.append(button((RX + 10, qy + 70, RW - 20, 40), "PSXGM_T('gm_buy')", 'PSXGM_BuySelected()',
+    items.append(button((RX + 14, qy, 34, 30), "'-'", 'PSXGM_Qty(-1)', style=P))
+    items.append(label((RX + 48, qy, RW - 96, 30), 'PSXGM_QtyText()', style=P, align='center center'))
+    items.append(button((RX + RW - 48, qy, 34, 30), "'+'", 'PSXGM_Qty(1)', style=P))
+    items.append(label((RX + 8, qy + 32, RW - 16, 30), 'PSXGM_TotalText()', style=PN, align='center center'))
+    # Buy ticket: the button, the buyer (the selected portrait), the party gold
+    items.append(button((RX + 22, 360, RW - 44, 32), "PSXGM_T('gm_buy')", 'PSXGM_BuySelected()', style=P,
                         clickable='PSXGM_CanBuy()'))
-    items.append(label((RX, qy + 120, RW, 30), 'PSXGM_GoldText()', style='gold', align='center center'))
-    items.append(frame((RX, 560, RW, 36)))
-    items.append(button((RX, 560, RW, 36), "PSXGM_T('gm_vanilla')", 'PSXGM_Vanilla()'))
-    items.append(frame((RX, 604, RW, 36)))
-    items.append(button((RX, 604, RW, 36), "PSXGM_T('gm_done')", 'PSXGM_Done()'))
+    items.append(label((RX + 22, 394, RW - 44, 22), 'Infinity_GetSelectedCharacterName()', style=PN,
+                       align='center center'))
+    items.append(label((RX + 22, 416, RW - 44, 26), 'PSXGM_GoldText()', style='gold', align='center center'))
+    # sell / done ticket
+    items.append(button((RX, 564, RW, 34), "PSXGM_T('gm_vanilla')", 'PSXGM_Vanilla()', style=P))
+    items.append(button((RX, 604, RW, 34), "PSXGM_T('gm_done')", 'PSXGM_Done()', style=P))
+    # board swap (bottom left, on the wood)
+    items.append(button((20, 674, 196, 26), 'PSXGM_SkinText()', 'PSXGM_NextSkin()', style='label'))
     return '''menu
 {
 \tname "PSXGM_PAGE"

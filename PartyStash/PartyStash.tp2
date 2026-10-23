@@ -165,3 +165,6 @@ COPY ~PartyStash/PSXCAMP.STO~ ~override~
 	SAY 0x0C @19
 COPY ~PartyStash/M_PSXGM.lua~ ~override~
 COPY ~PartyStash/PSXGM.menu~ ~override~
+// the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
+COPY ~PartyStash/PSXGMBA.MOS~ ~override~
+     ~PartyStash/PSXGMBB.MOS~ ~override~

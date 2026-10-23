@@ -60,6 +60,7 @@ G.EN = {
 	gm_no_gold = 'Not enough gold', gm_full = 'Backpack full: select another character', gm_cannot_buy = 'Cannot buy that now', gm_bought = 'Bought: %s x%d',
 	gm_select = 'Click an item. Ctrl + click: wishlist. Right click: description.',
 	gm_total = 'Total: %d gp',
+	gm_skin = 'Board: %s', gm_skin_1 = 'pinned notices', gm_skin_2 = 'painted',
 }
 local function T(key, ...)
 	local s = (PStash_Strings and PStash_Strings[key]) or G.EN[key] or key
@@ -821,6 +822,21 @@ function PSXGM_NextSort()
 	G.page = 1
 end
 function PSXGM_SortText() return T('gm_sort', T('gm_sort_' .. G.sort)) end
+
+-- Page background (John 2026-10-23): 1 = notice board assembled from pieces (PSXGMBA), 2 = the same redrawn by
+-- SwarmUI (PSXGMBB). Kept in Baldur.lua (per player, not per save).
+function PSXGM_Skin()
+	if not G.skin then
+		local ok, v = pcall(Infinity_GetINIValue, 'Party Stash', 'Camp Merchant Board', 1)
+		G.skin = (ok and tonumber(v) == 2) and 2 or 1
+	end
+	return G.skin
+end
+function PSXGM_NextSkin()
+	G.skin = PSXGM_Skin() == 1 and 2 or 1
+	pcall(Infinity_SetINIValue, 'Party Stash', 'Camp Merchant Board', G.skin)
+end
+function PSXGM_SkinText() return T('gm_skin', T('gm_skin_' .. PSXGM_Skin())) end
 
 -- Selected item panel.
 function PSXGM_SelIcon() local c = selected() return c and c.en.item.icon or nil end
