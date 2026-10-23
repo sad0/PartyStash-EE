@@ -70,7 +70,7 @@ menu
 	}
 	label
 	{
-		area 282 14 340 42
+		area 284 14 340 42
 		bam PSXGMTT
 	}
 	list

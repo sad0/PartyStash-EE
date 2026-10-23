@@ -824,11 +824,11 @@ end
 function PSXGM_SortText() return T('gm_sort', T('gm_sort_' .. G.sort)) end
 
 -- Page background (John 2026-10-23): 1 = notice board assembled from pieces (PSXGMBA), 2 = the same redrawn by
--- SwarmUI (PSXGMBB). Kept in Baldur.lua (per player, not per save).
+-- SwarmUI (PSXGMBB, the default: John 2026-10-23). Kept in Baldur.lua (per player, not per save).
 function PSXGM_Skin()
 	if not G.skin then
-		local ok, v = pcall(Infinity_GetINIValue, 'Party Stash', 'Camp Merchant Board', 1)
-		G.skin = (ok and tonumber(v) == 2) and 2 or 1
+		local ok, v = pcall(Infinity_GetINIValue, 'Party Stash', 'Camp Merchant Board', 2)
+		G.skin = (ok and tonumber(v) == 1) and 1 or 2
 	end
 	return G.skin
 end

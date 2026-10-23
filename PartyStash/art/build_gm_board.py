@@ -46,13 +46,18 @@ ZONES = {
 # corner treatment per sheet (tl, tr, br, bl): dog = dog-ear, torn = torn off, curl = curled, None = intact
 CORNERS = {
     'tree': (None, None, 'dog', 'torn'),
-    'list': ('torn', None, 'curl', None),
+    'list': ('cut', None, 'curl', None),  # 'cut': the dog-ear drawn by fold() after the img2img pass
     'card': (None, 'torn', None, None),
     'qty': (None, None, None, 'dog'),
     'buy': (None, None, 'curl', None),
     'msg': (None, None, None, None),
     'done': ('dog', None, None, 'torn'),
 }
+# The big notice's top-left dog-ear (John: the title's G tucked under it), drawn by fold() on both boards after the
+# img2img pass so it stays in place; the title BAM is cut by the same shape.
+FOLD = 68
+TITLE_XY = (284, 14)  # build_gm_menu.py: the title label
+
 # older notices left on the board, mostly covered: (x, y, w, h, angle)
 SCRAPS = [(150, 600, 150, 100, -7), (440, 584, 190, 110, 4), (628, 430, 120, 150, -5), (812, 470, 70, 120, 8),
           (190, 6, 70, 60, 12)]
@@ -129,7 +134,9 @@ def wear(sheet, rnd, corners, torn_edges):
             continue
         cx, cy, sx, sy = corner_xy(w, h, i)
         c = int(min(w, h) * rnd.uniform(0.10, 0.20))
-        if kind == 'dog':  # folded over: the corner is gone and its back lies on the sheet, darker
+        if kind == 'cut':  # the fixed dog-ear of the big notice: only the hole here (fold() adds the flap)
+            md.polygon([(cx, cy), (cx + sx * FOLD, cy), (cx, cy + sy * FOLD)], fill=0)
+        elif kind == 'dog':  # folded over: the corner is gone and its back lies on the sheet, darker
             md.polygon([(cx, cy), (cx + sx * c, cy), (cx, cy + sy * c)], fill=0)
             tilt = rnd.uniform(0.75, 1.15)
             od.polygon([(cx + sx * c, cy), (cx, cy + sy * int(c * tilt)), (cx + sx * c * 0.95, cy + sy * c * tilt * 0.95)],
@@ -345,11 +352,41 @@ def lines(img):
     return out.convert('RGB')
 
 
+def fold_shapes():
+    """(hole, flap) polygons of the big notice's dog-ear, page coordinates."""
+    x, y = ZONES['list'][0], ZONES['list'][1]
+    hole = [(x, y), (x + FOLD, y), (x, y + FOLD)]
+    flap = [(x + FOLD, y), (x, y + FOLD), (x + FOLD * 0.93, y + FOLD * 0.93)]
+    return hole, flap
+
+
+def fold(img, base):
+    """The dog-ear: the wood of the hole taken back from the base board, the flap (paper back, darker), its shadow."""
+    hole, flap = fold_shapes()
+    out = img.convert('RGBA')
+    m = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(m).polygon(hole, fill=255)
+    out.paste(base.convert('RGBA'), (0, 0), m)
+    sh = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(sh).polygon([(px + 3, py + 4) for px, py in flap], fill=150)
+    out.alpha_composite(Image.merge('RGBA', [Image.new('L', (W, H), 0)] * 3 + [sh.filter(ImageFilter.GaussianBlur(4))]))
+    tex = load('paper2').resize((W, H))
+    tex = ImageChops.multiply(tex, Image.new('RGB', (W, H), (176, 150, 112)))
+    fm = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(fm).polygon(flap, fill=255)
+    shade = Image.linear_gradient('L').resize((W, H)).point(lambda v: 255 - v // 3)
+    tex = ImageChops.multiply(tex, Image.merge('RGB', [shade] * 3))
+    out.paste(tex.convert('RGBA'), (0, 0), fm)
+    d = ImageDraw.Draw(out)
+    d.line([flap[0], flap[1]], fill=(95, 72, 45, 255), width=1)  # the crease
+    return out.convert('RGB')
+
+
 def compose():
     os.makedirs(GM, exist_ok=True)
     base = compose_base()
     base.save(os.path.join(GM, 'base.png'))
-    lines(base).save(os.path.join(GM, 'PSXGMBA.png'))
+    fold(lines(base), base).save(os.path.join(GM, 'PSXGMBA.png'))
     print('written gm/base.png, gm/PSXGMBA.png')
 
 
@@ -379,7 +416,7 @@ def ai(creativity=0.6, seed=5):
         sys.exit('SwarmUI: %s' % r.get('error'))
     with urllib.request.urlopen('http://localhost:7801/' + urllib.parse.quote(img), timeout=120) as f:
         b = Image.open(io.BytesIO(f.read())).convert('RGB').resize((W, H), Image.LANCZOS)
-    lines(b).save(os.path.join(GM, 'PSXGMBB.png'))
+    fold(lines(b), Image.open(os.path.join(GM, 'base.png')).convert('RGB')).save(os.path.join(GM, 'PSXGMBB.png'))
     print('written gm/PSXGMBB.png')
 
 
@@ -392,17 +429,18 @@ def charcoal(src, size):
     r = min(size[0] / ink.width, size[1] / ink.height)
     ink = ink.resize((int(ink.width * r), int(ink.height * r)), Image.LANCZOS)
     w, h = ink.size
-    grain = Image.effect_noise((w, h), 70).point(lambda v: 255 if v > 70 else 0)
-    streak = Image.effect_noise((w, max(1, h // 8)), 60).resize((w, h), Image.BICUBIC).point(lambda v: 255 if v > 60 else 0)
-    alpha = ImageChops.multiply(ink, ImageChops.multiply(grain, streak))
+    # solid black in the middle of the strokes, dry grain only on their edges (John: fuller letters)
+    core = ink.filter(ImageFilter.MinFilter(5))
+    grain = Image.effect_noise((w, h), 70).point(lambda v: 255 if v > 55 else 0)
+    edge = ImageChops.multiply(ink, grain)
     rough = ink.filter(ImageFilter.GaussianBlur(1.0)).point(lambda v: 255 if v > 110 else 0)
-    alpha = ImageChops.multiply(alpha, rough)
+    alpha = ImageChops.lighter(core, ImageChops.multiply(edge, rough))
     smudge = ink.filter(ImageFilter.GaussianBlur(4)).point(lambda v: v * 70 // 255)
     alpha = ImageChops.lighter(alpha, ImageChops.offset(smudge, 2, 3))
     out = Image.new('RGBA', size, (0, 0, 0, 0))
     col = Image.new('RGBA', (w, h), (28, 24, 22, 255))
     col.putalpha(alpha)
-    out.alpha_composite(col, ((size[0] - w) // 2, (size[1] - h) // 2))
+    out.alpha_composite(col, (0, (size[1] - h) // 2))  # left-aligned: the G sits under the dog-ear
     return out
 
 
@@ -411,6 +449,11 @@ def title():
     import build_art
     for lang in ('en', 'fr'):
         img = charcoal(os.path.join(GM, 'title_%s.png' % lang), (340, 42))
+        # tucked under the dog-ear: nothing drawn over its hole or its flap
+        cut = Image.new('L', img.size, 255)
+        for poly in fold_shapes():
+            ImageDraw.Draw(cut).polygon([(px - TITLE_XY[0], py - TITLE_XY[1]) for px, py in poly], fill=0)
+        img.putalpha(ImageChops.multiply(img.getchannel('A'), cut))
         img.save(os.path.join(GM, 'title_%s_charcoal.png' % lang))
         # BAM V1 is 1-bit transparent: keep the solid strokes, drop the faint smudge
         img.putalpha(img.getchannel('A').point(lambda a: 255 if a > 100 else 0))
