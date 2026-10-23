@@ -15,3 +15,5 @@
 @15 = ~Opzione: conserva l'oro del gruppo ai cambi di campagna (BG1 a SoD, SoD a BG2 in EET)~
 @16 = ~Opzione (hardcore): i cambi di campagna svuotano anche il baule, come tutto ciò che porta il gruppo~
 @17 = ~Richiede Party Stash.~
+@18 = ~Camp merchant: sells every item seen at the stores already visited (for SadoQoL's camp)~
+@19 = ~Camp merchant~

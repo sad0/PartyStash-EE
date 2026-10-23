@@ -15,3 +15,5 @@
 @15 = ~オプション：キャンペーン移行時にパーティーの所持金を保持（BG1→SoD、EET の SoD→BG2）~
 @16 = ~オプション（ハードコア）：キャンペーン移行時に収納箱も空になる（パーティーの持ち物と同様）~
 @17 = ~Party Stash が必要です。~
+@18 = ~Camp merchant: sells every item seen at the stores already visited (for SadoQoL's camp)~
+@19 = ~Camp merchant~

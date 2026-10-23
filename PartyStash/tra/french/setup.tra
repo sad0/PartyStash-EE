@@ -15,3 +15,5 @@
 @15 = ~Option : garder l'or du groupe aux changements de campagne (BG1 vers SoD, SoD vers BG2 dans EET)~
 @16 = ~Option (hardcore) : les changements de campagne vident aussi le coffre, comme tout ce que porte le groupe~
 @17 = ~Nécessite Party Stash.~
+@18 = ~Grand marchand du camp : vend tout objet vu chez les marchands déjà visités (pour le camp de SadoQoL)~
+@19 = ~Grand marchand~
