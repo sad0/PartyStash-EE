@@ -722,6 +722,26 @@ end
 -- Grid view          --
 -----------------------
 
+-- Search folding: lower case and Latin accents dropped (UTF-8 U+00C0-U+00FF, Œ/œ), so "epee", "épée" and "Épée"
+-- all find "Épée" (string.lower leaves non-ASCII letters alone).
+local FOLD = {}
+do
+	local runs = { { 0x80, 0x85, 'a' }, { 0x86, 0x86, 'ae' }, { 0x87, 0x87, 'c' }, { 0x88, 0x8B, 'e' }, { 0x8C, 0x8F, 'i' },
+		{ 0x90, 0x90, 'd' }, { 0x91, 0x91, 'n' }, { 0x92, 0x96, 'o' }, { 0x98, 0x98, 'o' }, { 0x99, 0x9C, 'u' },
+		{ 0x9D, 0x9D, 'y' }, { 0x9F, 0x9F, 'ss' }, { 0xA0, 0xA5, 'a' }, { 0xA6, 0xA6, 'ae' }, { 0xA7, 0xA7, 'c' },
+		{ 0xA8, 0xAB, 'e' }, { 0xAC, 0xAF, 'i' }, { 0xB1, 0xB1, 'n' }, { 0xB2, 0xB6, 'o' }, { 0xB8, 0xB8, 'o' },
+		{ 0xB9, 0xBC, 'u' }, { 0xBD, 0xBD, 'y' }, { 0xBF, 0xBF, 'y' } }
+	for _, r in ipairs(runs) do
+		for b = r[1], r[2] do FOLD[string.char(0xC3, b)] = r[3] end
+	end
+	FOLD[string.char(0xC5, 0x92)], FOLD[string.char(0xC5, 0x93)] = 'oe', 'oe'
+end
+local function fold(s)
+	s = tostring(s or ''):gsub('[\195\197][\128-\191]', function(c) return FOLD[c] end)
+	return string.lower(s)
+end
+G.fold = fold
+
 local function entryRes(en) return en and en.item and string.upper(en.item.res or '') or '' end
 local function cleanLabel(s)
 	s = tostring(s or '')
@@ -822,7 +842,7 @@ end
 local function rebuild()
 	local list = store and store.storeItems or {}
 	local out, sp, gold, campMk = {}, selectedSprite(), partyGold(), campMarkup()
-	local q = string.lower(tostring(gmFindText or '')):gsub('^%s+', ''):gsub('%s+$', '')
+	local q = fold(gmFindText):gsub('^%s+', ''):gsub('%s+$', '')
 	for i, en in ipairs(list) do
 		local res = entryRes(en)
 		local info = res ~= '' and itemInfo(res)
@@ -835,7 +855,7 @@ local function rebuild()
 			local src = a.sources[1]
 			c.from = src.name and src.name ~= '' and src.name or nil
 			if inCategory(G.cat, info, res)
-				and (q == '' or string.find(string.lower(name), q, 1, true))
+				and (q == '' or string.find(fold(name), q, 1, true))
 				and (not G.usable or usableBy(sp, info))
 				and (not G.afford or c.price <= gold) then
 				local lf = leafOf(info, res)
