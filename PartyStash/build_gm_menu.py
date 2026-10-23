@@ -96,8 +96,8 @@ def page():
 \t\t}
 \t\tarea 26 68 184 580
 \t\trowheight 26
-\t\ttable "PSXGM_treeRows"
-\t\tvar PSXGM_treeVar
+\t\ttable "gmTreeList"
+\t\tvar gmTreeRow
 \t\thidehighlight
 \t\taction "PSXGM_TreeClick()"
 \t}''' % PN)
@@ -105,13 +105,13 @@ def page():
     items.append('''\tedit
 \t{
 \t\tarea %d 60 196 32
-\t\tvar PSXGM_search
+\t\tvar gmFindText
 \t\ttext style "edit"
 \t\tmaxlines 1
 \t\tfill 40 25 10 170
 \t\taction "return PSXGM_SearchEdit()"
 \t}''' % GX)
-    items.append(label((GX + 6, 60, 190, 32), "PSXGM_T('gm_search') .. '...'", enabled="PSXGM_search == ''"))
+    items.append(label((GX + 6, 60, 190, 32), "PSXGM_T('gm_search') .. '...'", enabled="gmFindText == ''"))
     # filters: the game's round toggle (ROUNDBUT, frame 0 off / 2 on, as in its options screens; BG1 and BG2)
     for fx, fw, which, act in ((GX + 202, 112, 'usable', 'PSXGM_ToggleUsable()'),
                                (GX + 318, 114, 'afford', 'PSXGM_ToggleAfford()')):

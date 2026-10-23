@@ -94,15 +94,15 @@ menu
 		}
 		area 26 68 184 580
 		rowheight 26
-		table "PSXGM_treeRows"
-		var PSXGM_treeVar
+		table "gmTreeList"
+		var gmTreeRow
 		hidehighlight
 		action "PSXGM_TreeClick()"
 	}
 	edit
 	{
 		area 236 60 196 32
-		var PSXGM_search
+		var gmFindText
 		text style "edit"
 		maxlines 1
 		fill 40 25 10 170
@@ -110,7 +110,7 @@ menu
 	}
 	label
 	{
-		enabled "PSXGM_search == ''"
+		enabled "gmFindText == ''"
 		area 242 60 190 32
 		text lua "PSXGM_T('gm_search') .. '...'"
 		text style "normal"

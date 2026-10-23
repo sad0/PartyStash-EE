@@ -30,7 +30,7 @@ G.expanded = G.expanded or {}
 if G.sortV ~= 2 then G.sort, G.sortV = 'auto', 2 end -- Auto by default (John 2026-10-23)
 G.qty = G.qty or 1
 G.msg = G.msg or ''
-PSXGM_search = PSXGM_search or ''
+gmFindText = gmFindText or ''
 
 local function log(...)
 	if G.DEBUG then print('[PSXGM] ' .. string.format(...)) end
@@ -618,10 +618,12 @@ local function inCategory(key, info, res)
 end
 
 -- Tree rows for the list: top nodes, the expanded one's children indented.
--- The list reads the global PSXGM_treeRows (same table): a list table named "PSXGM.treeRows" made the engine
--- overwrite the global PSXGM with a number (John 2026-10-23: the tree broke on click; SAI_EDITOR had the same).
+-- The menu's own globals (list table, list row, search text) have short names, no '_' and no shared start, like the
+-- game's (storeItemsVar, currentItem): with table "PSXGM.treeRows" / var PSXGM_treeVar / var PSXGM_search the engine
+-- wrote the clicked row into the wrong global (PSXGM, then the search field; John 2026-10-23). The list reads
+-- gmTreeList, the same table as G.treeRows.
 G.treeRows = G.treeRows or {}
-PSXGM_treeRows = G.treeRows
+gmTreeList = G.treeRows
 local function buildTree()
 	local rows = {}
 	for _, top in ipairs(G.TREE) do
@@ -636,10 +638,10 @@ local function buildTree()
 	for i, r in ipairs(rows) do G.treeRows[i] = r end
 end
 buildTree()
-PSXGM_treeVar = PSXGM_treeVar or 1
+gmTreeRow = gmTreeRow or 1
 
 function PSXGM_TreeClick()
-	local r = G.treeRows[PSXGM_treeVar]
+	local r = G.treeRows[gmTreeRow]
 	if not r then return end
 	local node = G.nodes[r.key]
 	if node.children then
@@ -749,7 +751,7 @@ G.view = G.view or {}
 G.wishV = G.wishV or 0
 local function viewKey()
 	local sp = selectedSprite()
-	return table.concat({ tostring(store and store.storeItems), G.cat, PSXGM_search or '', tostring(G.usable),
+	return table.concat({ tostring(store and store.storeItems), G.cat, gmFindText or '', tostring(G.usable),
 		tostring(G.afford), G.sort, G.afford and partyGold() or 0,
 		(G.usable or G.sort == 'auto') and sp and sp.m_id or 0, G.wishV, tostring(G.agg) }, '|')
 end
@@ -820,7 +822,7 @@ end
 local function rebuild()
 	local list = store and store.storeItems or {}
 	local out, sp, gold, campMk = {}, selectedSprite(), partyGold(), campMarkup()
-	local q = string.lower(PSXGM_search or ''):gsub('^%s+', ''):gsub('%s+$', '')
+	local q = string.lower(tostring(gmFindText or '')):gsub('^%s+', ''):gsub('%s+$', '')
 	for i, en in ipairs(list) do
 		local res = entryRes(en)
 		local info = res ~= '' and itemInfo(res)
@@ -928,7 +930,7 @@ function PSXGM_Page(d) view() G.page = math.max(1, math.min(G.pages or 1, G.page
 function PSXGM_PageText() view() return string.format('%d / %d', G.page, G.pages or 1) end
 function PSXGM_CountText()
 	local n = #view()
-	if n == 0 and G.cat == 'all' and PSXGM_search == '' then return T('gm_empty') end
+	if n == 0 and G.cat == 'all' and gmFindText == '' then return T('gm_empty') end
 	return T('gm_items', n)
 end
 function PSXGM_CanPage(d)
@@ -1125,7 +1127,7 @@ function PSXGM_Done()
 end
 function PSXGM_OnOpen()
 	G.dirty, G.msg = true, ''
-	PSXGM_search = PSXGM_search or ''
+	gmFindText = gmFindText or ''
 end
 function PSXGM_ShowBack()
 	return G.vanilla == true and atCamp() and onStack('STORE_BUYSELL')
