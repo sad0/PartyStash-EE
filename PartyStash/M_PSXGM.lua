@@ -848,6 +848,32 @@ local function autoLess(a, b)
 	return a.name < b.name
 end
 
+-- What the search looks into besides the name (John 2026-10-23): the item's description, its category and
+-- sub-category names, the names of the stores that sell it. Folded, cached per item (the stores are added per view).
+G.findText = G.findText or {}
+local function findText(info, res)
+	local t = G.findText[res]
+	if t then return t end
+	local desc = ''
+	for _, ref in ipairs({ info.idDesc, info.unidDesc }) do
+		if ref and ref > 0 and ref < 0x7FFFFFFF then desc = Infinity_FetchString(ref) or '' break end
+	end
+	local lf = leafOf(info, res)
+	local cats = lf and (T(lf.node.label) .. ' ' .. T(lf.parent.label)) or T('gm_misc')
+	t = fold(desc .. ' ' .. cats)
+	G.findText[res] = t
+	return t
+end
+-- 2 = the name matches, 1 = something else matches (description, category, store), nil = no match.
+local function findHit(q, name, info, res, sources)
+	if q == '' then return 2 end
+	if string.find(fold(name), q, 1, true) then return 2 end
+	if string.find(findText(info, res), q, 1, true) then return 1 end
+	for _, s in ipairs(sources) do
+		if string.find(fold(s.name or ''), q, 1, true) or string.find(fold(s.store), q, 1, true) then return 1 end
+	end
+end
+
 local function rebuild()
 	local list = store and store.storeItems or {}
 	local out, sp, gold, campMk = {}, selectedSprite(), partyGold(), campMarkup()
@@ -863,8 +889,8 @@ local function rebuild()
 			c.price = unitPrice(c, a.sources[1])
 			local src = a.sources[1]
 			c.from = src.name and src.name ~= '' and src.name or nil
-			if inCategory(G.cat, info, res)
-				and (q == '' or string.find(fold(name), q, 1, true))
+			c.hit = inCategory(G.cat, info, res) and findHit(q, name, info, res, a.sources)
+			if c.hit
 				and (not G.usable or usableBy(sp, info))
 				and (not G.afford or c.price <= gold) then
 				local lf = leafOf(info, res)
@@ -880,6 +906,7 @@ local function rebuild()
 	end
 	table.sort(out, function(a, b)
 		if a.wish ~= b.wish then return a.wish end
+		if a.hit ~= b.hit then return a.hit > b.hit end -- searching: name matches first
 		if mode == 'auto' then return autoLess(a, b) end
 		if mode == 'price' then
 			if a.price ~= b.price then return a.price > b.price end
@@ -1287,7 +1314,7 @@ if not G.listenersAdded then
 	end)
 	EEex_GameState_AddInitializedListener(function()
 		G.gameId = (G.gameId or 0) + 1 -- new game or load: the known stores are read again from the save
-		G.info, G.leafOf, G.known, G.agg = {}, {}, {}, nil
+		G.info, G.leafOf, G.known, G.agg, G.findText = {}, {}, {}, nil, {}
 		pcall(pushTick)
 	end)
 end
