@@ -72,9 +72,8 @@ def page():
     items.append(label((0, 0, W, H), enabled='PSXGM_Skin() == 2', extra='\t\tmosaic PSXGMBB'))
     items.append(button((0, 0, W, H), extra='\t\taction ""'))  # eats the clicks meant for STORE_BUYSELL underneath
     items.append(label((0, 0, 0, 0), enabled='PSXGM_Tick()'))  # the tick also runs from the page itself
-    # the title in charcoal (art/build_gm_board.py title, PSXGMTT.BAM = the installed language), its G under the
-    # dog-ear: same x as TITLE_XY there
-    items.append(label((284, 14, 340, 42), extra='\t\tbam PSXGMTT'))
+    # the title in charcoal (art/build_gm_board.py title, PSXGMTT.BAM = the installed language)
+    items.append(label((GX + 46, 14, 340, 42), extra='\t\tbam PSXGMTT'))
     # category tree (the tall notice on the left): the chosen category circled in pencil (PSXGMCIR frame 1)
     items.append('''\tlist
 \t{
