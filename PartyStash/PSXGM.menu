@@ -70,10 +70,8 @@ menu
 	}
 	label
 	{
-		area 236 16 432 40
-		text lua "PSXGM_T('gm_title')"
-		text style "title"
-		text align center center
+		area 282 14 340 42
+		bam PSXGMTT
 	}
 	list
 	{
@@ -1440,7 +1438,7 @@ menu
 	{
 		area 706 416 116 26
 		text lua "PSXGM_GoldText()"
-		text style "gold"
+		text style "label_parchment"
 		text align center center
 	}
 	button

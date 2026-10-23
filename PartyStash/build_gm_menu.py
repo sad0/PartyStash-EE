@@ -66,7 +66,8 @@ def page():
     items.append(label((0, 0, W, H), enabled='PSXGM_Skin() == 2', extra='\t\tmosaic PSXGMBB'))
     items.append(button((0, 0, W, H), extra='\t\taction ""'))  # eats the clicks meant for STORE_BUYSELL underneath
     items.append(label((0, 0, 0, 0), enabled='PSXGM_Tick()'))  # the tick also runs from the page itself
-    items.append(label((GX, 16, COLS * PITCH, 40), "PSXGM_T('gm_title')", style='title', align='center center'))
+    # the title in charcoal on the paper (art/build_gm_board.py title: PSXGMTT.BAM = the installed language's)
+    items.append(label((GX + 46, 14, 340, 42), extra='		bam PSXGMTT'))
     # category tree (the tall notice on the left)
     items.append('''\tlist
 \t{
@@ -146,7 +147,7 @@ def page():
                         clickable='PSXGM_CanBuy()'))
     items.append(label((RX + 22, 394, RW - 44, 22), 'Infinity_GetSelectedCharacterName()', style=PN,
                        align='center center'))
-    items.append(label((RX + 22, 416, RW - 44, 26), 'PSXGM_GoldText()', style='gold', align='center center'))
+    items.append(label((RX + 22, 416, RW - 44, 26), 'PSXGM_GoldText()', style=P, align='center center'))
     # sell / done ticket
     items.append(button((RX, 564, RW, 34), "PSXGM_T('gm_vanilla')", 'PSXGM_Vanilla()', style=P))
     items.append(button((RX, 604, RW, 34), "PSXGM_T('gm_done')", 'PSXGM_Done()', style=P))

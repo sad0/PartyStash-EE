@@ -862,7 +862,7 @@ function PSXGM_TotalText()
 	if not c then return '' end
 	return T('gm_total', c.price * (G.qty or 1))
 end
-function PSXGM_GoldText() return tostring(partyGold()) end
+function PSXGM_GoldText() return T('gm_price', partyGold()) end
 function PSXGM_MsgText() return G.msg or '' end
 function PSXGM_CanBuy()
 	local c = selected()
