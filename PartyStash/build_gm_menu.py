@@ -101,17 +101,18 @@ def page():
 \t\thidehighlight
 \t\taction "PSXGM_TreeClick()"
 \t}''' % PN)
-    # search + filters (top of the big notice)
+    # search + filters (top of the big notice). The "Search..." hint sits UNDER the edit field (drawn first): on top
+    # of it, it took the clicks and the field could not get the focus (John 2026-10-23).
+    items.append(label((GX + 6, 60, 190, 32), "PSXGM_T('gm_search') .. '...'", enabled="gmFindText == ''"))
     items.append('''\tedit
 \t{
 \t\tarea %d 60 196 32
 \t\tvar gmFindText
 \t\ttext style "edit"
 \t\tmaxlines 1
-\t\tfill 40 25 10 170
+\t\tfill 40 25 10 110
 \t\taction "return PSXGM_SearchEdit()"
 \t}''' % GX)
-    items.append(label((GX + 6, 60, 190, 32), "PSXGM_T('gm_search') .. '...'", enabled="gmFindText == ''"))
     # filters: the game's round toggle (ROUNDBUT, frame 0 off / 2 on, as in its options screens; BG1 and BG2)
     for fx, fw, which, act in ((GX + 202, 112, 'usable', 'PSXGM_ToggleUsable()'),
                                (GX + 318, 114, 'afford', 'PSXGM_ToggleAfford()')):
