@@ -70,8 +70,17 @@ menu
 	}
 	label
 	{
+		enabled "PSXGM_Mode() == 'camp'"
 		area 282 14 340 42
 		bam PSXGMTT
+	}
+	label
+	{
+		enabled "PSXGM_Mode() == 'chest'"
+		area 236 16 432 40
+		text lua "PSXGM_T('gm_chest')"
+		text style "title"
+		text align center center
 	}
 	list
 	{
@@ -1382,6 +1391,7 @@ menu
 	}
 	button
 	{
+		enabled "PSXGM_Mode() == 'camp'"
 		area 520 543 144 32
 		text lua "PSXGM_SellMarkedText()"
 		text style "label_parchment"
@@ -1449,7 +1459,7 @@ menu
 	button
 	{
 		area 706 360 116 32
-		text lua "PSXGM_T('gm_buy')"
+		text lua "PSXGM_BuyText()"
 		text style "label_parchment"
 		text align center center
 		clickable lua "PSXGM_CanBuy()"
@@ -1473,6 +1483,7 @@ menu
 	}
 	button
 	{
+		enabled "PSXGM_Mode() == 'camp'"
 		area 692 564 144 32
 		text lua "PSXGM_T('gm_vanilla')"
 		text style "label_parchment"

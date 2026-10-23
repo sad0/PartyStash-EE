@@ -51,9 +51,9 @@ def button(area, text=None, action=None, style='button', enabled=None, clickable
     return '\n'.join(out)
 
 
-def pbutton(area, text, action, bam, clickable=None):
+def pbutton(area, text, action, bam, clickable=None, enabled=None):
     """A paper ticket button (art/build_gm_board.py buttons: frames 0 up, 1 pressed, 3 disabled), dark text."""
-    return button(area, text, action, style='label_parchment', clickable=clickable,
+    return button(area, text, action, style='label_parchment', clickable=clickable, enabled=enabled,
                   extra=f'\t\tbam {bam}\n\t\tsequence 0')
 
 
@@ -72,8 +72,11 @@ def page():
     items.append(label((0, 0, W, H), enabled='PSXGM_Skin() == 2', extra='\t\tmosaic PSXGMBB'))
     items.append(button((0, 0, W, H), extra='\t\taction ""'))  # eats the clicks meant for STORE_BUYSELL underneath
     items.append(label((0, 0, 0, 0), enabled='PSXGM_Tick()'))  # the tick also runs from the page itself
-    # the title in charcoal (art/build_gm_board.py title, PSXGMTT.BAM = the installed language)
-    items.append(label((GX + 46, 14, 340, 42), extra='\t\tbam PSXGMTT'))
+    # the title in charcoal (art/build_gm_board.py title, PSXGMTT.BAM = the installed language); the camp chest has
+    # no charcoal title yet: its name in the game's title font
+    items.append(label((GX + 46, 14, 340, 42), enabled="PSXGM_Mode() == 'camp'", extra='\t\tbam PSXGMTT'))
+    items.append(label((GX, 16, COLS * PITCH, 40), "PSXGM_T('gm_chest')", style='title', align='center center',
+                       enabled="PSXGM_Mode() == 'chest'"))
     # category tree (the tall notice on the left): the chosen category circled in pencil (PSXGMCIR frame 1)
     items.append('''\tlist
 \t{
@@ -147,7 +150,7 @@ def page():
     # marked for sale, sold to the camp store: PStash_SellMarked), shown when there is something to sell
     items.append(label((GX + 10, 536, 270, 48), 'PSXGM_MsgText()', style=PN, align='left center'))
     items.append(pbutton((GX + 284, 543, 144, 32), 'PSXGM_SellMarkedText()', 'PSXGM_SellMarked()', 'PSXGMBN2',
-                         clickable='PSXGM_CanSellMarked()'))
+                         clickable='PSXGM_CanSellMarked()', enabled="PSXGM_Mode() == 'camp'"))
     # the selected item (wanted poster, top right)
     items.append(button((RX + (RW - CELL) // 2, GY, CELL, CELL), extra='\n'.join([
         '\t\tbam PSSLOT', '\t\ticon lua "PSXGM_SelIcon()"', '\t\tactionAlt "PSXGM_SelDesc()"'])))
@@ -160,13 +163,15 @@ def page():
     items.append(pbutton((RX + RW - 46, qy, 30, 30), "'+'", 'PSXGM_Qty(1)', 'PSXGMBN3'))
     items.append(label((RX + 8, qy + 32, RW - 16, 30), 'PSXGM_TotalText()', style=PN, align='center center'))
     # Buy ticket: the button, the buyer (the selected portrait), the party gold
-    items.append(pbutton((RX + 22, 360, 116, 32), "PSXGM_T('gm_buy')", 'PSXGM_BuySelected()', 'PSXGMBN1',
+    items.append(pbutton((RX + 22, 360, 116, 32), 'PSXGM_BuyText()', 'PSXGM_BuySelected()', 'PSXGMBN1',
                          clickable='PSXGM_CanBuy()'))
     items.append(label((RX + 22, 394, RW - 44, 22), 'Infinity_GetSelectedCharacterName()', style=PN,
                        align='center center'))
     items.append(label((RX + 22, 416, RW - 44, 26), 'PSXGM_GoldText()', style=P, align='center center'))
     # sell / done ticket
-    items.append(pbutton((RX + 8, 564, 144, 32), "PSXGM_T('gm_vanilla')", 'PSXGM_Vanilla()', 'PSXGMBN2'))
+    # (the camp chest only gives and sells: no vanilla view there)
+    items.append(pbutton((RX + 8, 564, 144, 32), "PSXGM_T('gm_vanilla')", 'PSXGM_Vanilla()', 'PSXGMBN2',
+                         enabled="PSXGM_Mode() == 'camp'"))
     items.append(pbutton((RX + 8, 604, 144, 32), "PSXGM_T('gm_done')", 'PSXGM_Done()', 'PSXGMBN2'))
     # board swap (bottom left, a paper tag on the wood)
     items.append(pbutton((20, 674, 196, 28), 'PSXGM_SkinText()', 'PSXGM_NextSkin()', 'PSXGMBN4'))

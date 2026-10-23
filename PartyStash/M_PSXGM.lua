@@ -22,6 +22,9 @@ Console: PSXGM.DEBUG = true   PSXGM_Rescan()   PSXGM_Catalog()
 PSXGM = PSXGM or {}
 local G = PSXGM
 G.CAMP = 'PSXCAMP'
+G.CHEST = 'PSXCHEST' -- the camp chest: the stash + what the known stores sell + every item of the game
+G.SEEN = 'PSXSEEN'   -- hidden bag: the save's log of the items seen
+G.mode = G.mode or 'camp'
 G.COLS, G.ROWS = 8, 7
 G.DEBUG = G.DEBUG or false
 G.page = G.page or 1
@@ -60,6 +63,9 @@ G.EN = {
 	gm_total = 'Total: %d gp',
 	gm_skin = 'Board: %s', gm_skin_1 = 'pinned notices', gm_skin_2 = 'painted',
 	gm_sell_marked = 'Sell marked: %s gp', gm_sell_none = 'Nothing marked', gm_sold = 'Sold from the stash: %d gp',
+	gm_chest = 'Camp chest', gm_stash = 'Party stash', gm_take = 'Take', gm_in_stash = '%d in the stash',
+	gm_value = 'Value: %d gp', gm_never_seen = 'Never seen', gm_seen_1 = 'Seen for sale: %s', gm_seen_2 = 'Carried: %s',
+	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
 }
 -- PSXGM_Strings: the installed language's M_PSXGT.lua (build_gm_strings.py; component #8 copies it).
 local function T(key, ...)
@@ -280,17 +286,26 @@ local function isMerchant(p)
 end
 
 -- A store just opened joins the known ones.
+local OURS = { PSXCAMP = true, PSXCHEST = true, PSXSEEN = true, PSTASH = true }
+local markSeen -- the items seen log, below
+
+-- A store just opened joins the known ones; what it sells is seen there.
 local function discover(storePtr, storeRes)
-	if storeRes == G.CAMP or storeRes == 'PSTASH' or not isMerchant(storePtr) then return false end
+	if OURS[storeRes] or not isMerchant(storePtr) then return false end
 	if not G.known[storeRes] then log('known store + %s', storeRes) end
 	G.known[storeRes] = true
+	for _, it in ipairs(storeEntries(storePtr)) do
+		if it.res ~= '' and (EEex_BAnd(it.inf, 1) ~= 0 or it.stock > 0) then markSeen(it.res, 1, storeRes) end
+	end
 	return true
 end
 G.discover = discover
 
 -- { [res] = { inf, total, sources = { { store, stock, inf, markup, name }, ... } cheapest first } } from the known
--- stores' current contents. Critical / quest items are left out.
-local function aggregate()
+-- stores' current contents (critical / quest items left out); withStash: the Party Stash too, as a free source
+-- (markup 0, quest items included: they are the party's own).
+G.storeNames = G.storeNames or {}
+local function aggregate(withStash)
 	local out, names = {}, {}
 	for sres in pairs(G.known) do names[#names + 1] = sres end
 	table.sort(names)
@@ -300,9 +315,11 @@ local function aggregate()
 			local markup = EEex_ReadU32(p + STO_SELL)
 			local strref = EEex_ReadU32(p + 0x0C)
 			local name = (strref ~= 0xFFFFFFFF and Infinity_FetchString(strref)) or sres
+			G.storeNames[sres] = name
 			for _, it in ipairs(storeEntries(p)) do
 				local inf = EEex_BAnd(it.inf, 1) ~= 0
 				local info = it.res ~= '' and itemInfo(it.res)
+				if info and (inf or it.stock > 0) then markSeen(it.res, 1, sres, true) end
 				if info and not excluded(info, it.res) and (inf or it.stock > 0) then
 					local a = out[it.res]
 					if not a then a = { total = 0, inf = false, sources = {}, u = it.u } out[it.res] = a end
@@ -311,6 +328,24 @@ local function aggregate()
 				end
 			end
 		end)
+	end
+	if withStash and PStash_List then
+		for _, e in ipairs(PStash_List('PSTASH')) do
+			if e.res ~= '' and e.count > 0 and itemInfo(e.res) then
+				local a = out[e.res]
+				if not a then a = { total = 0, inf = false, sources = {}, u = { e.uses, 0, 0 }, unid = true } out[e.res] = a end
+				local s = nil
+				for _, x in ipairs(a.sources) do if x.stash then s = x end end
+				if not s then
+					s = { store = 'PSTASH', stock = 0, inf = false, markup = 0, name = T('gm_stash'), stash = true }
+					a.sources[#a.sources + 1] = s
+				end
+				s.stock = s.stock + e.count
+				a.total = a.total + e.count
+				a.stash = (a.stash or 0) + e.count
+				if e.identified then a.unid = nil end
+			end
+		end
 	end
 	for _, a in pairs(out) do
 		table.sort(a.sources, function(x, y)
@@ -328,9 +363,9 @@ G.CAMP_MARKUP = 300
 
 -- The camp store gets exactly the aggregated stock: missing items added, gone ones emptied, then compressed
 -- (CStore::CompressItems drops the entries with no stock that are not unlimited).
-local function syncCamp(campPtr)
+local function syncCamp(campPtr, withStash)
 	EEex_Write32(campPtr + STO_SELL, G.CAMP_MARKUP)
-	local agg = aggregate()
+	local agg = aggregate(withStash)
 	G.agg = agg
 	for _, e in ipairs(storeEntries(campPtr)) do
 		if not agg[e.res] then
@@ -343,7 +378,9 @@ local function syncCamp(campPtr)
 		local e = findEntry(campPtr, res) or addToCamp(campPtr, res, a.u)
 		if e then
 			local info = itemInfo(res)
-			EEex_Write32(e.ptr + FI_FLAGS, EEex_BOr(EEex_ReadU32(e.ptr + FI_FLAGS), 1)) -- identified, as at a store
+			-- identified, as at a store; the stash's own unidentified items stay so
+			local fl = EEex_ReadU32(e.ptr + FI_FLAGS)
+			EEex_Write32(e.ptr + FI_FLAGS, a.unid and (fl - EEex_BAnd(fl, 1)) or EEex_BOr(fl, 1))
 			EEex_Write32(e.ptr + FI_INF, a.inf and 1 or 0)
 			EEex_Write32(e.ptr + FI_STOCK, a.inf and math.max(1, info and info.stack or 1) or a.total)
 			n = n + 1
@@ -372,6 +409,10 @@ local function takeFrom(s, res, n, a)
 	end)
 	s.stock = math.max(0, s.stock - n)
 	a.total = math.max(0, a.total - n)
+	if s.stash and PStash then -- the stash page reads its list again
+		PStash.list, PStash.dirty = nil, true
+		a.stash = math.max(0, (a.stash or 0) - n)
+	end
 end
 G.takeFrom = takeFrom
 
@@ -397,6 +438,121 @@ local function reconcileCamp(campPtr)
 		end
 	end
 end
+
+-----------------------
+-- Items seen         --
+-----------------------
+-- The camp chest shows every item of the game; those the party has seen say how and where, last (John 2026-10-23).
+-- The log lives in the save: the hidden bag PSXSEEN, one entry per item (STO item layout): the 8 bytes from +0x08
+-- (expiry + 3 usages) hold the place's resref (an area, or the store that sold it), the stock holds the ways:
+-- low 4 bits the last one (1 for sale, 2 carried, 3 on the ground, 4 in a container), then a bit per way seen
+-- (* 16). Never 0, so CStore::CompressItems keeps the entry.
+G.seen = G.seen or nil      -- [res] = { way, place, ways }
+G.seenDirty = G.seenDirty or {}
+
+local function loadSeen()
+	G.seen = {}
+	withStore(G.SEEN, function(p)
+		for _, it in ipairs(storeEntries(p)) do
+			G.seen[it.res] = { way = it.stock % 16, ways = math.floor(it.stock / 16), place = readRes(it.ptr + 0x08) }
+		end
+	end)
+end
+
+-- keepPlace: an item already seen this way keeps the place it was first seen at (carried, for sale in the save's
+-- stores when the camp opens); otherwise the last sighting wins.
+markSeen = function(res, way, place, keepPlace)
+	if not G.seen then loadSeen() end
+	res = string.upper(res)
+	local bit = math.floor(2 ^ (way - 1))
+	local s = G.seen[res]
+	if not s then
+		G.seen[res] = { way = way, place = place or '', ways = bit }
+		G.seenDirty[res] = true
+		return
+	end
+	local had = EEex_BAnd(s.ways, bit) ~= 0
+	if not had then s.ways = s.ways + bit end
+	if not (keepPlace and had) and (s.way ~= way or s.place ~= (place or '')) then
+		s.way, s.place = way, place or ''
+		G.seenDirty[res] = true
+	elseif not had then
+		G.seenDirty[res] = true
+	end
+end
+G.markSeen = markSeen
+
+local function writePlace(ptr, place)
+	for i = 0, 7 do EEex_WriteU8(ptr + 0x08 + i, i < #place and string.byte(place, i + 1) or 0) end
+end
+
+local function flushSeen()
+	if not next(G.seenDirty) then return end
+	local dirty = G.seenDirty
+	G.seenDirty = {}
+	withStore(G.SEEN, function(p)
+		local have = {}
+		for _, it in ipairs(storeEntries(p)) do have[it.res] = it end
+		for res in pairs(dirty) do
+			local s = G.seen[res]
+			local e = have[res] or addToCamp(p, res, { 0, 0, 0 })
+			if s and e then
+				writePlace(e.ptr, s.place)
+				EEex_Write32(e.ptr + FI_STOCK, s.way + 16 * s.ways)
+				EEex_Write32(e.ptr + FI_INF, 0)
+			end
+		end
+	end)
+end
+G.flushSeen = flushSeen
+
+local function areaRes()
+	local ok, res = pcall(function() return EEex_Sprite_GetInPortrait(0).m_pArea.m_resref:get() end)
+	return ok and res and string.upper(res) or ''
+end
+
+-- World tick (every 2 s): what the party carries (backpacks, worn, the stash), what the game's loot lists show
+-- (the ground near the party, the container open).
+local function scanSeen()
+	local area = areaRes()
+	for p = 0, (PSXP7_LastPortrait and PSXP7_LastPortrait() or 5) do
+		local sp = EEex_Sprite_GetInPortrait(p)
+		if sp then
+			local items = sp.m_equipment.m_items
+			for slot = 0, 38 do
+				local ok, it = pcall(function() return items:get(slot) end)
+				if ok and it then markSeen(it.pRes.resref:get(), 2, area, true) end
+			end
+		end
+	end
+	if PStash_List then
+		for _, e in ipairs(PStash_List('PSTASH')) do markSeen(e.res, 2, area, true) end
+	end
+	if type(loot) == 'table' then
+		for way, list in pairs({ [3] = loot.groundItems, [4] = loot.containerItems }) do
+			for _, g in ipairs(type(list) == 'table' and list or {}) do
+				local r = g.item and g.item.res
+				if type(r) == 'string' and r ~= '' then markSeen(r, way, area) end
+			end
+		end
+	end
+	flushSeen()
+end
+G.scanSeen = scanSeen
+
+-- "Where": a store's name, or an area's (WORLDMAP caption from M_PSXCAT.lua; an inner area takes its outer one's).
+local function placeName(place)
+	if not place or place == '' then return '?' end
+	if G.storeNames[place] then return G.storeNames[place] end
+	local areas = PSXGM_AREAS or {}
+	return areas[place] or areas[string.sub(place, 1, 4) .. '00'] or place
+end
+local function seenText(res)
+	local s = G.seen and G.seen[res]
+	if not s then return T('gm_never_seen') end
+	return T('gm_seen_' .. s.way, placeName(s.place))
+end
+G.seenText = seenText
 
 -----------------------
 -- Stores before the install: the loaded save's BALDUR.SAV
@@ -783,7 +939,7 @@ local function viewKey()
 	local sp = selectedSprite()
 	return table.concat({ tostring(store and store.storeItems), G.cat, gmFindText or '', tostring(G.usable),
 		tostring(G.afford), G.sort, G.afford and partyGold() or 0,
-		(G.usable or G.sort == 'auto') and sp and sp.m_id or 0, G.wishV, tostring(G.agg) }, '|')
+		(G.usable or G.sort == 'auto') and sp and sp.m_id or 0, G.wishV, tostring(G.agg), G.mode }, '|')
 end
 
 -- Auto (default, John 2026-10-23: the stash's Auto order): grouped by category in tree order (Misc last); weapons by
@@ -879,26 +1035,49 @@ local function rebuild()
 	local list = store and store.storeItems or {}
 	local out, sp, gold, campMk = {}, selectedSprite(), partyGold(), campMarkup()
 	local q = fold(gmFindText):gsub('^%s+', ''):gsub('%s+$', '')
+	local shown = {}
+	local function keep(c, info, res)
+		c.hit = inCategory(G.cat, info, res) and findHit(q, c.name, info, res, c.sources)
+		if c.hit
+			and (not G.usable or usableBy(sp, info))
+			and (not G.afford or (not c.catalog and c.price <= gold)) then
+			local lf = leafOf(info, res)
+			c.wish, c.order, c.usable = isWished(res), lf and lf.order or 999, usableBy(sp, info)
+			out[#out + 1] = c
+		end
+	end
 	for i, en in ipairs(list) do
 		local res = entryRes(en)
 		local info = res ~= '' and itemInfo(res)
 		local a = G.agg and G.agg[res]
-		if info and a and #a.sources > 0 then
+		if info and a and #a.sources > 0 and not shown[res] then
+			shown[res] = true
 			local name = cleanLabel(en.label)
 			local c = { en = en, row = i, res = res, info = info, name = name, value = tonumber(en.value) or 0,
-				campMk = campMk, sources = a.sources, inf = a.inf, total = a.total }
+				campMk = campMk, sources = a.sources, inf = a.inf, total = a.total, icon = en.item.icon,
+				stash = a.stash }
 			c.price = unitPrice(c, a.sources[1])
 			local src = a.sources[1]
 			c.from = src.name and src.name ~= '' and src.name or nil
-			c.hit = inCategory(G.cat, info, res) and findHit(q, name, info, res, a.sources)
-			if c.hit
-				and (not G.usable or usableBy(sp, info))
-				and (not G.afford or c.price <= gold) then
-				local lf = leafOf(info, res)
-				c.wish, c.order, c.usable = isWished(res), lf and lf.order or 999, usableBy(sp, info)
-				out[#out + 1] = c
-			end
+			keep(c, info, res)
 		end
+	end
+	-- the camp chest: every other item of the game (M_PSXCAT.lua) and anything seen that is not in that list,
+	-- greyed, with where it was seen (John 2026-10-23: all shown, mixed with what can be taken or bought)
+	if G.mode == 'chest' then
+		local function catalog(res)
+			if shown[res] then return end
+			shown[res] = true
+			local info = itemInfo(res)
+			if not info or info.icon == '' then return end
+			local name = Infinity_FetchString(info.idName)
+			if not name or name == '' then name = Infinity_FetchString(info.unidName) or res end
+			local c = { res = res, info = info, name = name, value = info.price, campMk = 100, sources = {},
+				inf = false, total = 0, icon = info.icon, catalog = true, price = info.price, row = 100000 }
+			keep(c, info, res)
+		end
+		for _, res in ipairs(PSXGM_ALL or {}) do catalog(res) end
+		for res in pairs(G.seen or {}) do catalog(res) end
 	end
 	local mode = G.sort
 	if mode == 'auto' then
@@ -940,26 +1119,36 @@ local function selected()
 	for _, c in ipairs(view()) do if c.res == G.sel then return c end end
 end
 
-function PSXGM_CellIcon(i) local c = cell(i) return c and c.en.item.icon or nil end
--- Bottom right of the cell: how many are left (nothing when unlimited).
+function PSXGM_CellIcon(i) local c = cell(i) return c and c.icon or nil end
+-- Bottom right of the cell: how many are left (nothing when unlimited, nothing for the chest's catalog).
 function PSXGM_CellCount(i)
 	local c = cell(i)
-	if not c or c.inf then return nil end
+	if not c or c.inf or c.catalog then return nil end
 	return c.total
 end
+-- Catalog items (camp chest): greyed; never seen: darkened too.
 function PSXGM_CellTint(i)
 	local c = cell(i)
 	if not c then return nil end
 	if c.res == G.sel then return 'PSTASHOR' end
+	if c.catalog then return (G.seen and G.seen[c.res]) and nil or 'PSTASHDK' end
 	return c.en.item.tint
 end
-function PSXGM_CellGrey(i) local c = cell(i) return c ~= nil and not c.usable end
+function PSXGM_CellGrey(i) local c = cell(i) return c ~= nil and (c.catalog or not c.usable) end
 function PSXGM_CellWished(i) local c = cell(i) return c ~= nil and c.wish end
+-- What the item is here: price and stock (and how many in the stash), or for the catalog its value and where seen.
+local function infoLines(c)
+	if c.catalog then return T('gm_value', c.price) .. '\n' .. seenText(c.res) end
+	local s = T('gm_price', c.price) .. '  ' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
+	if c.stash and c.stash > 0 then s = s .. '\n' .. T('gm_in_stash', c.stash) end
+	if c.from and not (c.sources[1] and c.sources[1].stash) then s = s .. '\n' .. T('gm_from', c.from) end
+	return s
+end
+G.infoLines = infoLines
 function PSXGM_CellTip(i)
 	local c = cell(i)
 	if not c then return '' end
-	local s = c.name .. '\n' .. T('gm_price', c.price) .. '  ' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
-	if c.from then s = s .. '\n' .. T('gm_from', c.from) end
+	local s = c.name .. '\n' .. infoLines(c)
 	if c.wish then s = s .. '\n* ' .. T('gm_wished') end
 	return s
 end
@@ -974,10 +1163,16 @@ function PSXGM_CellClick(i)
 	if G.sel ~= c.res then G.qty = 1 end
 	G.sel, G.msg = c.res, ''
 end
-function PSXGM_CellDesc(i)
-	local c = cell(i)
-	if c then showItemDescription(c.en.item, 1) end
+-- The description window: the store entry's item, or one made from the ITM for the catalog (as the stash does).
+local function describe(c)
+	if not c then return end
+	if c.en then showItemDescription(c.en.item, 1) return end
+	local ref = c.info.idDesc
+	if not ref or ref <= 0 or ref >= 0x7FFFFFFF then ref = c.info.unidDesc end
+	showItemDescription({ name = c.name, description = Infinity_FetchString(ref), descPicture = c.info.descPic,
+		icon = c.icon }, 2)
 end
+function PSXGM_CellDesc(i) describe(cell(i)) end
 function PSXGM_Wheel()
 	local d = (scrollDirection or 0)
 	if d == 0 then return end
@@ -1030,20 +1225,25 @@ end
 function PSXGM_SkinText() return T('gm_skin', T('gm_skin_' .. PSXGM_Skin())) end
 
 -- Selected item panel.
-function PSXGM_SelIcon() local c = selected() return c and c.en.item.icon or nil end
+function PSXGM_SelIcon() local c = selected() return c and c.icon or nil end
 function PSXGM_SelName() local c = selected() return c and c.name or T('gm_select') end
 function PSXGM_SelInfo()
 	local c = selected()
 	if not c then return '' end
-	local s = T('gm_price', c.price) .. '\n' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
-	if c.from then s = s .. '\n' .. T('gm_from', c.from) end
-	return s
+	return infoLines(c)
 end
-function PSXGM_SelDesc() local c = selected() if c then showItemDescription(c.en.item, 1) end end
+function PSXGM_SelDesc() describe(selected()) end
 local function maxQty(c)
-	if not c then return 1 end
+	if not c or c.catalog then return 1 end
 	return c.inf and 99 or math.max(1, math.min(99, c.total))
 end
+-- The chest's button says "Take" for what comes from the stash (free), "Buy" otherwise.
+function PSXGM_BuyText()
+	local c = selected()
+	if c and c.sources and c.sources[1] and c.sources[1].stash then return T('gm_take') end
+	return T('gm_buy')
+end
+function PSXGM_Mode() return G.mode end
 -- What `qty` copies cost: the cheapest stores' copies first.
 local function costOf(c, qty)
 	local left, cost = qty, 0
@@ -1089,7 +1289,7 @@ function PSXGM_SellMarked()
 end
 function PSXGM_CanBuy()
 	local c = selected()
-	return c ~= nil and costOf(c, G.qty or 1) <= partyGold()
+	return c ~= nil and not c.catalog and costOf(c, G.qty or 1) <= partyGold()
 end
 
 -----------------------
@@ -1120,7 +1320,7 @@ end
 -- that store's for its copies, and they are taken out of that store's stock.
 function PSXGM_Buy(res, qty)
 	local campPtr, campRes = openStore()
-	if not campPtr or campRes ~= G.CAMP then return 0 end
+	if not campPtr or (campRes ~= G.CAMP and campRes ~= G.CHEST) then return 0 end
 	res = string.upper(res or G.sel or '')
 	qty = qty or G.qty or 1
 	local a = G.agg and G.agg[res]
@@ -1195,7 +1395,7 @@ end
 local function syncMenus()
 	local p, res = openStore()
 	local buysell = p ~= nil and onStack('STORE_BUYSELL')
-	local want = buysell and res == G.CAMP and not G.vanilla
+	local want = buysell and (res == G.CAMP or res == G.CHEST) and not G.vanilla
 	local shown = onStack('PSXGM_PAGE')
 	if want and not shown then Infinity_PushMenu('PSXGM_PAGE') elseif shown and not want then Infinity_PopMenu('PSXGM_PAGE') end
 	local wantBack = buysell and res == G.CAMP and G.vanilla == true
@@ -1213,8 +1413,10 @@ function PSXGM_Tick()
 		if p ~= G.visitPtr then
 			G.visitPtr, G.visitRes, G.vanilla, G.sel = p, res, false, nil
 			local ok, err = pcall(function()
-				if res == G.CAMP then -- the camp opens: its stock follows the known stores' current ones
-					G.syncCamp(p)
+				if res == G.CAMP or res == G.CHEST then
+					-- the camp opens: its stock follows the known stores' current ones; the chest adds the stash
+					G.mode = res == G.CHEST and 'chest' or 'camp'
+					G.syncCamp(p, res == G.CHEST)
 					storeScreen:UpdateBuySellPanel()
 				elseif not storeScreen:IsContainer() then
 					discover(p, res)
@@ -1233,6 +1435,12 @@ function PSXGM_Tick()
 			G.scanFor = G.gameId
 			local ok, err = pcall(PSXGM_Rescan)
 			if not ok then print('[PSXGM] save scan error: ' .. tostring(err)) end
+		end
+		-- the items seen log: what the party carries, the ground near it, the container open
+		if worldScreen ~= nil and e:GetActiveEngine() == worldScreen and (not G.nextSeen or now >= G.nextSeen) then
+			G.nextSeen = now + 2000
+			local ok, err = pcall(scanSeen)
+			if not ok then print('[PSXGM] seen log error: ' .. tostring(err)) end
 		end
 	end
 	pcall(syncMenus)
@@ -1318,6 +1526,7 @@ if not G.listenersAdded then
 	EEex_GameState_AddInitializedListener(function()
 		G.gameId = (G.gameId or 0) + 1 -- new game or load: the known stores are read again from the save
 		G.info, G.leafOf, G.known, G.agg, G.findText = {}, {}, {}, nil, {}
+		G.seen, G.seenDirty = nil, {} -- the seen log of the game just loaded (PSXSEEN in its save)
 		pcall(pushTick)
 	end)
 end

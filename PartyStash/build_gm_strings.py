@@ -206,6 +206,15 @@ T = {
         '채색', '표시한 물건 판매: %s 골드', '표시한 것 없음', '보관함에서 판매: %d 골드'],
 }
 
+# The camp chest (2026-10-23): French for now, the other languages fall back to English.
+EXTRA = {
+    'french': {
+        'gm_chest': 'Coffre du camp', 'gm_stash': 'Coffre du groupe', 'gm_take': 'Prendre',
+        'gm_in_stash': '%d dans le coffre', 'gm_value': 'Valeur : %d po', 'gm_never_seen': 'Jamais vu',
+        'gm_seen_1': 'Vu en vente : %s', 'gm_seen_2': 'Porté : %s', 'gm_seen_3': 'Vu au sol : %s',
+        'gm_seen_4': 'Vu dans un conteneur : %s'},
+}
+
 
 def lua_str(s):
     return "'" + s.replace('\\', '\\\\').replace("'", "\\'").replace('\n', '\\n') + "'"
@@ -230,6 +239,8 @@ def main():
         for k, v in zip(KEYS, vals):
             if k == 'gm_select':
                 v = one_per_line(v)
+            lines.append('\t%s = %s,' % (k, lua_str(v)))
+        for k, v in EXTRA.get(lang, {}).items():
             lines.append('\t%s = %s,' % (k, lua_str(v)))
         lines.append('}')
         out = os.path.join(HERE, 'tra', lang, 'M_PSXGT.lua')

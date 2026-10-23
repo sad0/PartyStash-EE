@@ -169,6 +169,56 @@ COPY ~PartyStash/PSXGM.menu~ ~override~
 ACTION_IF FILE_EXISTS ~PartyStash/tra/%LANGUAGE%/M_PSXGT.lua~ BEGIN
 	COPY ~PartyStash/tra/%LANGUAGE%/M_PSXGT.lua~ ~override~
 END
+// The camp chest (2026-10-23): its store (the stash + what the known stores sell, taken / bought there), the hidden
+// bag of the items seen (the save's log), and its encyclopedia built from the player's own game and language: every
+// item with an icon and a name (gold left out), and the world map's area names (build_gm_catalog.py = the same, dev).
+COPY ~PartyStash/PSXCHEST.STO~ ~override~
+     ~PartyStash/PSXSEEN.STO~ ~override~
+OUTER_TEXT_SPRINT gm_all ~~
+COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
+	PATCH_IF SOURCE_SIZE > 0x71 BEGIN
+		READ_SHORT 0x1c gm_type
+		READ_ASCII 0x3a gm_icon (8) NULL
+		READ_LONG 0x0c gm_name
+		PATCH_IF gm_name <= 0 OR gm_name >= 0x7fffffff BEGIN READ_LONG 0x08 gm_name END
+		PATCH_IF gm_type != 33 AND gm_name > 0 AND gm_name < 0x7fffffff AND FILE_EXISTS_IN_GAME ~%gm_icon%.bam~ BEGIN
+			GET_STRREF gm_name gm_text
+			PATCH_IF NOT ~%gm_text%~ STRING_EQUAL ~~ BEGIN
+				TEXT_SPRINT gm_res ~%SOURCE_RES%~
+				TO_UPPER gm_res
+				TEXT_SPRINT gm_all ~%gm_all%'%gm_res%',~
+			END
+		END
+	END
+BUT_ONLY
+OUTER_TEXT_SPRINT gm_areas ~~
+ACTION_IF FILE_EXISTS_IN_GAME ~worldmap.wmp~ BEGIN
+	COPY_EXISTING ~worldmap.wmp~ ~override~
+		READ_LONG 0x08 gm_maps
+		READ_LONG 0x0c gm_moff
+		FOR (m = 0; m < gm_maps; ++m) BEGIN
+			READ_LONG (gm_moff + m * 0xb8 + 0x20) gm_na
+			READ_LONG (gm_moff + m * 0xb8 + 0x24) gm_ao
+			FOR (a = 0; a < gm_na; ++a) BEGIN
+				READ_ASCII (gm_ao + a * 0xf0) gm_area (8) NULL
+				READ_LONG (gm_ao + a * 0xf0 + 0x40) gm_cap
+				PATCH_IF gm_cap > 0 AND gm_cap < 0x7fffffff BEGIN
+					GET_STRREF gm_cap gm_text
+					TO_UPPER gm_area
+					TEXT_SPRINT gm_areas ~%gm_areas%%gm_area% = [[%gm_text%]],~
+				END
+			END
+		END
+	BUT_ONLY
+END
+<<<<<<<< .../PartyStash-inlined/M_PSXCAT.lua
+-- Written by the installer (PartyStash.tp2 #8): the camp chest encyclopedia and the area names.
+PSXGM_ALL = { GM_ALL_LIST }
+PSXGM_AREAS = { GM_AREA_LIST }
+>>>>>>>>
+COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
+	REPLACE_TEXTUALLY EXACT_MATCH ~GM_ALL_LIST~ ~%gm_all%~
+	REPLACE_TEXTUALLY EXACT_MATCH ~GM_AREA_LIST~ ~%gm_areas%~
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
