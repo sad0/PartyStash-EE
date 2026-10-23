@@ -618,7 +618,10 @@ local function inCategory(key, info, res)
 end
 
 -- Tree rows for the list: top nodes, the expanded one's children indented.
+-- The list reads the global PSXGM_treeRows (same table): a list table named "PSXGM.treeRows" made the engine
+-- overwrite the global PSXGM with a number (John 2026-10-23: the tree broke on click; SAI_EDITOR had the same).
 G.treeRows = G.treeRows or {}
+PSXGM_treeRows = G.treeRows
 local function buildTree()
 	local rows = {}
 	for _, top in ipairs(G.TREE) do
@@ -654,6 +657,8 @@ function PSXGM_TreeText(row)
 	return r.text
 end
 function PSXGM_TreeSelected(row) local r = G.treeRows[row] return r ~= nil and r.key == G.cat end
+-- The search field: back to the first page on each key (1 = the key is accepted).
+function PSXGM_SearchEdit() G.page = 1 return 1 end
 
 -----------------------
 -- Usable by          --

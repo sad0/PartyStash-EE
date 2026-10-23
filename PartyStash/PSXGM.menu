@@ -94,7 +94,7 @@ menu
 		}
 		area 26 68 184 580
 		rowheight 26
-		table "PSXGM.treeRows"
+		table "PSXGM_treeRows"
 		var PSXGM_treeVar
 		hidehighlight
 		action "PSXGM_TreeClick()"
@@ -106,7 +106,7 @@ menu
 		text style "edit"
 		maxlines 1
 		fill 40 25 10 170
-		action "PSXGM.page = 1 return 1"
+		action "return PSXGM_SearchEdit()"
 	}
 	label
 	{
