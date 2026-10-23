@@ -571,7 +571,9 @@ local function buildTree()
 			for _, c in ipairs(top.children) do rows[#rows + 1] = { key = c.key, text = '      ' .. T(c.label), depth = 1 } end
 		end
 	end
-	G.treeRows = rows
+	-- refilled in place: the menu's list keeps the table it was given
+	for i = #G.treeRows, 1, -1 do G.treeRows[i] = nil end
+	for i, r in ipairs(rows) do G.treeRows[i] = r end
 end
 buildTree()
 PSXGM_treeVar = PSXGM_treeVar or 1
@@ -660,8 +662,9 @@ local function entryRes(en) return en and en.item and string.upper(en.item.res o
 local function cleanLabel(s)
 	s = tostring(s or '')
 	if s:sub(1, 2) == '* ' then s = s:sub(3) end
-	-- the engine's label ends with the stock: "Name94p (1)"
-	return (s:gsub('[94p%s]*%(%d+%)%s*$', ''))
+	-- the engine's label ends with the stock: "Name<no-break space> (1)" (U+00A0 = bytes 194 160)
+	s = s:gsub('%s*%(%d+%)%s*$', '')
+	return (s:gsub('\194\160', ' '):gsub('%s+$', ''))
 end
 local function partyGold()
 	local ok, g = pcall(function() return game:GetPartyGold() end)
@@ -803,8 +806,12 @@ end
 function PSXGM_ToggleUsable() G.usable = not G.usable G.page = 1 end
 function PSXGM_ToggleAfford() G.afford = not G.afford G.page = 1 end
 function PSXGM_FilterText(which)
+	return T(which == 'usable' and 'gm_usable' or 'gm_affordable')
+end
+-- ROUNDBUT frame: 2 = on, 0 = off.
+function PSXGM_FilterFrame(which)
 	local on = (which == 'usable' and G.usable) or (which == 'afford' and G.afford)
-	return (on and '[x] ' or '[ ] ') .. T(which == 'usable' and 'gm_usable' or 'gm_affordable')
+	return on and 2 or 0
 end
 local SORTS = { 'type', 'price', 'name' }
 function PSXGM_NextSort()
@@ -917,7 +924,7 @@ function PSXGM_BuySelected() if G.sel then PSXGM_Buy(G.sel, G.qty) end end
 
 function PSXGM_Vanilla()
 	G.vanilla = true
-	if Infinity_IsMenuOnStack('PSXGM') then Infinity_PopMenu('PSXGM') end
+	if Infinity_IsMenuOnStack('PSXGM_PAGE') then Infinity_PopMenu('PSXGM_PAGE') end
 end
 function PSXGM_Back()
 	G.vanilla = false
@@ -925,7 +932,7 @@ function PSXGM_Back()
 end
 function PSXGM_Done()
 	G.vanilla = false
-	if Infinity_IsMenuOnStack('PSXGM') then Infinity_PopMenu('PSXGM') end
+	if Infinity_IsMenuOnStack('PSXGM_PAGE') then Infinity_PopMenu('PSXGM_PAGE') end
 	pcall(function() storeScreen:OnMainDoneButtonClick() end)
 end
 function PSXGM_OnOpen()
@@ -940,8 +947,8 @@ local function syncMenus()
 	local p, res = openStore()
 	local buysell = p ~= nil and onStack('STORE_BUYSELL')
 	local want = buysell and res == G.CAMP and not G.vanilla
-	local shown = onStack('PSXGM')
-	if want and not shown then Infinity_PushMenu('PSXGM') elseif shown and not want then Infinity_PopMenu('PSXGM') end
+	local shown = onStack('PSXGM_PAGE')
+	if want and not shown then Infinity_PushMenu('PSXGM_PAGE') elseif shown and not want then Infinity_PopMenu('PSXGM_PAGE') end
 	local wantBack = buysell and res == G.CAMP and G.vanilla == true
 	local backShown = onStack('PSXGM_BACK')
 	if wantBack and not backShown then Infinity_PushMenu('PSXGM_BACK') elseif backShown and not wantBack then Infinity_PopMenu('PSXGM_BACK') end
@@ -1003,6 +1010,9 @@ local function pushTick()
 	end
 end
 G.pushTick = pushTick
+
+-- The page menu is PSXGM_PAGE, not PSXGM: the engine makes a global of each menu's name (a number), which
+-- overwrote this module's table (John 2026-10-23: the tree and the search broke).
 
 -- Chains onto the `store` proxy of M_PSXENG.lua (made first), or makes a plain one.
 local function hookStoreTable()

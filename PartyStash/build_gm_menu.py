@@ -2,7 +2,8 @@
 
     python build_gm_menu.py            -> PSXGM.menu
 
-Geometry: 864 x 710 like the game's STORE_BUYSELL (centered), drawn over it (modal) while the camp store is open.
+Geometry: 864 x 710 like the game's STORE_BUYSELL (centered), drawn over it while the camp store is open. Not modal: the portraits
+stay clickable (the buyer is the selected character); a full-size empty button stops clicks reaching the vanilla panel.
 Left: category tree. Middle: search + filters, the 8 x 7 icon grid (54 px pitch, like the stash), pages.
 Right: the selected item, quantity, Buy, party gold, "vanilla view" (to sell) and Done.
 """
@@ -57,6 +58,7 @@ def frame(area, opacity=120):
 def page():
     items = []
     items.append(label((0, 0, W, H), extra='\t\trectangle 0\n\t\trectangle opacity 255'))
+    items.append(button((0, 0, W, H), extra='\t\taction ""'))  # eats the clicks meant for STORE_BUYSELL underneath
     items.append(label((0, 0, 0, 0), enabled='PSXGM_Tick()'))  # the tick also runs from the page itself
     items.append(label((0, 12, W, 40), "PSXGM_T('gm_title')", style='title', align='center center'))
     # category tree
@@ -91,10 +93,14 @@ def page():
 \t\taction "PSXGM.page = 1 return 1"
 \t}''' % GX)
     items.append(label((GX + 6, 60, 190, 32), "PSXGM_T('gm_search') .. '...'", enabled="PSXGM_search == ''"))
-    items.append(frame((GX + 202, 60, 112, 32)))
-    items.append(button((GX + 202, 60, 112, 32), "PSXGM_FilterText('usable')", 'PSXGM_ToggleUsable()'))
-    items.append(frame((GX + 318, 60, 114, 32)))
-    items.append(button((GX + 318, 60, 114, 32), "PSXGM_FilterText('afford')", 'PSXGM_ToggleAfford()'))
+    # filters: the game's round toggle (ROUNDBUT, frame 0 off / 2 on, as in its options screens; BG1 and BG2)
+    for fx, fw, which, act in ((GX + 202, 112, 'usable', 'PSXGM_ToggleUsable()'),
+                               (GX + 318, 114, 'afford', 'PSXGM_ToggleAfford()')):
+        items.append(label((fx + 2, 64, 24, 24), extra='\n'.join([
+            '\t\tbam ROUNDBUT', '\t\tscaleToClip', f'\t\tframe lua "PSXGM_FilterFrame(\'{which}\')"'])))
+        items.append(button((fx, 60, fw, 32), extra='\n'.join([
+            f'\t\ttext lua "PSXGM_FilterText(\'{which}\')"', '\t\ttext style "label"', '\t\ttext align right center',
+            f'\t\taction "{act}"'])))
     # grid
     items.append(label((GX, GY, COLS * PITCH, ROWS * PITCH), extra='\t\tactionScroll "PSXGM_Wheel()"'))
     for i in range(COLS * ROWS):
@@ -121,6 +127,7 @@ def page():
     items.append(label((GX, py + 40, COLS * PITCH, 60), 'PSXGM_MsgText()', style='label', align='left top'))
     # right panel: the selected item
     items.append(frame((RX - 4, 56, RW + 8, 588)))
+    items.append(label((RX, 64, RW, 30), 'Infinity_GetSelectedCharacterName()', style='label', align='center center'))
     items.append(button((RX + (RW - CELL) // 2, GY, CELL, CELL), extra='\n'.join([
         '\t\tbam PSSLOT', '\t\ticon lua "PSXGM_SelIcon()"', '\t\tactionAlt "PSXGM_SelDesc()"'])))
     items.append(label((RX, GY + 60, RW, 64), 'PSXGM_SelName()', align='center top'))
@@ -140,10 +147,9 @@ def page():
     items.append(button((RX, 604, RW, 36), "PSXGM_T('gm_done')", 'PSXGM_Done()'))
     return '''menu
 {
-\tname "PSXGM"
+\tname "PSXGM_PAGE"
 \talign center center
 \tsize %d %d
-\tmodal
 \tignoreesc
 \tonOpen "PSXGM_OnOpen()"
 %s
