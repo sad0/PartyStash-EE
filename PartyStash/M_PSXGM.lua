@@ -2,17 +2,16 @@
 Party Stash "grand marchand" (camp merchant), branch feature/grand-marchand (John 2026-10-23). Requires EEex and
 M_PSTASH.lua (its engine stubs and item data). BGEE / BG2EE / EET, v2.6.6 and v2.7.3.
 
-One merchant at the camp (SadoQoL's creature: StartStore("PSXCAMP", ...)) sells every item seen at the stores the
-party already visited.
-1. Discovery: each time a store opens, its items are recorded (best markup seen, stock) and copied into the camp
-   store PSXCAMP, a real STO, through CInfGame::AddItemToStore: the vanilla buy flow (gold, room, stolen flags) works
-   unchanged. Infinite stock, except uniques (stock 1 at the store where it was seen, or a named magic item): a unique
-   bought once is gone. Critical / quest items are never copied. Stores visited before the install: read once per
-   game from the loaded save (its BALDUR.SAV lists the stores it holds).
-   Kept in the save: PSXGP_<RES> = lowest sell markup seen (%), PSXGF_<RES> = flags (1 seen with more than one in
-   stock, 2 a unique already given to the camp), PSXGM_SCAN = the loaded save was scanned.
-2. Price: the best markup seen, per item. The camp store's markup (STO +0x14) is switched to the item's own just
-   around the engine's select + buy calls; reputation and charisma apply on top as the game does.
+One merchant at the camp (SadoQoL's creature: StartStore("PSXCAMP", ...)) sells what the stores the party already
+visited have in stock right now (John 2026-10-23: the exact stocks).
+1. Known stores: those held by the loaded save (its BALDUR.SAV lists every store the party opened; read after each
+   load) and those opened since. Nothing else is kept.
+2. The camp store PSXCAMP is a real STO, rebuilt from them each time it opens (CStore::AddItem / CompressItems): per
+   item, the sum of the stores' stocks (unlimited when one store has it unlimited); critical / quest items left out.
+   The vanilla buy flow (gold, room, stolen flags) works unchanged.
+3. Price: each copy at the price of the store it comes from, cheapest first. The camp store's markup (STO +0x14) is
+   switched to that store's just around the engine's select + buy calls (reputation and charisma apply on top as the
+   game does), and the copies bought are taken out of that store's stock.
 3. The page (PSXGM.menu) replaces the vanilla buy list of the camp store: category tree, 8 x 7 icon grid with pages,
    name search, "usable by the selected character" and "affordable" filters, wishlist first (Ctrl + click, global
    PSXW_<RES>, the same as M_PSXENG.lua), price in the tooltip. Selling stays on the vanilla panel ("Vanilla view")
@@ -31,7 +30,6 @@ G.expanded = G.expanded or {}
 G.sort = G.sort or 'type'
 G.qty = G.qty or 1
 G.msg = G.msg or ''
-G.queue = G.queue or {}
 PSXGM_search = PSXGM_search or ''
 
 local function log(...)
@@ -55,7 +53,7 @@ G.EN = {
 	gm_search = 'Search', gm_usable = 'Usable', gm_affordable = 'Affordable', gm_sort = 'Sort: %s',
 	gm_sort_type = 'Type', gm_sort_price = 'Price', gm_sort_name = 'Name',
 	gm_buy = 'Buy', gm_done = 'Done', gm_vanilla = 'Sell / vanilla view', gm_back = 'Camp merchant',
-	gm_price = '%d gp', gm_unique = 'Unique', gm_unlimited = 'Unlimited', gm_wished = 'Wishlist',
+	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock', gm_from = 'From: %s', gm_wished = 'Wishlist',
 	gm_items = '%d items', gm_empty = 'Nothing here yet: visit stores to fill the camp merchant.',
 	gm_no_gold = 'Not enough gold', gm_full = 'Backpack full: select another character', gm_cannot_buy = 'Cannot buy that now', gm_bought = 'Bought: %s x%d',
 	gm_select = 'Click an item. Ctrl + click: wishlist. Right click: description.',
@@ -200,27 +198,16 @@ local function excluded(info, res)
 	return questItem(info, res) or info.type == 33 or res == 'PSTASH'
 end
 
--- A named magic item: its identified name is not its unidentified one with a "+N" (Varscona +2 vs Long Sword,
--- not Long Sword +1). Ammo, potions, scrolls, gems and anything stackable never count.
-local NOT_NAMED = { [5] = true, [9] = true, [11] = true, [14] = true, [24] = true, [31] = true, [34] = true }
-local function namedItem(info)
-	if not info.magical and info.enchant == 0 then return false end
-	if NOT_NAMED[info.type] or info.stack > 1 then return false end
-	local id = string.lower(info.idText):gsub('%s*%+%s*%d+%s*$', ''):gsub('^%s+', ''):gsub('%s+$', '')
-	local unid = string.lower(info.unidText):gsub('^%s+', ''):gsub('%s+$', '')
-	return id ~= '' and unid ~= '' and id ~= unid
-end
-G.namedItem = namedItem
-
 -- Engine functions of our own, through the same fixed-target stubs as M_PSTASH.lua (PStash.buildStub). Same bytes
 -- on BGEE / BG2EE / EET of each build (checked 2026-10-23). The game's Lua has no io library: the save file is read
 -- with the engine's own C runtime (_wfopen, fread, fseek, fclose) and dimmResolveFileName ("home:/..." -> real path).
 -- CStore::AddItem: CInfGame::AddItemToStore only takes bags (STO type 5) and pays the item's sale value.
+-- CStore::CompressItems drops the entries with no stock that are not unlimited.
 local FILE_FUNCS = {
 	['2.7.3.0'] = { ResolveFileName = 0x1404058F0, wfopen = 0x14050FAA0, fread = 0x14050F354, fseek = 0x14050FD20,
-		fclose = 0x14050F060, StoreAddItem = 0x14024F650 },
+		fclose = 0x14050F060, StoreAddItem = 0x14024F650, StoreCompress = 0x14024FA90 },
 	['2.6.6.0'] = { ResolveFileName = 0x140404A50, wfopen = 0x14050EAC0, fread = 0x14050E374, fseek = 0x14050ED40,
-		fclose = 0x14050E080, StoreAddItem = 0x14024F3F0 },
+		fclose = 0x14050E080, StoreAddItem = 0x14024F3F0, StoreCompress = 0x14024F830 },
 }
 local FILE_PROLOGUE = {
 	ResolveFileName = { { 0x40, 0x53, 0x48, 0x83, 0xEC, 0x20, 0x41, 0xB8 }, 1 },
@@ -229,6 +216,7 @@ local FILE_PROLOGUE = {
 	fseek = { { 0x48, 0x63, 0xD2, 0xE9 }, 3 },
 	fclose = { { 0x48, 0x89, 0x5C, 0x24, 0x10, 0x48, 0x89, 0x4C }, 1 },
 	StoreAddItem = { { 0x40, 0x53, 0x55, 0x56, 0x48, 0x83, 0xEC, 0x70 }, 2 }, -- CStore::AddItem(this, CItem&)
+	StoreCompress = { { 0x48, 0x89, 0x5C, 0x24, 0x10, 0x56, 0x48, 0x83 }, 1 }, -- CStore::CompressItems(this)
 }
 
 local function fileReady()
@@ -252,21 +240,17 @@ end
 -----------------------
 -- Camp store         --
 -----------------------
-
-local function gpKey(res) return 'PSXGP_' .. res end
-local function gfKey(res) return 'PSXGF_' .. res end
-local function bestMarkup(res) return getG(gpKey(res)) end
-PSXGM_BestMarkup = bestMarkup
-
-local function isUnique(info, res)
-	return namedItem(info) or EEex_BAnd(getG(gfKey(res)), 1) == 0
-end
+-- A live window on every store the party knows (John 2026-10-23): for each item, the sum of the current stocks
+-- (unlimited when one store has it unlimited), each copy at the price of the store it comes from (cheapest first),
+-- and a copy bought at the camp is taken out of its store. Known stores: those held by the loaded save (read after
+-- each load) and those opened since. The camp store PSXCAMP is rebuilt from them each time it opens.
+G.known = G.known or {} -- [store resref] = true
 
 local function findEntry(storePtr, res)
 	for _, it in ipairs(storeEntries(storePtr)) do if it.res == res then return it end end
 end
 
--- A CItem for AddItemToStore (the engine copies it; ours is destroyed right after).
+-- A CItem for CStore::AddItem (the engine copies it).
 -- CItem(CResRef, useCount1, useCount2, useCount3, wear, flags) through the binding's manual overload.
 local function makeItem(res, u)
 	local it = EEex_NewUD('CItem')
@@ -288,60 +272,124 @@ local function addToCamp(campPtr, res, u)
 	return findEntry(campPtr, res)
 end
 
--- Makes the camp store sell `res`. Returns 1 when an entry was added.
-local function campOffer(campPtr, res, info, u)
-	local unique = isUnique(info, res)
-	local e = findEntry(campPtr, res)
-	if e then
-		if not unique and e.inf == 0 then -- first seen as a unique, now found in stock elsewhere
-			EEex_Write32(e.ptr + FI_INF, 1)
-			EEex_Write32(e.ptr + FI_STOCK, math.max(1, info.stack))
-		end
-		return 0
-	end
-	if unique and EEex_BAnd(getG(gfKey(res)), 2) ~= 0 then return 0 end -- sold once already
-	e = addToCamp(campPtr, res, u)
-	if not e then return 0 end
-	EEex_Write32(e.ptr + FI_FLAGS, EEex_BOr(EEex_ReadU32(e.ptr + FI_FLAGS), 1)) -- identified, as at a store
-	if unique then
-		EEex_Write32(e.ptr + FI_STOCK, 1)
-		EEex_Write32(e.ptr + FI_INF, 0)
-		setG(gfKey(res), EEex_BOr(getG(gfKey(res)), 2))
-	else
-		EEex_Write32(e.ptr + FI_STOCK, math.max(1, info.stack))
-		EEex_Write32(e.ptr + FI_INF, 1)
-	end
-	log('camp + %s%s', res, unique and ' (unique)' or '')
-	return 1
+-- A store the camp draws from: a merchant (not a container / bag, type 5) that sells (flag bit 0 "user can buy").
+local function isMerchant(p)
+	return EEex_ReadU32(p + STO_TYPE) ~= 5 and EEex_BAnd(EEex_ReadU32(p + STO_FLAGS), 1) ~= 0
 end
 
--- Records a store's items and offers them at the camp. Returns the number of new camp entries.
+-- A store just opened joins the known ones.
 local function discover(storePtr, storeRes)
-	if storeRes == G.CAMP or storeRes == 'PSTASH' then return 0 end
-	local typ, flags, markup = EEex_ReadU32(storePtr + STO_TYPE), EEex_ReadU32(storePtr + STO_FLAGS),
-		EEex_ReadU32(storePtr + STO_SELL)
-	-- containers / bags (type 5) and stores that sell nothing (flag bit 0 "user can buy") are not merchants
-	if typ == 5 or EEex_BAnd(flags, 1) == 0 then return 0 end
-	local seen = {}
-	for _, it in ipairs(storeEntries(storePtr)) do
-		local info = it.res ~= '' and itemInfo(it.res)
-		if info and not excluded(info, it.res) and not seen[it.res] then
-			seen[it.res] = it
-			local best = bestMarkup(it.res)
-			if best == 0 or markup < best then setG(gpKey(it.res), math.max(1, markup)) end
-			if it.inf ~= 0 or it.stock > 1 or info.stack > 1 then setG(gfKey(it.res), EEex_BOr(getG(gfKey(it.res)), 1)) end
-		end
-	end
-	local added = withStore(G.CAMP, function(camp)
-		local n = 0
-		for res, it in pairs(seen) do n = n + campOffer(camp, res, itemInfo(res), it.u) end
-		return n
-	end) or 0
-	log('store %s: %d items, markup %d, %d new at the camp', storeRes, (function() local k = 0 for _ in pairs(seen) do k = k + 1 end return k end)(), markup, added)
-	if added > 0 then G.dirty = true end
-	return added
+	if storeRes == G.CAMP or storeRes == 'PSTASH' or not isMerchant(storePtr) then return false end
+	if not G.known[storeRes] then log('known store + %s', storeRes) end
+	G.known[storeRes] = true
+	return true
 end
 G.discover = discover
+
+-- { [res] = { inf, total, sources = { { store, stock, inf, markup, name }, ... } cheapest first } } from the known
+-- stores' current contents. Critical / quest items are left out.
+local function aggregate()
+	local out, names = {}, {}
+	for sres in pairs(G.known) do names[#names + 1] = sres end
+	table.sort(names)
+	for _, sres in ipairs(names) do
+		withStore(sres, function(p)
+			if not isMerchant(p) then return end
+			local markup = EEex_ReadU32(p + STO_SELL)
+			local strref = EEex_ReadU32(p + 0x0C)
+			local name = (strref ~= 0xFFFFFFFF and Infinity_FetchString(strref)) or sres
+			for _, it in ipairs(storeEntries(p)) do
+				local inf = EEex_BAnd(it.inf, 1) ~= 0
+				local info = it.res ~= '' and itemInfo(it.res)
+				if info and not excluded(info, it.res) and (inf or it.stock > 0) then
+					local a = out[it.res]
+					if not a then a = { total = 0, inf = false, sources = {}, u = it.u } out[it.res] = a end
+					a.sources[#a.sources + 1] = { store = sres, stock = it.stock, inf = inf, markup = markup, name = name }
+					if inf then a.inf = true else a.total = a.total + it.stock end
+				end
+			end
+		end)
+	end
+	for _, a in pairs(out) do
+		table.sort(a.sources, function(x, y)
+			if x.markup ~= y.markup then return x.markup < y.markup end
+			return x.store < y.store
+		end)
+	end
+	return out
+end
+G.aggregate = aggregate
+
+-- The camp store gets exactly the aggregated stock: missing items added, gone ones emptied, then compressed
+-- (CStore::CompressItems drops the entries with no stock that are not unlimited).
+local function syncCamp(campPtr)
+	local agg = aggregate()
+	G.agg = agg
+	for _, e in ipairs(storeEntries(campPtr)) do
+		if not agg[e.res] then
+			EEex_Write32(e.ptr + FI_STOCK, 0)
+			EEex_Write32(e.ptr + FI_INF, 0)
+		end
+	end
+	local n = 0
+	for res, a in pairs(agg) do
+		local e = findEntry(campPtr, res) or addToCamp(campPtr, res, a.u)
+		if e then
+			local info = itemInfo(res)
+			EEex_Write32(e.ptr + FI_FLAGS, EEex_BOr(EEex_ReadU32(e.ptr + FI_FLAGS), 1)) -- identified, as at a store
+			EEex_Write32(e.ptr + FI_INF, a.inf and 1 or 0)
+			EEex_Write32(e.ptr + FI_STOCK, a.inf and math.max(1, info and info.stack or 1) or a.total)
+			n = n + 1
+		end
+	end
+	if fileReady() then PStash_Eng_GM_StoreCompress(campPtr) end
+	G.dirty = true
+	log('camp: %d items from the known stores', n)
+	return n
+end
+G.syncCamp = syncCamp
+
+-- `n` copies of `res` bought at the camp leave store `s` (and the aggregate `a`).
+local function takeFrom(s, res, n, a)
+	withStore(s.store, function(p)
+		local left = n
+		for _, it in ipairs(storeEntries(p)) do
+			if left <= 0 then break end
+			if it.res == res and EEex_BAnd(it.inf, 1) == 0 and it.stock > 0 then
+				local k = math.min(left, it.stock)
+				EEex_Write32(it.ptr + FI_STOCK, it.stock - k)
+				left = left - k
+			end
+		end
+		if fileReady() then PStash_Eng_GM_StoreCompress(p) end
+	end)
+	s.stock = math.max(0, s.stock - n)
+	a.total = math.max(0, a.total - n)
+end
+G.takeFrom = takeFrom
+
+-- Copies that left the camp store some other way (bought in the vanilla view) leave their stores too, cheapest
+-- first: the camp never sells more than the stores hold. Run by the tick while the camp is open.
+local function reconcileCamp(campPtr)
+	if not G.agg then return end
+	local have = {}
+	for _, e in ipairs(storeEntries(campPtr)) do have[e.res] = (have[e.res] or 0) + e.stock end
+	for res, a in pairs(G.agg) do
+		if not a.inf and (have[res] or 0) < a.total then
+			local gone = a.total - (have[res] or 0)
+			for _, s in ipairs(a.sources) do
+				if gone <= 0 then break end
+				if not s.inf and s.stock > 0 then
+					local k = math.min(gone, s.stock)
+					takeFrom(s, res, k, a)
+					gone = gone - k
+				end
+			end
+			G.dirty = true
+			log('camp: %s bought outside the page, taken from its stores', res)
+		end
+	end
+end
 
 -----------------------
 -- Stores before the install: the loaded save's BALDUR.SAV
@@ -442,15 +490,16 @@ local function loadedSaveStores()
 end
 G.loadedSaveStores = loadedSaveStores
 
+-- The stores held by the loaded save join the known ones (read after each load: the save holds every store the party
+-- opened, so nothing else needs to be kept).
 function PSXGM_Rescan()
 	local stores, where = loadedSaveStores()
-	if not stores then print('[PSXGM] the loaded save could not be read') return 0 end
-	local n = 0
+	if not stores then log('the loaded save could not be read') return 0 end
 	for _, res in ipairs(stores) do
-		n = n + (withStore(res, function(p) return discover(p, res) end) or 0)
+		if res ~= G.CAMP and res ~= 'PSTASH' then G.known[res] = true end
 	end
-	print(string.format('[PSXGM] %s: %d stores, %d new camp items', where, #stores, n))
-	return n
+	log('%s: %d stores', where, #stores)
+	return #stores
 end
 
 -----------------------
@@ -672,13 +721,12 @@ local function partyGold()
 	return ok and tonumber(g) or 0
 end
 
--- What the item costs here: the engine's price at the camp markup, scaled to the best markup seen.
-local function priceOf(en, res, campMk)
-	local v = tonumber(en.value) or 0
-	local best = bestMarkup(res)
-	if best <= 0 or campMk <= 0 then return v end
-	return math.floor(v * best / campMk + 0.5)
+-- What one copy costs from store `s`: the engine's price at the camp markup (reputation, charisma, charges
+-- included), scaled to that store's markup.
+local function unitPrice(c, s)
+	return math.floor(c.value * s.markup / math.max(1, c.campMk) + 0.5)
 end
+G.unitPrice = unitPrice
 
 local function campMarkup()
 	local p = openStore()
@@ -690,7 +738,8 @@ G.wishV = G.wishV or 0
 local function viewKey()
 	local sp = selectedSprite()
 	return table.concat({ tostring(store and store.storeItems), G.cat, PSXGM_search or '', tostring(G.usable),
-		tostring(G.afford), G.sort, G.afford and partyGold() or 0, G.usable and sp and sp.m_id or 0, G.wishV }, '|')
+		tostring(G.afford), G.sort, G.afford and partyGold() or 0, G.usable and sp and sp.m_id or 0, G.wishV,
+		tostring(G.agg) }, '|')
 end
 
 local function rebuild()
@@ -700,17 +749,21 @@ local function rebuild()
 	for i, en in ipairs(list) do
 		local res = entryRes(en)
 		local info = res ~= '' and itemInfo(res)
-		if info then
+		local a = G.agg and G.agg[res]
+		if info and a and #a.sources > 0 then
 			local name = cleanLabel(en.label)
-			local price = priceOf(en, res, campMk)
+			local c = { en = en, row = i, res = res, info = info, name = name, value = tonumber(en.value) or 0,
+				campMk = campMk, sources = a.sources, inf = a.inf, total = a.total }
+			c.price = unitPrice(c, a.sources[1])
+			local src = a.sources[1]
+			c.from = src.name and src.name ~= '' and src.name or nil
 			if inCategory(G.cat, info, res)
 				and (q == '' or string.find(string.lower(name), q, 1, true))
 				and (not G.usable or usableBy(sp, info))
-				and (not G.afford or price <= gold) then
+				and (not G.afford or c.price <= gold) then
 				local lf = leafOf(info, res)
-				out[#out + 1] = { en = en, row = i, res = res, info = info, name = name, price = price,
-					wish = isWished(res), unique = en.item.count ~= 0xFFFF and isUnique(info, res),
-					order = lf and lf.order or 999, usable = usableBy(sp, info) }
+				c.wish, c.order, c.usable = isWished(res), lf and lf.order or 999, usableBy(sp, info)
+				out[#out + 1] = c
 			end
 		end
 	end
@@ -749,11 +802,11 @@ local function selected()
 end
 
 function PSXGM_CellIcon(i) local c = cell(i) return c and c.en.item.icon or nil end
+-- Bottom right of the cell: how many are left (nothing when unlimited).
 function PSXGM_CellCount(i)
 	local c = cell(i)
-	if not c then return nil end
-	local s = c.en.item.stackSize
-	return (s and s > 1) and s or nil
+	if not c or c.inf then return nil end
+	return c.total
 end
 function PSXGM_CellTint(i)
 	local c = cell(i)
@@ -763,12 +816,11 @@ function PSXGM_CellTint(i)
 end
 function PSXGM_CellGrey(i) local c = cell(i) return c ~= nil and not c.usable end
 function PSXGM_CellWished(i) local c = cell(i) return c ~= nil and c.wish end
-function PSXGM_CellUnique(i) local c = cell(i) return c ~= nil and c.unique end
 function PSXGM_CellTip(i)
 	local c = cell(i)
 	if not c then return '' end
-	local s = c.name .. '\n' .. T('gm_price', c.price)
-	if c.unique then s = s .. '  (' .. T('gm_unique') .. ')' end
+	local s = c.name .. '\n' .. T('gm_price', c.price) .. '  ' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
+	if c.from then s = s .. '\n' .. T('gm_from', c.from) end
 	if c.wish then s = s .. '\n* ' .. T('gm_wished') end
 	return s
 end
@@ -844,13 +896,25 @@ function PSXGM_SelName() local c = selected() return c and c.name or T('gm_selec
 function PSXGM_SelInfo()
 	local c = selected()
 	if not c then return '' end
-	return T('gm_price', c.price) .. '\n' .. (c.unique and T('gm_unique') or T('gm_unlimited'))
+	local s = T('gm_price', c.price) .. '\n' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
+	if c.from then s = s .. '\n' .. T('gm_from', c.from) end
+	return s
 end
 function PSXGM_SelDesc() local c = selected() if c then showItemDescription(c.en.item, 1) end end
 local function maxQty(c)
 	if not c then return 1 end
-	if c.unique then return 1 end
-	return 99
+	return c.inf and 99 or math.max(1, math.min(99, c.total))
+end
+-- What `qty` copies cost: the cheapest stores' copies first.
+local function costOf(c, qty)
+	local left, cost = qty, 0
+	for _, s in ipairs(c.sources) do
+		if left <= 0 then break end
+		local n = s.inf and left or math.min(left, s.stock)
+		cost = cost + n * unitPrice(c, s)
+		left = left - n
+	end
+	return cost
 end
 function PSXGM_Qty(d)
 	local c = selected()
@@ -860,13 +924,13 @@ function PSXGM_QtyText() return tostring(G.qty or 1) end
 function PSXGM_TotalText()
 	local c = selected()
 	if not c then return '' end
-	return T('gm_total', c.price * (G.qty or 1))
+	return T('gm_total', costOf(c, G.qty or 1))
 end
 function PSXGM_GoldText() return T('gm_price', partyGold()) end
 function PSXGM_MsgText() return G.msg or '' end
 function PSXGM_CanBuy()
 	local c = selected()
-	return c ~= nil and c.price * (G.qty or 1) <= partyGold()
+	return c ~= nil and costOf(c, G.qty or 1) <= partyGold()
 end
 
 -----------------------
@@ -893,41 +957,49 @@ local function clearSelection()
 	end
 end
 
--- Buys `qty` of `res` through the engine (select + Buy), the camp markup set to the item's best one meanwhile.
+-- Buys `qty` of `res` through the engine (select + Buy), store by store, cheapest first: the camp markup is set to
+-- that store's for its copies, and they are taken out of that store's stock.
 function PSXGM_Buy(res, qty)
 	local campPtr, campRes = openStore()
 	if not campPtr or campRes ~= G.CAMP then return 0 end
 	res = string.upper(res or G.sel or '')
 	qty = qty or G.qty or 1
+	local a = G.agg and G.agg[res]
+	if not a then G.msg = T('gm_cannot_buy') return 0 end
 	local saved = EEex_ReadU32(campPtr + STO_SELL)
-	local best = bestMarkup(res)
 	local bought, why = 0, nil
 	local ok, err = pcall(function()
-		if best > 0 then EEex_Write32(campPtr + STO_SELL, best) end
 		clearSelection()
-		while bought < qty do
-			local row, en = rowOf(res)
-			if not row then break end
-			local n = math.min(qty - bought, math.max(1, tonumber(en.maxCount) or 1))
-			storeScreen:SelectStoreItem(row, true)
-			if n > 1 then storeScreen:SetStoreItemCount(row, n) end
-			if not storeScreen:IsBuyItemButtonClickable() then
-				storeScreen:SelectStoreItem(row, false)
-				if partyGold() < priceOf(en, res, saved) * n then why = T('gm_no_gold')
-				elseif not freeSlot() then why = T('gm_full')
-				else why = T('gm_cannot_buy') end
-				break
+		for _, s in ipairs(a.sources) do
+			local avail = s.inf and math.huge or s.stock
+			while bought < qty and avail > 0 and not why do
+				local row, en = rowOf(res)
+				if not row then why = T('gm_cannot_buy') break end
+				local n = math.min(qty - bought, avail, math.max(1, tonumber(en.maxCount) or 1))
+				EEex_Write32(campPtr + STO_SELL, s.markup)
+				storeScreen:SelectStoreItem(row, true)
+				if n > 1 then storeScreen:SetStoreItemCount(row, n) end
+				if not storeScreen:IsBuyItemButtonClickable() then
+					storeScreen:SelectStoreItem(row, false)
+					if not freeSlot() then why = T('gm_full')
+					elseif partyGold() < n * math.floor((tonumber(en.value) or 0) * s.markup / math.max(1, saved) + 0.5) then
+						why = T('gm_no_gold')
+					else why = T('gm_cannot_buy') end
+					break
+				end
+				storeScreen:OnBuyItemButtonClick()
+				bought, avail = bought + n, avail - n
+				if not s.inf then takeFrom(s, res, n, a) end
 			end
-			storeScreen:OnBuyItemButtonClick()
-			bought = bought + n
+			if bought >= qty or why then break end
 		end
 	end)
 	EEex_Write32(campPtr + STO_SELL, saved)
 	pcall(function() storeScreen:UpdateBuySellPanel() end)
 	if not ok then print('[PSXGM] buy error: ' .. tostring(err)) why = T('gm_cannot_buy') end
-	local c = itemInfo(res)
-	G.msg = why or T('gm_bought', c and c.idText or res, bought)
-	if bought > 0 and isUnique(c, res) then G.sel = nil end
+	local info = itemInfo(res)
+	G.msg = why or T('gm_bought', info and info.idText or res, bought)
+	if not a.inf and a.total <= 0 then G.sel = nil end
 	G.dirty = true
 	log('buy %s x%d -> %d (%s)', res, qty, bought, tostring(why))
 	return bought
@@ -979,40 +1051,42 @@ function PSXGM_Tick()
 	if p then
 		if p ~= G.visitPtr then
 			G.visitPtr, G.visitRes, G.vanilla, G.sel = p, res, false, nil
-			if res ~= G.CAMP and not storeScreen:IsContainer() then
-				local ok, err = pcall(discover, p, res)
-				if not ok then print('[PSXGM] discover error: ' .. tostring(err)) end
-			end
+			local ok, err = pcall(function()
+				if res == G.CAMP then -- the camp opens: its stock follows the known stores' current ones
+					G.syncCamp(p)
+					storeScreen:UpdateBuySellPanel()
+				elseif not storeScreen:IsContainer() then
+					discover(p, res)
+				end
+			end)
+			if not ok then print('[PSXGM] store error: ' .. tostring(err)) end
+		elseif res == G.CAMP and (not G.nextRec or now >= G.nextRec) then
+			G.nextRec = now + 500
+			local ok, err = pcall(reconcileCamp, p)
+			if not ok then print('[PSXGM] camp check error: ' .. tostring(err)) end
 		end
 	else
 		G.visitPtr = nil
+		-- after each load: the stores held by the save join the known ones
 		if worldScreen ~= nil and e:GetActiveEngine() == worldScreen and G.scanFor ~= G.gameId then
 			G.scanFor = G.gameId
-			if getG('PSXGM_SCAN') == 0 then
-				setG('PSXGM_SCAN', 1)
-				local ok, err = pcall(PSXGM_Rescan)
-				if not ok then print('[PSXGM] save scan error: ' .. tostring(err)) end
-			end
+			local ok, err = pcall(PSXGM_Rescan)
+			if not ok then print('[PSXGM] save scan error: ' .. tostring(err)) end
 		end
 	end
 	pcall(syncMenus)
 	return false
 end
 
--- The camp catalog: { total, unique, infinite, sample = 'RES ...' } (a long print crashed the game: no listing).
-function PSXGM_Catalog(maxSample)
-	local out = { total = 0, unique = 0, infinite = 0 }
-	local sample = {}
-	withStore(G.CAMP, function(camp)
-		for _, it in ipairs(storeEntries(camp)) do
-			out.total = out.total + 1
-			if it.inf ~= 0 then out.infinite = out.infinite + 1 else out.unique = out.unique + 1 end
-			if #sample < (maxSample or 10) then
-				sample[#sample + 1] = string.format('%s %d%% %s', it.res, bestMarkup(it.res), it.inf ~= 0 and 'inf' or 'x' .. it.stock)
-			end
-		end
-	end)
-	out.sample = table.concat(sample, ', ')
+-- The camp catalog from the known stores: { stores, items, infinite, units } (no listing: a long print crashed the game).
+function PSXGM_Catalog()
+	local agg = G.aggregate()
+	local out = { stores = 0, items = 0, infinite = 0, units = 0 }
+	for _ in pairs(G.known) do out.stores = out.stores + 1 end
+	for _, a in pairs(agg) do
+		out.items = out.items + 1
+		if a.inf then out.infinite = out.infinite + 1 else out.units = out.units + a.total end
+	end
 	return out
 end
 
@@ -1081,8 +1155,8 @@ if not G.listenersAdded then
 		pcall(pushTick)
 	end)
 	EEex_GameState_AddInitializedListener(function()
-		G.gameId = (G.gameId or 0) + 1 -- new game or load: the save scan runs again if PSXGM_SCAN is 0
-		G.info, G.leafOf = {}, {}
+		G.gameId = (G.gameId or 0) + 1 -- new game or load: the known stores are read again from the save
+		G.info, G.leafOf, G.known, G.agg = {}, {}, {}, nil
 		pcall(pushTick)
 	end)
 end

@@ -461,6 +461,104 @@ def title():
         print('written PSXGMT%s.BAM' % lang.upper())
 
 
+# --- buttons ------------------------------------------------------------------------------------------------------
+# Paper tickets in the same pencil look (John 2026-10-23), game buttons with the usual frames: 0 up, 1 pressed,
+# 2 selected (= up), 3 disabled. name: (w, h, shape)
+BUTTONS = {
+    'PSXGMBN1': (116, 32, 'ticket'),  # Buy
+    'PSXGMBN2': (144, 32, 'ticket'),  # sell, done, sort
+    'PSXGMBN3': (30, 30, 'disc'),     # - + < >
+    'PSXGMBN4': (196, 28, 'tag'),     # board swap, on the wood
+}
+
+
+def button_frames(w, h, shape, rnd):
+    S = 4
+    base = paper(w * S, h * S, 'paper2', rnd).convert('RGBA')
+    base = base.resize((w * S, h * S))
+    m = Image.new('L', (w * S, h * S), 0)
+    md = ImageDraw.Draw(m)
+    if shape == 'disc':
+        md.ellipse((2 * S, 2 * S, (w - 2) * S, (h - 2) * S), fill=255)
+    else:
+        # a slightly irregular ticket: corners cut at random, the tag gets a punched hole on the left
+        cut = [rnd.randint(1, 4) * S for _ in range(4)]
+        md.polygon([(cut[0], 0), (w * S - cut[1], 0), (w * S, cut[1]), (w * S, h * S - cut[2]),
+                    (w * S - cut[2], h * S), (cut[3], h * S), (0, h * S - cut[3]), (0, cut[0])], fill=255)
+        if shape == 'tag':
+            md.ellipse((5 * S, (h // 2 - 3) * S, 11 * S, (h // 2 + 3) * S), fill=0)
+    layer = Image.new('RGBA', (w * S, h * S), (0, 0, 0, 0))
+
+    class Big:
+        def __init__(self, draw):
+            self.draw = draw
+
+        def line(self, pts, fill, width=1):
+            self.draw.line([(x * S, y * S) for x, y in pts], fill=fill, width=max(1, int(width * S * 0.8)))
+
+    d = Big(ImageDraw.Draw(layer))
+    if shape == 'disc':
+        pts = [(w / 2 + (w / 2 - 4) * math.cos(a / 20 * 2 * math.pi) + rnd.uniform(-0.6, 0.6),
+                h / 2 + (h / 2 - 4) * math.sin(a / 20 * 2 * math.pi) + rnd.uniform(-0.6, 0.6)) for a in range(22)]
+        stroke(d, pts, rnd, width=1, alpha=170, wobble=0.5)
+    else:
+        box(d, 4, 4, w - 8, h - 8, rnd, width=1, alpha=170, wobble=0.6)
+    sheet = base.copy()
+    sheet.alpha_composite(layer)
+    sheet.putalpha(ImageChops.multiply(sheet.getchannel('A'), m))
+    up = sheet.resize((w, h), Image.LANCZOS)
+    # pressed: darker, pushed 1 px down-right; disabled: faded and greyer
+    down = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    dk = ImageChops.multiply(up, Image.new('RGBA', (w, h), (205, 190, 165, 255)))
+    down.paste(dk.crop((0, 0, w - 1, h - 1)), (1, 1))
+    off = up.copy()
+    grey = Image.blend(off.convert('RGB'), ImageOps.grayscale(off).convert('RGB'), 0.6)
+    off = Image.merge('RGBA', grey.split() + (off.getchannel('A').point(lambda a: a * 200 // 255),))
+    for f in (up, down, off):  # 1-bit edges in the palette's alpha: keep them clean
+        f.putalpha(f.getchannel('A').point(lambda a: 0 if a < 90 else a))
+    return [up, down, up, off]
+
+
+def circle_frames(w=180, h=26):
+    """Tree selection: frame 0 empty, frame 1 a quick pencil loop around the row."""
+    rnd = random.Random(23)
+    S = 4
+    layer = Image.new('RGBA', (w * S, h * S), (0, 0, 0, 0))
+
+    class Big:
+        def __init__(self, draw):
+            self.draw = draw
+
+        def line(self, pts, fill, width=1):
+            self.draw.line([(x * S, y * S) for x, y in pts], fill=fill, width=max(1, int(width * S * 0.8)))
+
+    d = Big(ImageDraw.Draw(layer))
+    n = 40
+    pts = []
+    for k in range(n + 6):  # a little more than one turn: the loop overlaps where it started
+        a = k / n * 2 * math.pi - 2.4
+        pts.append((w / 2 + (w / 2 - 4) * math.cos(a) * rnd.uniform(0.98, 1.02),
+                    h / 2 + (h / 2 - 3) * math.sin(a) * rnd.uniform(0.94, 1.04)))
+    stroke(d, pts, rnd, width=2, alpha=200, wobble=0.8)
+    on = layer.resize((w, h), Image.LANCZOS)
+    on.putalpha(on.getchannel('A').point(lambda a: 0 if a < 40 else min(255, a * 2)))
+    return [Image.new('RGBA', (w, h), (0, 0, 0, 0)), on]
+
+
+def buttons():
+    sys.argv = sys.argv[:1]
+    import build_art
+    rnd = random.Random(31)
+    for name, (w, h, shape) in BUTTONS.items():
+        frames = button_frames(w, h, shape, rnd)
+        build_art.write_bam_v1(frames, [[0, 1, 2, 3]], os.path.join(HERE, '..', name + '.BAM'))
+        prev = Image.new('RGBA', (w * 4 + 12, h), (60, 40, 25, 255))
+        for i, f in enumerate(frames):
+            prev.alpha_composite(f, (i * (w + 4), 0))
+        prev.save(os.path.join(GM, 'prev_%s.png' % name))
+    build_art.write_bam_v1(circle_frames(), [[0, 1]], os.path.join(HERE, '..', 'PSXGMCIR.BAM'))
+
+
 def mos():
     sys.argv = sys.argv[:1]  # build_art reads argv[2] for the game
     import build_art
@@ -470,4 +568,4 @@ def mos():
 
 
 if __name__ == '__main__':
-    {'compose': compose, 'ai': ai, 'title': title, 'mos': mos}[sys.argv[1]]()
+    {'compose': compose, 'ai': ai, 'title': title, 'buttons': buttons, 'mos': mos}[sys.argv[1]]()

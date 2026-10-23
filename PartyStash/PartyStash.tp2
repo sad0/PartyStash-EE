@@ -168,6 +168,12 @@ COPY ~PartyStash/PSXGM.menu~ ~override~
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
+// paper ticket buttons and the pencil circle of the chosen category
+COPY ~PartyStash/PSXGMBN1.BAM~ ~override~
+     ~PartyStash/PSXGMBN2.BAM~ ~override~
+     ~PartyStash/PSXGMBN3.BAM~ ~override~
+     ~PartyStash/PSXGMBN4.BAM~ ~override~
+     ~PartyStash/PSXGMCIR.BAM~ ~override~
 // the title in charcoal is drawn, not typed: French or English lettering (other languages: English for now)
 ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~french~ BEGIN
 	COPY ~PartyStash/PSXGMTFR.BAM~ ~override/PSXGMTT.BAM~

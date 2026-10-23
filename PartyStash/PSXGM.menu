@@ -80,7 +80,13 @@ menu
 			width 100
 			label
 			{
-				area 6 0 -1 -1
+				area 0 0 180 26
+				bam PSXGMCIR
+				frame lua "PSXGM_TreeSelected(rowNumber) and 1 or 0"
+			}
+			label
+			{
+				area 10 0 -1 -1
 				text lua "PSXGM_TreeText(rowNumber)"
 				text style "normal_parchment"
 				text align left center
@@ -90,6 +96,7 @@ menu
 		rowheight 26
 		table "PSXGM.treeRows"
 		var PSXGM_treeVar
+		hidehighlight
 		action "PSXGM_TreeClick()"
 	}
 	edit
@@ -1322,12 +1329,14 @@ menu
 	}
 	button
 	{
-		area 236 488 40 30
+		area 240 488 30 30
 		text lua "'<'"
 		text style "label_parchment"
 		text align center center
 		clickable lua "PSXGM_CanPage(-1)"
 		action "PSXGM_Page(-1)"
+		bam PSXGMBN3
+		sequence 0
 	}
 	label
 	{
@@ -1338,24 +1347,28 @@ menu
 	}
 	button
 	{
-		area 376 488 40 30
+		area 382 488 30 30
 		text lua "'>'"
 		text style "label_parchment"
 		text align center center
 		clickable lua "PSXGM_CanPage(1)"
 		action "PSXGM_Page(1)"
+		bam PSXGMBN3
+		sequence 0
 	}
 	button
 	{
-		area 426 488 120 30
+		area 418 487 144 32
 		text lua "PSXGM_SortText()"
 		text style "label_parchment"
 		text align center center
 		action "PSXGM_NextSort()"
+		bam PSXGMBN2
+		sequence 0
 	}
 	label
 	{
-		area 552 488 116 30
+		area 566 488 102 30
 		text lua "PSXGM_CountText()"
 		text style "normal_parchment"
 		text align right center
@@ -1390,11 +1403,13 @@ menu
 	}
 	button
 	{
-		area 698 288 34 30
+		area 700 288 30 30
 		text lua "'-'"
 		text style "label_parchment"
 		text align center center
 		action "PSXGM_Qty(-1)"
+		bam PSXGMBN3
+		sequence 0
 	}
 	label
 	{
@@ -1405,11 +1420,13 @@ menu
 	}
 	button
 	{
-		area 796 288 34 30
+		area 798 288 30 30
 		text lua "'+'"
 		text style "label_parchment"
 		text align center center
 		action "PSXGM_Qty(1)"
+		bam PSXGMBN3
+		sequence 0
 	}
 	label
 	{
@@ -1426,6 +1443,8 @@ menu
 		text align center center
 		clickable lua "PSXGM_CanBuy()"
 		action "PSXGM_BuySelected()"
+		bam PSXGMBN1
+		sequence 0
 	}
 	label
 	{
@@ -1443,26 +1462,32 @@ menu
 	}
 	button
 	{
-		area 684 564 160 34
+		area 692 564 144 32
 		text lua "PSXGM_T('gm_vanilla')"
 		text style "label_parchment"
 		text align center center
 		action "PSXGM_Vanilla()"
+		bam PSXGMBN2
+		sequence 0
 	}
 	button
 	{
-		area 684 604 160 34
+		area 692 604 144 32
 		text lua "PSXGM_T('gm_done')"
 		text style "label_parchment"
 		text align center center
 		action "PSXGM_Done()"
+		bam PSXGMBN2
+		sequence 0
 	}
 	button
 	{
-		area 20 674 196 26
+		area 20 674 196 28
 		text lua "PSXGM_SkinText()"
-		text style "label"
+		text style "label_parchment"
 		text align center center
 		action "PSXGM_NextSkin()"
+		bam PSXGMBN4
+		sequence 0
 	}
 }
