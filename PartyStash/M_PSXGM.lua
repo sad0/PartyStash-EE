@@ -61,8 +61,9 @@ G.EN = {
 	gm_skin = 'Board: %s', gm_skin_1 = 'pinned notices', gm_skin_2 = 'painted',
 	gm_sell_marked = 'Sell marked: %s gp', gm_sell_none = 'Nothing marked', gm_sold = 'Sold from the stash: %d gp',
 }
+-- PSXGM_Strings: the installed language's M_PSXGT.lua (build_gm_strings.py; component #8 copies it).
 local function T(key, ...)
-	local s = (PStash_Strings and PStash_Strings[key]) or G.EN[key] or key
+	local s = (PSXGM_Strings and PSXGM_Strings[key]) or (PStash_Strings and PStash_Strings[key]) or G.EN[key] or key
 	if select('#', ...) > 0 then return string.format(s, ...) end
 	return s
 end
@@ -1184,6 +1185,8 @@ end
 function PSXGM_OnOpen()
 	G.dirty, G.msg = true, ''
 	gmFindText = gmFindText or ''
+	G.findText = {}
+	buildTree() -- in the installed language (M_PSXGT.lua loads after this file)
 end
 function PSXGM_ShowBack()
 	return G.vanilla == true and atCamp() and onStack('STORE_BUYSELL')

@@ -165,6 +165,10 @@ COPY ~PartyStash/PSXCAMP.STO~ ~override~
 	SAY 0x0C @19
 COPY ~PartyStash/M_PSXGM.lua~ ~override~
 COPY ~PartyStash/PSXGM.menu~ ~override~
+// the page in the install language (build_gm_strings.py; English is M_PSXGM.lua's own)
+ACTION_IF FILE_EXISTS ~PartyStash/tra/%LANGUAGE%/M_PSXGT.lua~ BEGIN
+	COPY ~PartyStash/tra/%LANGUAGE%/M_PSXGT.lua~ ~override~
+END
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~

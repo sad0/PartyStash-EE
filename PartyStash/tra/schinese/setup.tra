@@ -15,5 +15,5 @@
 @15 = ~选项：战役切换时保留队伍金币（BG1 到 SoD，EET 中 SoD 到 BG2）~
 @16 = ~选项（硬核）：战役切换时也清空储物箱，就像队伍携带的一切~
 @17 = ~需要 Party Stash。~
-@18 = ~Camp merchant: sells every item seen at the stores already visited (for SadoQoL's camp)~
-@19 = ~Camp merchant~
+@18 = ~营地商人：出售已拜访过的商店现有库存中的所有物品（用于 SadoQoL 的营地）~
+@19 = ~营地商人~
