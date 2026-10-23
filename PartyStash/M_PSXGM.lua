@@ -59,6 +59,7 @@ G.EN = {
 	gm_select = 'Click an item. Ctrl + click: wishlist. Right click: description.',
 	gm_total = 'Total: %d gp',
 	gm_skin = 'Board: %s', gm_skin_1 = 'pinned notices', gm_skin_2 = 'painted',
+	gm_sell_marked = 'Sell marked: %s gp', gm_sell_none = 'Nothing marked', gm_sold = 'Sold from the stash: %d gp',
 }
 local function T(key, ...)
 	local s = (PStash_Strings and PStash_Strings[key]) or G.EN[key] or key
@@ -997,6 +998,26 @@ function PSXGM_TotalText()
 end
 function PSXGM_GoldText() return T('gm_price', partyGold()) end
 function PSXGM_MsgText() return G.msg or '' end
+
+-- Party Stash's "sell marked" from the page (John: sell straight from the stash): the camp store buys them like the
+-- vanilla panel's button would (M_PSTASH.lua's rules: 50 % at an unknown store, every type the STO buys).
+function PSXGM_CanSellMarked()
+	local ok, can = pcall(function() return PStash_CanSellMarked and PStash_CanSellMarked() end)
+	return ok and can == true
+end
+function PSXGM_SellMarkedText()
+	local ok, gold = pcall(function() return PStash_SellAmount and PStash_SellAmount() end)
+	if not ok or not gold or gold == '' or not PSXGM_CanSellMarked() then return T('gm_sell_none') end
+	return T('gm_sell_marked', gold)
+end
+function PSXGM_SellMarked()
+	if not PSXGM_CanSellMarked() then return end
+	local before = partyGold()
+	local ok, err = pcall(PStash_SellMarked)
+	if not ok then print('[PSXGM] sell marked: ' .. tostring(err)) end
+	G.msg = T('gm_sold', partyGold() - before)
+	G.dirty = true
+end
 function PSXGM_CanBuy()
 	local c = selected()
 	return c ~= nil and costOf(c, G.qty or 1) <= partyGold()

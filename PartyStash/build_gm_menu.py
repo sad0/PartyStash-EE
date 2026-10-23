@@ -143,8 +143,11 @@ def page():
     items.append(pbutton((GX + 146, py, 30, 30), "'>'", 'PSXGM_Page(1)', 'PSXGMBN3', clickable='PSXGM_CanPage(1)'))
     items.append(pbutton((GX + 182, py - 1, 144, 32), 'PSXGM_SortText()', 'PSXGM_NextSort()', 'PSXGMBN2'))
     items.append(label((GX + 330, py, 102, 30), 'PSXGM_CountText()', style=PN, align='right center'))
-    # messages: the torn strip under the big notice
-    items.append(label((GX + 10, 536, COLS * PITCH - 20, 48), 'PSXGM_MsgText()', style=PN, align='left center'))
+    # messages: the torn strip under the big notice; on its right, Party Stash's "sell marked" (the stash items
+    # marked for sale, sold to the camp store: PStash_SellMarked), shown when there is something to sell
+    items.append(label((GX + 10, 536, 270, 48), 'PSXGM_MsgText()', style=PN, align='left center'))
+    items.append(pbutton((GX + 284, 543, 144, 32), 'PSXGM_SellMarkedText()', 'PSXGM_SellMarked()', 'PSXGMBN2',
+                         clickable='PSXGM_CanSellMarked()'))
     # the selected item (wanted poster, top right)
     items.append(button((RX + (RW - CELL) // 2, GY, CELL, CELL), extra='\n'.join([
         '\t\tbam PSSLOT', '\t\ticon lua "PSXGM_SelIcon()"', '\t\tactionAlt "PSXGM_SelDesc()"'])))

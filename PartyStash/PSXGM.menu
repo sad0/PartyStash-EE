@@ -1375,10 +1375,21 @@ menu
 	}
 	label
 	{
-		area 246 536 412 48
+		area 246 536 270 48
 		text lua "PSXGM_MsgText()"
 		text style "normal_parchment"
 		text align left center
+	}
+	button
+	{
+		area 520 543 144 32
+		text lua "PSXGM_SellMarkedText()"
+		text style "label_parchment"
+		text align center center
+		clickable lua "PSXGM_CanSellMarked()"
+		action "PSXGM_SellMarked()"
+		bam PSXGMBN2
+		sequence 0
 	}
 	button
 	{
