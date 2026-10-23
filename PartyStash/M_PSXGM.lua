@@ -27,7 +27,7 @@ G.DEBUG = G.DEBUG or false
 G.page = G.page or 1
 G.cat = G.cat or 'all'
 G.expanded = G.expanded or {}
-G.sort = G.sort or 'type'
+if G.sortV ~= 2 then G.sort, G.sortV = 'auto', 2 end -- Auto by default (John 2026-10-23)
 G.qty = G.qty or 1
 G.msg = G.msg or ''
 PSXGM_search = PSXGM_search or ''
@@ -51,7 +51,7 @@ G.EN = {
 	gm_wands = 'Wands', gm_bags = 'Bags',
 	gm_arrows = 'Arrows', gm_bolts = 'Bolts', gm_bullets = 'Bullets', gm_darts = 'Darts',
 	gm_search = 'Search', gm_usable = 'Usable', gm_affordable = 'Affordable', gm_sort = 'Sort: %s',
-	gm_sort_type = 'Type', gm_sort_price = 'Price', gm_sort_name = 'Name',
+	gm_sort_auto = 'Auto', gm_sort_type = 'Type', gm_sort_price = 'Price', gm_sort_name = 'Name',
 	gm_buy = 'Buy', gm_done = 'Done', gm_vanilla = 'Sell / vanilla view', gm_back = 'Camp merchant',
 	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock', gm_from = 'From: %s', gm_wished = 'Wishlist',
 	gm_items = '%d items', gm_empty = 'Nothing here yet: visit stores to fill the camp merchant.',
@@ -579,8 +579,9 @@ G.TREE = {
 G.leaves, G.nodes = {}, {}
 do
 	local order = 0
-	for _, top in ipairs(G.TREE) do
+	for ti, top in ipairs(G.TREE) do
 		G.nodes[top.key] = top
+		top.index = ti
 		if top.match then order = order + 1 G.leaves[#G.leaves + 1] = { node = top, parent = top, order = order } end
 		for _, c in ipairs(top.children or {}) do
 			order = order + 1
@@ -738,8 +739,71 @@ G.wishV = G.wishV or 0
 local function viewKey()
 	local sp = selectedSprite()
 	return table.concat({ tostring(store and store.storeItems), G.cat, PSXGM_search or '', tostring(G.usable),
-		tostring(G.afford), G.sort, G.afford and partyGold() or 0, G.usable and sp and sp.m_id or 0, G.wishV,
-		tostring(G.agg) }, '|')
+		tostring(G.afford), G.sort, G.afford and partyGold() or 0,
+		(G.usable or G.sort == 'auto') and sp and sp.m_id or 0, G.wishV, tostring(G.agg) }, '|')
+end
+
+-- Auto (default, John 2026-10-23: the stash's Auto order): grouped by category in tree order (Misc last); weapons by
+-- damage per round for the buyer (PStash_WeaponDps; those he cannot use last), armor by AC, equipment in body order
+-- (head, cloak, amulet, rings, bracers, belt, boots), scrolls mage then priest by level, the rest by price;
+-- quality (enchantment, magic, price) breaks the ties.
+local BODY_ORDER = { [7] = 1, [72] = 1, [32] = 2, [1] = 3, [10] = 4, [6] = 5, [73] = 5, [3] = 6, [4] = 7 }
+local function acOf(info)
+	local e = info.equip
+	if not e then return 0 end
+	return (e.base and 10 - e.base or 0) + e.ac
+end
+local function scrollRank(info)
+	local sp = info.spell or ''
+	local lvl = tonumber(string.sub(sp, 5, 5)) or 9
+	if string.sub(sp, 1, 4) == 'SPWI' then return lvl end
+	if string.sub(sp, 1, 4) == 'SPPR' then return 10 + lvl end
+	return sp ~= '' and 30 or 40
+end
+local function portraitOf(sp)
+	if not sp then return nil end
+	for p = 0, (PSXP7_LastPortrait and PSXP7_LastPortrait() or 5) do
+		local s = EEex_Sprite_GetInPortrait(p)
+		if s and s.m_id == sp.m_id then return p end
+	end
+end
+local function autoKeys(c, portrait)
+	local info, lf = c.info, leafOf(c.info, c.res)
+	c.topKey = lf and lf.parent.key or 'misc'
+	c.top = lf and lf.parent.index or 99
+	c.enchant, c.magic, c.ac = info.enchant, info.magical or info.enchant > 0, acOf(info)
+	c.body = BODY_ORDER[info.type] or 9
+	c.scroll = info.type == 11 and scrollRank(info) or 0
+	if c.topKey == 'weap' and portrait and PStash_WeaponDps then
+		local ok, d = pcall(PStash_WeaponDps, portrait, info)
+		c.dps = ok and d or nil
+	end
+end
+local function qualityLess(a, b)
+	if a.enchant ~= b.enchant then return a.enchant > b.enchant end
+	if a.magic ~= b.magic then return a.magic end
+	if a.price ~= b.price then return a.price > b.price end
+	return a.name < b.name
+end
+local function autoLess(a, b)
+	if a.top ~= b.top then return a.top < b.top end
+	local k = a.topKey
+	if k == 'weap' then
+		if (a.dps ~= nil) ~= (b.dps ~= nil) then return a.dps ~= nil end
+		if a.dps and a.dps.score ~= b.dps.score then return a.dps.score > b.dps.score end
+		return qualityLess(a, b)
+	elseif k == 'arm' then
+		if a.ac ~= b.ac then return a.ac > b.ac end
+		return qualityLess(a, b)
+	elseif k == 'equip' then
+		if a.body ~= b.body then return a.body < b.body end
+	elseif k == 'scr' then
+		if a.scroll ~= b.scroll then return a.scroll < b.scroll end
+	elseif k ~= 'pot' and k ~= 'gem' then -- ammo, misc: type then price
+		if a.info.type ~= b.info.type then return a.info.type < b.info.type end
+	end
+	if a.price ~= b.price then return a.price > b.price end
+	return a.name < b.name
 end
 
 local function rebuild()
@@ -768,8 +832,13 @@ local function rebuild()
 		end
 	end
 	local mode = G.sort
+	if mode == 'auto' then
+		local portrait = portraitOf(sp)
+		for _, c in ipairs(out) do autoKeys(c, portrait) end
+	end
 	table.sort(out, function(a, b)
 		if a.wish ~= b.wish then return a.wish end
+		if mode == 'auto' then return autoLess(a, b) end
 		if mode == 'price' then
 			if a.price ~= b.price then return a.price > b.price end
 		elseif mode == 'type' then
@@ -866,7 +935,7 @@ function PSXGM_FilterFrame(which)
 	local on = (which == 'usable' and G.usable) or (which == 'afford' and G.afford)
 	return on and 2 or 0
 end
-local SORTS = { 'type', 'price', 'name' }
+local SORTS = { 'auto', 'type', 'price', 'name' }
 function PSXGM_NextSort()
 	for k, s in ipairs(SORTS) do
 		if s == G.sort then G.sort = SORTS[k % #SORTS + 1] break end

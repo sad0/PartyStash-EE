@@ -979,6 +979,7 @@ local function weaponDps(p, info)
 	local round = math.max(1, perHit) * math.max(1, apr)
 	return { round = round, hit = hit, thac0 = EEex_Sprite_GetStat(sp, 7) - hit, score = round * (1 + 0.05 * hit) }
 end
+PStash_WeaponDps = weaponDps -- (portrait, PStash_ItemInfo) -> { round, hit, thac0, score } or nil: the camp merchant's Auto sort
 
 -- Game language, read from a string the game translates: "Arc" (8733, the Bow skill) in French.
 local function lang()
