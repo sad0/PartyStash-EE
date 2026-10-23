@@ -89,4 +89,10 @@ PSXGM_Strings = {
 	gm_seen_2 = 'Porté : %s',
 	gm_seen_3 = 'Vu au sol : %s',
 	gm_seen_4 = 'Vu dans un conteneur : %s',
+	gm_origin = 'Provenance :',
+	gm_more = '+%d autres',
+	gm_from_S = 'Vendu par %s',
+	gm_from_G = 'Au sol : %s',
+	gm_from_C = 'Dans un conteneur : %s',
+	gm_from_K = 'Porté par %s (%s)',
 }

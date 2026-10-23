@@ -66,6 +66,8 @@ G.EN = {
 	gm_chest = 'Camp chest', gm_stash = 'Party stash', gm_take = 'Take', gm_in_stash = '%d in the stash',
 	gm_value = 'Value: %d gp', gm_never_seen = 'Never seen', gm_seen_1 = 'Seen for sale: %s', gm_seen_2 = 'Carried: %s',
 	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
+	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = 'On the ground: %s',
+	gm_from_C = 'In a container: %s', gm_from_K = 'Carried by %s (%s)',
 }
 -- PSXGM_Strings: the installed language's M_PSXGT.lua (build_gm_strings.py; component #8 copies it).
 local function T(key, ...)
@@ -1137,18 +1139,51 @@ end
 function PSXGM_CellGrey(i) local c = cell(i) return c ~= nil and (c.catalog or not c.usable) end
 function PSXGM_CellWished(i) local c = cell(i) return c ~= nil and c.wish end
 -- What the item is here: price and stock (and how many in the stash), or for the catalog its value and where seen.
-local function infoLines(c)
-	if c.catalog then return T('gm_value', c.price) .. '\n' .. seenText(c.res) end
-	local s = T('gm_price', c.price) .. '  ' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
-	if c.stash and c.stash > 0 then s = s .. '\n' .. T('gm_in_stash', c.stash) end
-	if c.from and not (c.sources[1] and c.sources[1].stash) then s = s .. '\n' .. T('gm_from', c.from) end
+-- Where the item comes from at the start of the game (PSXGM_FROM, M_PSXCAT.lua; John 2026-10-23): text lines.
+G.fromCache = G.fromCache or {}
+local function origins(res)
+	local o = G.fromCache[res]
+	if o then return o end
+	o = {}
+	for entry in string.gmatch((PSXGM_FROM or {})[res] or '', '[^|]+') do
+		local kind, name, area = string.match(entry, '^(%a)~([^~]*)~(.*)$')
+		if kind == 'S' then o[#o + 1] = T('gm_from_S', name)
+		elseif kind == 'K' then o[#o + 1] = T('gm_from_K', name, placeName(area))
+		elseif kind == 'G' or kind == 'C' then o[#o + 1] = T('gm_from_' .. kind, placeName(area)) end
+	end
+	G.fromCache[res] = o
+	return o
+end
+G.origins = origins
+-- The first origin, and how many more ("+2").
+local function firstOrigin(res)
+	local o = origins(res)
+	if #o == 0 then return nil end
+	return o[1] .. (#o > 1 and ('  ' .. T('gm_more', #o - 1)) or '')
+end
+
+-- The card and the tooltip (tip): the catalog's value and where seen, or price / stock (stash, store); the first
+-- origin on the catalog's card and in every tooltip.
+local function infoLines(c, tip)
+	local s
+	if c.catalog then
+		s = T('gm_value', c.price) .. '\n' .. seenText(c.res)
+	else
+		s = T('gm_price', c.price) .. '  ' .. (c.inf and T('gm_unlimited') or T('gm_stock', c.total))
+		if c.stash and c.stash > 0 then s = s .. '\n' .. T('gm_in_stash', c.stash) end
+		if c.from and not (c.sources[1] and c.sources[1].stash) then s = s .. '\n' .. T('gm_from', c.from) end
+	end
+	if c.catalog or tip then
+		local f = firstOrigin(c.res)
+		if f then s = s .. '\n' .. f end
+	end
 	return s
 end
 G.infoLines = infoLines
 function PSXGM_CellTip(i)
 	local c = cell(i)
 	if not c then return '' end
-	local s = c.name .. '\n' .. infoLines(c)
+	local s = c.name .. '\n' .. infoLines(c, true)
 	if c.wish then s = s .. '\n* ' .. T('gm_wished') end
 	return s
 end
@@ -1163,14 +1198,16 @@ function PSXGM_CellClick(i)
 	if G.sel ~= c.res then G.qty = 1 end
 	G.sel, G.msg = c.res, ''
 end
--- The description window: the store entry's item, or one made from the ITM for the catalog (as the stash does).
+-- The description window (right click), made from the ITM as the stash does: the item's text, then where it was
+-- seen and every origin.
 local function describe(c)
 	if not c then return end
-	if c.en then showItemDescription(c.en.item, 1) return end
 	local ref = c.info.idDesc
 	if not ref or ref <= 0 or ref >= 0x7FFFFFFF then ref = c.info.unidDesc end
-	showItemDescription({ name = c.name, description = Infinity_FetchString(ref), descPicture = c.info.descPic,
-		icon = c.icon }, 2)
+	local lines = { seenText(c.res) }
+	for _, o in ipairs(origins(c.res)) do lines[#lines + 1] = '- ' .. o end
+	local text = (Infinity_FetchString(ref) or '') .. '\n\n' .. T('gm_origin') .. '\n' .. table.concat(lines, '\n')
+	showItemDescription({ name = c.name, description = text, descPicture = c.info.descPic, icon = c.icon }, 2)
 end
 function PSXGM_CellDesc(i) describe(cell(i)) end
 function PSXGM_Wheel()

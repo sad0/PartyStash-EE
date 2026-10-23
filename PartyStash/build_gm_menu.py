@@ -154,8 +154,8 @@ def page():
     # the selected item (wanted poster, top right)
     items.append(button((RX + (RW - CELL) // 2, GY, CELL, CELL), extra='\n'.join([
         '\t\tbam PSSLOT', '\t\ticon lua "PSXGM_SelIcon()"', '\t\tactionAlt "PSXGM_SelDesc()"'])))
-    items.append(label((RX + 6, GY + 58, RW - 12, 66), 'PSXGM_SelName()', style=PN, align='center top'))
-    items.append(label((RX + 6, GY + 126, RW - 12, 48), 'PSXGM_SelInfo()', style=P, align='center top'))
+    items.append(label((RX + 6, GY + 56, RW - 12, 50), 'PSXGM_SelName()', style=PN, align='center top'))
+    items.append(label((RX + 6, GY + 106, RW - 12, 72), 'PSXGM_SelInfo()', style=PN, align='center top'))
     # quantity ticket
     qy = GY + 184
     items.append(pbutton((RX + 16, qy, 30, 30), "'-'", 'PSXGM_Qty(-1)', 'PSXGMBN3'))

@@ -212,7 +212,9 @@ EXTRA = {
         'gm_chest': 'Coffre du camp', 'gm_stash': 'Coffre du groupe', 'gm_take': 'Prendre',
         'gm_in_stash': '%d dans le coffre', 'gm_value': 'Valeur : %d po', 'gm_never_seen': 'Jamais vu',
         'gm_seen_1': 'Vu en vente : %s', 'gm_seen_2': 'Porté : %s', 'gm_seen_3': 'Vu au sol : %s',
-        'gm_seen_4': 'Vu dans un conteneur : %s'},
+        'gm_seen_4': 'Vu dans un conteneur : %s', 'gm_origin': 'Provenance :', 'gm_more': '+%d autres',
+        'gm_from_S': 'Vendu par %s', 'gm_from_G': 'Au sol : %s', 'gm_from_C': 'Dans un conteneur : %s',
+        'gm_from_K': 'Porté par %s (%s)'},
 }
 
 

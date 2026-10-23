@@ -1410,16 +1410,16 @@ menu
 	}
 	label
 	{
-		area 690 162 148 66
+		area 690 160 148 50
 		text lua "PSXGM_SelName()"
 		text style "normal_parchment"
 		text align center top
 	}
 	label
 	{
-		area 690 230 148 48
+		area 690 210 148 72
 		text lua "PSXGM_SelInfo()"
-		text style "label_parchment"
+		text style "normal_parchment"
 		text align center top
 	}
 	button
