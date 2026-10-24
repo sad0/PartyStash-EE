@@ -382,6 +382,9 @@ def main():
     for k in sorted(plc):
         lines.append('\t["%s"] = %s,' % (k, q(plc[k])))
     lines.append('}')
+    # the game: on BGEE the AR areas are BG1's, on BG2EE and EET BG2's (the origins' campaigns)
+    game = 'eet' if g.get('BG0100', 'ARE') is not None else ('bg2ee' if g.get('AR6200', 'ARE') is not None else 'bgee')
+    lines.append('PSXGM_GAME = %s' % q(game))
     lines.append('-- The area each store\'s merchant stands in.')
     lines.append('PSXGM_STOREAT = {')
     for k in sorted(STORE_AT):

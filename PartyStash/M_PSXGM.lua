@@ -68,6 +68,8 @@ G.EN = {
 	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
 	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = '%s: on the ground',
 	gm_from_C = '%s: %s', gm_from_K = 'Carried by %s at %s', gm_from_K0 = 'Carried by %s', gm_from_G0 = 'On the ground',
+	gm_camp_1 = "Baldur's Gate", gm_camp_2 = 'Siege of Dragonspear', gm_camp_3 = 'Shadows of Amn', gm_camp_4 = 'Throne of Bhaal',
+	gm_camp_5 = 'The Black Pits', gm_camp_6 = 'Elsewhere',
 	gm_from_C0 = 'Container: %s', gm_from_S2 = 'Sold at %s: %s', gm_at = '%s, %s',
 	-- container types (ARE container type), "In a container" when unknown
 	gm_ctype = 'container', gm_ctype_1 = 'bag', gm_ctype_2 = 'chest', gm_ctype_3 = 'drawer', gm_ctype_5 = 'table',
@@ -1155,31 +1157,59 @@ function PSXGM_CellWished(i) local c = cell(i) return c ~= nil and c.wish end
 -- What the item is here: price and stock (and how many in the stash), or for the catalog its value and where seen.
 -- Where the item comes from at the start of the game (PSXGM_FROM, M_PSXCAT.lua; John 2026-10-23): text lines.
 G.fromCache = G.fromCache or {}
+-- The campaign an area belongs to (John 2026-10-24: the origins grouped BG, SoD, BG2, ToB): 1 BG, 2 SoD, 3 SoA,
+-- 4 ToB, 5 the Black Pits, 6 elsewhere (no area). AR is BG1 on BGEE, BG2 elsewhere (PSXGM_GAME, M_PSXCAT.lua).
+local function campaign(area)
+	local pre, num = string.match(area or '', '^(%a%a)(%d%d%d%d)')
+	if not pre then return 6 end
+	pre, num = string.upper(pre), tonumber(num)
+	if pre == 'BG' then return 1 end
+	if pre == 'BD' then return 2 end
+	if pre == 'OH' or pre == 'BP' then return 5 end
+	if pre == 'AR' then
+		if PSXGM_GAME == 'bgee' then return 1 end
+		return num >= 4000 and 4 or 3
+	end
+	return 6
+end
+-- Text lines, sorted by campaign (o.camp[i] = its campaign), then sold, container, ground, carried.
+local KIND_RANK = { S = 1, C = 2, G = 3, K = 4 }
 local function origins(res)
 	local o = G.fromCache[res]
 	if o then return o end
-	o = {}
+	local list = {}
 	for entry in string.gmatch((PSXGM_FROM or {})[res] or '', '[^|]+') do
 		local kind, name, area = string.match(entry, '^(%a)~([^~]*)~(.*)$')
+		local text
 		-- S: name~its area; C: its container type~area (John 2026-10-24: place first, readable names)
 		if kind == 'S' then
 			local at = areaName(area)
-			o[#o + 1] = at and T('gm_from_S2', at, name) or T('gm_from_S', name)
+			text = at and T('gm_from_S2', at, name) or T('gm_from_S', name)
 		-- an area without a readable name shows no place (never a code)
 		elseif kind == 'K' then
 			local at = areaName(area)
-			o[#o + 1] = at and T('gm_from_K', name, at) or T('gm_from_K0', name)
+			text = at and T('gm_from_K', name, at) or T('gm_from_K0', name)
 		elseif kind == 'G' then
 			local at = areaName(area)
-			o[#o + 1] = at and T('gm_from_G', at) or T('gm_from_G0')
+			text = at and T('gm_from_G', at) or T('gm_from_G0')
 		elseif kind == 'C' then
 			local key = 'gm_ctype_' .. name
 			local word = T(key)
 			if word == key then word = T('gm_ctype') end
 			local at = areaName(area)
-			o[#o + 1] = at and T('gm_from_C', at, word) or T('gm_from_C0', word)
+			text = at and T('gm_from_C', at, word) or T('gm_from_C0', word)
+		end
+		if text then
+			list[#list + 1] = { text = text, camp = campaign(area), rank = KIND_RANK[kind] or 5, n = #list }
 		end
 	end
+	table.sort(list, function(x, y)
+		if x.camp ~= y.camp then return x.camp < y.camp end
+		if x.rank ~= y.rank then return x.rank < y.rank end
+		return x.n < y.n
+	end)
+	o = { camp = {} }
+	for i, e in ipairs(list) do o[i], o.camp[i] = e.text, e.camp end
 	G.fromCache[res] = o
 	return o
 end
@@ -1234,7 +1264,15 @@ local function describe(c)
 	local ref = c.info.idDesc
 	if not ref or ref <= 0 or ref >= 0x7FFFFFFF then ref = c.info.unidDesc end
 	local lines = { seenText(c.res) }
-	for _, o in ipairs(origins(c.res)) do lines[#lines + 1] = '- ' .. o end
+	local o, last = origins(c.res), nil
+	for i, text in ipairs(o) do
+		-- a sub-title per campaign
+		if o.camp[i] ~= last then
+			last = o.camp[i]
+			lines[#lines + 1] = T('gm_camp_' .. last) .. ':'
+		end
+		lines[#lines + 1] = '- ' .. text
+	end
 	local text = (Infinity_FetchString(ref) or '') .. '\n\n' .. T('gm_origin') .. '\n' .. table.concat(lines, '\n')
 	showItemDescription({ name = c.name, description = text, descPicture = c.info.descPic, icon = c.icon }, 2)
 end

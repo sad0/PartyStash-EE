@@ -612,6 +612,10 @@ OUTER_TEXT_SPRINT gm_froms ~~
 ACTION_PHP_EACH gm_from AS gm_r => gm_v BEGIN
 	OUTER_TEXT_SPRINT gm_froms ~%gm_froms%["%gm_r%"] = [[%gm_v%]],~
 END
+// the game: on BGEE the AR areas are BG1's, on BG2EE and EET BG2's (the origins' campaigns)
+OUTER_TEXT_SPRINT gm_game ~bgee~
+ACTION_IF GAME_IS ~eet~ BEGIN OUTER_TEXT_SPRINT gm_game ~eet~ END
+ACTION_IF GAME_IS ~bg2ee~ BEGIN OUTER_TEXT_SPRINT gm_game ~bg2ee~ END
 <<<<<<<< .../PartyStash-inlined/M_PSXCAT.lua
 -- Written by the installer (PartyStash.tp2 #8): the camp chest encyclopedia and the area names.
 PSXGM_ALL = { GM_ALL_LIST }
@@ -619,6 +623,7 @@ PSXGM_AREAS = { GM_AREA_LIST }
 PSXGM_FROM = { GM_FROM_LIST }
 PSXGM_PLACES = { GM_PLACE_LIST }
 PSXGM_STOREAT = { GM_STOREAT_LIST }
+PSXGM_GAME = "GM_GAME"
 >>>>>>>>
 COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_ALL_LIST~ ~%gm_all%~
@@ -626,6 +631,7 @@ COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_FROM_LIST~ ~%gm_froms%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_PLACE_LIST~ ~%gm_places%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_STOREAT_LIST~ ~%gm_storeats%~
+	REPLACE_TEXTUALLY EXACT_MATCH ~GM_GAME~ ~%gm_game%~
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~

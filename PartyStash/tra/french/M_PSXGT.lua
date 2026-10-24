@@ -97,6 +97,7 @@ PSXGM_Strings = {
 	gm_from_K = 'Porté par %s à %s',
 	gm_from_K0 = 'Porté par %s',
 	gm_from_G0 = 'Au sol',
+	gm_camp_6 = 'Ailleurs',
 	gm_from_C0 = 'Conteneur : %s',
 	gm_from_S2 = 'Vendu à %s : %s',
 	gm_at = '%s, %s',
