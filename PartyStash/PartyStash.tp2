@@ -279,8 +279,8 @@ DEFINE_PATCH_MACRO ~gm_add_from~ BEGIN
 	END
 END
 // An origin without an area gets its campaign from its file (John 2026-10-24; build_gm_catalog.py camp_of, the same):
-// "#1" BG, "#2" SoD, "#3" SoA, "#4" ToB, "#5" the Black Pits, "" unknown. SoD files start with BD, the Black Pits'
-// with OH / BP; in a BIF (chitin.key, read only), ToB's are in 25*.bif, the Black Pits' in BlackPits.bif; EET keeps
+// "#1" BG, "#2" SoD, "#3" SoA, "#4" ToB, "#5" the Black Pits, "#6" the Black Pits II, "" unknown. SoD files start with BD, the Black Pits'
+// with BP, the Black Pits II's with OH; in a BIF (chitin.key, read only), ToB's are in 25*.bif, the Black Pits' in BlackPits.bif; EET keeps
 // BG1 (and SoD) in its override, BG2 in the BIFs. $gm_bifc(TYPE NAME) = the campaign of the BIF holding it.
 OUTER_TEXT_SPRINT gm_ckind ~bgee~
 ACTION_IF GAME_IS ~eet~ BEGIN OUTER_TEXT_SPRINT gm_ckind ~eet~ END
@@ -299,7 +299,7 @@ COPY - ~chitin.key~ ~override~
 		SET gm_cc = 3
 		PATCH_IF ~%gm_ckind%~ STRING_EQUAL ~bgee~ BEGIN SET gm_cc = 1 END
 		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?25.*~ = 0 BEGIN SET gm_cc = 4 END
-		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?BLACKP.*~ = 0 BEGIN SET gm_cc = 5 END
+		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?BLACKP.*~ = 0 BEGIN SET gm_cc = 6 END
 		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?EET.*~ = 0 BEGIN SET gm_cc = (~%gm_ckind%~ STRING_EQUAL ~eet~) ? 1 : 0 END
 		SET $gm_bifn(~%i%~) = gm_cc
 	END
@@ -319,7 +319,8 @@ DEFINE_PATCH_MACRO ~gm_camp~ BEGIN
 	TO_UPPER gm_cn
 	SET gm_cc = 0
 	PATCH_IF ~%gm_cn%~ STRING_MATCHES_REGEXP ~^BD.*~ = 0 BEGIN SET gm_cc = 2 END
-	ELSE PATCH_IF ~%gm_cn%~ STRING_MATCHES_REGEXP ~^\(OH\|BP\).*~ = 0 BEGIN SET gm_cc = 5 END
+	ELSE PATCH_IF ~%gm_cn%~ STRING_MATCHES_REGEXP ~^BP.*~ = 0 BEGIN SET gm_cc = 5 END
+	ELSE PATCH_IF ~%gm_cn%~ STRING_MATCHES_REGEXP ~^OH.*~ = 0 BEGIN SET gm_cc = 6 END
 	ELSE PATCH_IF VARIABLE_IS_SET $gm_bifc(~%gm_ctyp%~ ~%gm_cn%~) BEGIN SET gm_cc = $gm_bifc(~%gm_ctyp%~ ~%gm_cn%~) END
 	ELSE PATCH_IF ~%gm_ckind%~ STRING_EQUAL ~bgee~ OR ~%gm_ckind%~ STRING_EQUAL ~eet~ BEGIN SET gm_cc = 1 END
 	TEXT_SPRINT gm_cmp ~~

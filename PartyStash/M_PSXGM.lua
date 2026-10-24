@@ -71,10 +71,11 @@ G.EN = {
 	gm_from_D = 'Given by %s at %s', gm_from_D1 = 'Given by %s', gm_from_D2 = 'Given at %s',
 	gm_from_D0 = 'Given in a quest or a dialogue', gm_from_P = 'Carried by %s (appears) at %s',
 	gm_from_P0 = 'Carried by %s (appears)', gm_from_T = 'Random treasure',
-	gm_equipped_by = 'Equipped by %s', gm_in_pack = "In %s's pack", gm_cf_6 = 'Carried',
-	gm_cf_1 = 'BG', gm_cf_2 = 'SoD', gm_cf_3 = 'BG2', gm_cf_4 = 'ToB', gm_cf_5 = 'Other',
+	gm_equipped_by = 'Equipped by %s', gm_in_pack = "In %s's pack", gm_cf_8 = 'Carried', gm_cf_9 = 'Found',
+	gm_cf_10 = 'Not found',
+	gm_cf_1 = 'BG', gm_cf_2 = 'SoD', gm_cf_3 = 'BG2', gm_cf_4 = 'ToB', gm_cf_5 = 'BP1', gm_cf_6 = 'BP2', gm_cf_7 = 'Other',
 	gm_camp_1 = "Baldur's Gate", gm_camp_2 = 'Siege of Dragonspear', gm_camp_3 = 'Shadows of Amn', gm_camp_4 = 'Throne of Bhaal',
-	gm_camp_5 = 'The Black Pits', gm_camp_6 = 'Elsewhere',
+	gm_camp_5 = 'The Black Pits', gm_camp_6 = 'The Black Pits II', gm_camp_7 = 'Elsewhere',
 	gm_from_C0 = 'Container: %s', gm_from_S2 = 'Sold at %s: %s', gm_at = '%s, %s',
 	-- container types (ARE container type), "In a container" when unknown
 	gm_ctype = 'container', gm_ctype_1 = 'bag', gm_ctype_2 = 'chest', gm_ctype_3 = 'drawer', gm_ctype_5 = 'table',
@@ -960,24 +961,27 @@ G.view = G.view or {}
 G.wishV = G.wishV or 0
 -- Campaign filters (John 2026-10-24): 1 BG, 2 SoD, 3 BG2, 4 ToB, 5 other (the Black Pits, elsewhere); all ticked
 -- by default. An item shows when one of its origins (G.origins, its campaigns) is ticked.
-G.camps = G.camps or { true, true, true, true, true }  -- [6] = carried only (off)
+-- 1 BG, 2 SoD, 3 BG2, 4 ToB, 5 Black Pits, 6 Black Pits II, 7 other (all ticked); [8] = carried only (off)
+if not G.camps or #G.camps < 7 then G.camps = { true, true, true, true, true, true, true } end
+-- [9] found (seen in this save), [10] not found yet: both ticked
+if G.camps[9] == nil then G.camps[9], G.camps[10] = true, true end
 G.campOf = G.campOf or {}
 local function campKey()
 	local k = ''
-	for i = 1, 6 do k = k .. (G.camps[i] and '1' or '0') end
+	for i = 1, 10 do k = k .. (G.camps[i] and '1' or '0') end
 	return k
 end
 local function campOk(res)
-	if string.sub(campKey(), 1, 5) == '11111' then return true end
+	if string.sub(campKey(), 1, 7) == '1111111' then return true end
 	local set = G.campOf[res]
 	if not set then
 		set = {}
 		local o = G.origins and G.origins(res) or { camp = {} }
-		for i = 1, #o do set[math.min(o.camp[i], 5)] = true end
-		if #o == 0 then set[5] = true end
+		for i = 1, #o do set[o.camp[i]] = true end
+		if #o == 0 then set[7] = true end
 		G.campOf[res] = set
 	end
-	for i = 1, 5 do
+	for i = 1, 7 do
 		if set[i] and G.camps[i] then return true end
 	end
 	return false
@@ -1126,7 +1130,8 @@ local function rebuild()
 			and (not G.usable or usableBy(sp, info))
 			and (not G.afford or (not c.catalog and c.price <= gold))
 			and campOk(res)
-			and (not G.camps[6] or (G.carried and G.carried[res])) then
+			and (not G.camps[8] or (G.carried and G.carried[res]))
+			and ((G.seen and G.seen[res]) and G.camps[9] or (not (G.seen and G.seen[res]) and G.camps[10])) then
 			local lf = leafOf(info, res)
 			c.wish, c.order, c.usable = isWished(res), lf and lf.order or 999, usableBy(sp, info)
 			out[#out + 1] = c
@@ -1226,22 +1231,23 @@ function PSXGM_CellWished(i) local c = cell(i) return c ~= nil and c.wish end
 -- Where the item comes from at the start of the game (PSXGM_FROM, M_PSXCAT.lua; John 2026-10-23): text lines.
 G.fromCache = G.fromCache or {}
 -- The campaign an area belongs to (John 2026-10-24: the origins grouped BG, SoD, BG2, ToB): 1 BG, 2 SoD, 3 SoA,
--- 4 ToB, 5 the Black Pits, 6 elsewhere (not known). AR is BG1 on BGEE, BG2 elsewhere (PSXGM_GAME, M_PSXCAT.lua).
+-- 4 ToB, 5 the Black Pits (BGEE: OH1000-OH3999, OH93xx), 6 the Black Pits II (BG2EE: the other OH), 7 elsewhere. AR is BG1 on BGEE, BG2 elsewhere (PSXGM_GAME, M_PSXCAT.lua).
 local function campaign(area)
 	-- an origin without an area carries its campaign ("#2", build_gm_catalog.py camp_of)
 	local c = tonumber(string.match(area or '', '^#(%d)$'))
 	if c then return c end
 	local pre, num = string.match(area or '', '^(%a%a)(%d%d%d%d)')
-	if not pre then return 6 end
+	if not pre then return 7 end
 	pre, num = string.upper(pre), tonumber(num)
 	if pre == 'BG' then return 1 end
 	if pre == 'BD' then return 2 end
-	if pre == 'OH' or pre == 'BP' then return 5 end
+	if pre == 'BP' then return 5 end
+	if pre == 'OH' then return (num < 4000 or (num >= 9300 and num < 9400)) and 5 or 6 end
 	if pre == 'AR' then
 		if PSXGM_GAME == 'bgee' then return 1 end
 		return num >= 4000 and 4 or 3
 	end
-	return 6
+	return 7
 end
 -- Text lines, sorted by campaign (o.camp[i] = its campaign), then sold, container, ground, given, carried, carried
 -- by a creature that appears, random treasure.

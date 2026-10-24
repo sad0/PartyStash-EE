@@ -246,14 +246,16 @@ GAME_KIND = ''  # 'eet', 'bgee', 'bg2ee' (main())
 
 def camp_of(g, n, ext):
     """An origin without an area gets its campaign from its file (John 2026-10-24: no "Other" when it can be traced):
-    '#1' BG, '#2' SoD, '#3' SoA, '#4' ToB, '#5' the Black Pits, '' unknown. SoD files start with BD, the Black Pits'
-    with OH / BP; in a BIF, ToB's are in 25*.bif, the Black Pits' in BlackPits.bif; EET keeps BG1 (and SoD) in its
-    override, BG2 in the BIFs."""
+    '#1' BG, '#2' SoD, '#3' SoA, '#4' ToB, '#5' the Black Pits, '#6' the Black Pits II, '' unknown. SoD files start
+    with BD, the Black Pits' with BP, the Black Pits II's with OH; in a BIF, ToB's are in 25*.bif, the Black Pits II's
+    in BlackPits.bif; EET keeps BG1 (and SoD) in its override, BG2 in the BIFs."""
     n = n.upper()
     if n[:2] == 'BD':
         c = 2
-    elif n[:2] in ('OH', 'BP'):
+    elif n[:2] == 'BP':  # BGEE's Black Pits
         c = 5
+    elif n[:2] == 'OH':  # BG2EE's Black Pits II
+        c = 6
     else:
         loc = g.res.get((n, build_items.TYP[ext]))
         b = os.path.basename(g.bifs[loc >> 20]).upper() if loc is not None else ''
@@ -262,7 +264,7 @@ def camp_of(g, n, ext):
         elif b.startswith('25'):
             c = 4
         elif b.startswith('BLACKP'):
-            c = 5
+            c = 6
         elif b and not b.startswith('EET'):
             c = 3
         else:  # EET: only in the override (or EET's own BIFs) = BG1; BG2EE: a mod's file

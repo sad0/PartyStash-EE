@@ -1491,116 +1491,192 @@ menu
 	}
 	label
 	{
-		area 458 603 20 20
+		area 456 602 16 16
 		bam ROUNDBUT
 		scaleToClip
 		frame lua "PSXGM_CampFrame(1)"
 	}
 	label
 	{
-		area 482 600 54 26
+		area 474 598 38 24
 		text lua "PSXGM_CampText(1)"
 		text style "label_parchment"
 		text align left center
 	}
 	button
 	{
-		area 456 600 80 26
+		area 456 598 56 24
 		action "PSXGM_ToggleCamp(1)"
 	}
 	label
 	{
-		area 540 603 20 20
+		area 512 602 16 16
 		bam ROUNDBUT
 		scaleToClip
 		frame lua "PSXGM_CampFrame(2)"
 	}
 	label
 	{
-		area 564 600 54 26
+		area 530 598 38 24
 		text lua "PSXGM_CampText(2)"
 		text style "label_parchment"
 		text align left center
 	}
 	button
 	{
-		area 538 600 80 26
+		area 512 598 56 24
 		action "PSXGM_ToggleCamp(2)"
 	}
 	label
 	{
-		area 458 631 20 20
-		bam ROUNDBUT
-		scaleToClip
-		frame lua "PSXGM_CampFrame(3)"
-	}
-	label
-	{
-		area 482 628 54 26
-		text lua "PSXGM_CampText(3)"
-		text style "label_parchment"
-		text align left center
-	}
-	button
-	{
-		area 456 628 80 26
-		action "PSXGM_ToggleCamp(3)"
-	}
-	label
-	{
-		area 540 631 20 20
-		bam ROUNDBUT
-		scaleToClip
-		frame lua "PSXGM_CampFrame(4)"
-	}
-	label
-	{
-		area 564 628 54 26
-		text lua "PSXGM_CampText(4)"
-		text style "label_parchment"
-		text align left center
-	}
-	button
-	{
-		area 538 628 80 26
-		action "PSXGM_ToggleCamp(4)"
-	}
-	label
-	{
-		area 458 659 20 20
+		area 568 602 16 16
 		bam ROUNDBUT
 		scaleToClip
 		frame lua "PSXGM_CampFrame(5)"
 	}
 	label
 	{
-		area 482 656 54 26
+		area 586 598 38 24
 		text lua "PSXGM_CampText(5)"
 		text style "label_parchment"
 		text align left center
 	}
 	button
 	{
-		area 456 656 80 26
+		area 568 598 56 24
 		action "PSXGM_ToggleCamp(5)"
 	}
 	label
 	{
-		area 540 659 20 20
+		area 456 628 16 16
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(3)"
+	}
+	label
+	{
+		area 474 624 38 24
+		text lua "PSXGM_CampText(3)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 456 624 56 24
+		action "PSXGM_ToggleCamp(3)"
+	}
+	label
+	{
+		area 512 628 16 16
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(4)"
+	}
+	label
+	{
+		area 530 624 38 24
+		text lua "PSXGM_CampText(4)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 512 624 56 24
+		action "PSXGM_ToggleCamp(4)"
+	}
+	label
+	{
+		area 568 628 16 16
 		bam ROUNDBUT
 		scaleToClip
 		frame lua "PSXGM_CampFrame(6)"
 	}
 	label
 	{
-		area 564 656 54 26
+		area 586 624 38 24
 		text lua "PSXGM_CampText(6)"
 		text style "label_parchment"
 		text align left center
 	}
 	button
 	{
-		area 538 656 80 26
+		area 568 624 56 24
 		action "PSXGM_ToggleCamp(6)"
+	}
+	label
+	{
+		area 456 654 16 16
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(7)"
+	}
+	label
+	{
+		area 474 650 48 24
+		text lua "PSXGM_CampText(7)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 456 650 66 24
+		action "PSXGM_ToggleCamp(7)"
+	}
+	label
+	{
+		area 524 654 16 16
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(8)"
+	}
+	label
+	{
+		area 542 650 72 24
+		text lua "PSXGM_CampText(8)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 524 650 90 24
+		action "PSXGM_ToggleCamp(8)"
+	}
+	label
+	{
+		area 228 616 16 16
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(9)"
+	}
+	label
+	{
+		area 246 612 62 24
+		text lua "PSXGM_CampText(9)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 228 612 80 24
+		action "PSXGM_ToggleCamp(9)"
+	}
+	label
+	{
+		area 228 644 16 16
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(10)"
+	}
+	label
+	{
+		area 246 640 62 24
+		text lua "PSXGM_CampText(10)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 228 640 80 24
+		action "PSXGM_ToggleCamp(10)"
 	}
 }

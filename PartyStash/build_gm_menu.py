@@ -170,13 +170,17 @@ def page():
     # done ticket (no vanilla view: John 2026-10-24; selling = the Sell marked ticket)
     items.append(pbutton((RX + 8, 584, 144, 32), "PSXGM_T('gm_done')", 'PSXGM_Done()', 'PSXGMBN2'))
     # campaign filters (John 2026-10-24, the small pinned paper under the grid): an item shows when one of its origins
-    # is in a ticked campaign (BG, SoD, BG2, ToB, other), and "Carried" keeps the party's items only; the board swap button is gone (the painted board stays)
-    for k in range(6):  # the 6th: carried by the party only
-        cx, cy = 456 + (k % 2) * 82, 600 + (k // 2) * 28
-        items.append(label((cx + 2, cy + 3, 20, 20), extra='\n'.join([
-            '\t\tbam ROUNDBUT', '\t\tscaleToClip', f'\t\tframe lua "PSXGM_CampFrame({k + 1})"'])))
-        items.append(label((cx + 26, cy, 54, 26), f'PSXGM_CampText({k + 1})', style=P, align='left center'))
-        items.append(button((cx, cy, 80, 26), extra=f'\t\taction "PSXGM_ToggleCamp({k + 1})"'))
+    # is in a ticked campaign (BG, SoD, BG2, ToB, Black Pits 1 / 2, other), and "Carried" keeps the party's items only;
+    # the board swap button is gone (the painted board stays). John's layout: BG SoD BP / BG2 ToB BP2 / Other Carried.
+    # and on the small paper on the left (John 2026-10-24): Found (seen in this save) / Not found
+    for k, cx, cy, w in ((1, 456, 598, 56), (2, 512, 598, 56), (5, 568, 598, 56),
+                         (3, 456, 624, 56), (4, 512, 624, 56), (6, 568, 624, 56),
+                         (7, 456, 650, 66), (8, 524, 650, 90),
+                         (9, 228, 612, 80), (10, 228, 640, 80)):
+        items.append(label((cx, cy + 4, 16, 16), extra='\n'.join([
+            '\t\tbam ROUNDBUT', '\t\tscaleToClip', f'\t\tframe lua "PSXGM_CampFrame({k})"'])))
+        items.append(label((cx + 18, cy, w - 18, 24), f'PSXGM_CampText({k})', style=P, align='left center'))
+        items.append(button((cx, cy, w, 24), extra=f'\t\taction "PSXGM_ToggleCamp({k})"'))
     return '''menu
 {
 \tname "PSXGM_PAGE"

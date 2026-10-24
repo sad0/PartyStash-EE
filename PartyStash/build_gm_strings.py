@@ -214,7 +214,7 @@ EXTRA = {
         'gm_seen_1': 'Vu en vente : %s', 'gm_seen_2': 'Porté : %s', 'gm_seen_3': 'Vu au sol : %s',
         'gm_seen_4': 'Vu dans un conteneur : %s', 'gm_origin': 'Provenance :', 'gm_more': '+%d autres',
         'gm_from_S': 'Vendu par %s', 'gm_from_G': '%s : au sol', 'gm_from_C': '%s : %s',
-        'gm_from_K': 'Porté par %s à %s', 'gm_from_K0': 'Porté par %s', 'gm_from_G0': 'Au sol', 'gm_camp_6': 'Ailleurs', 'gm_cf_5': 'Autre', 'gm_cf_6': 'Porté',
+        'gm_from_K': 'Porté par %s à %s', 'gm_from_K0': 'Porté par %s', 'gm_from_G0': 'Au sol', 'gm_camp_7': 'Ailleurs', 'gm_cf_7': 'Autre', 'gm_cf_8': 'Porté', 'gm_cf_9': 'Trouvé', 'gm_cf_10': 'Pas trouvé',
         'gm_equipped_by': 'Équipé par %s', 'gm_in_pack': 'Dans le sac de %s',
         'gm_from_D': 'Donné par %s à %s', 'gm_from_D1': 'Donné par %s', 'gm_from_D2': 'Donné à %s',
         'gm_from_D0': "Donné lors d'une quête ou d'un dialogue", 'gm_from_P': 'Porté par %s (apparaît) à %s',
