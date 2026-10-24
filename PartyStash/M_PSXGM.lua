@@ -68,6 +68,10 @@ G.EN = {
 	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
 	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = '%s: on the ground',
 	gm_from_C = '%s: %s', gm_from_K = 'Carried by %s at %s', gm_from_K0 = 'Carried by %s', gm_from_G0 = 'On the ground',
+	gm_from_D = 'Given by %s at %s', gm_from_D1 = 'Given by %s', gm_from_D2 = 'Given at %s',
+	gm_from_D0 = 'Given in a quest or a dialogue', gm_from_P = 'Carried by %s (appears) at %s',
+	gm_from_P0 = 'Carried by %s (appears)', gm_from_T = 'Random treasure',
+	gm_cf_1 = 'BG', gm_cf_2 = 'SoD', gm_cf_3 = 'BG2', gm_cf_4 = 'ToB', gm_cf_5 = 'Other',
 	gm_camp_1 = "Baldur's Gate", gm_camp_2 = 'Siege of Dragonspear', gm_camp_3 = 'Shadows of Amn', gm_camp_4 = 'Throne of Bhaal',
 	gm_camp_5 = 'The Black Pits', gm_camp_6 = 'Elsewhere',
 	gm_from_C0 = 'Container: %s', gm_from_S2 = 'Sold at %s: %s', gm_at = '%s, %s',
@@ -953,11 +957,35 @@ end
 
 G.view = G.view or {}
 G.wishV = G.wishV or 0
+-- Campaign filters (John 2026-10-24): 1 BG, 2 SoD, 3 BG2, 4 ToB, 5 other (the Black Pits, elsewhere); all ticked
+-- by default. An item shows when one of its origins (G.origins, its campaigns) is ticked.
+G.camps = G.camps or { true, true, true, true, true }
+G.campOf = G.campOf or {}
+local function campKey()
+	local k = ''
+	for i = 1, 5 do k = k .. (G.camps[i] and '1' or '0') end
+	return k
+end
+local function campOk(res)
+	if campKey() == '11111' then return true end
+	local set = G.campOf[res]
+	if not set then
+		set = {}
+		local o = G.origins and G.origins(res) or { camp = {} }
+		for i = 1, #o do set[math.min(o.camp[i], 5)] = true end
+		if #o == 0 then set[5] = true end
+		G.campOf[res] = set
+	end
+	for i = 1, 5 do
+		if set[i] and G.camps[i] then return true end
+	end
+	return false
+end
 local function viewKey()
 	local sp = selectedSprite()
 	return table.concat({ tostring(store and store.storeItems), G.cat, gmFindText or '', tostring(G.usable),
 		tostring(G.afford), G.sort, G.afford and partyGold() or 0,
-		(G.usable or G.sort == 'auto') and sp and sp.m_id or 0, G.wishV, tostring(G.agg), G.mode }, '|')
+		(G.usable or G.sort == 'auto') and sp and sp.m_id or 0, G.wishV, tostring(G.agg), G.mode, campKey() }, '|')
 end
 
 -- Auto (default, John 2026-10-23: the stash's Auto order): grouped by category in tree order (Misc last); weapons by
@@ -1058,7 +1086,8 @@ local function rebuild()
 		c.hit = inCategory(G.cat, info, res) and findHit(q, c.name, info, res, c.sources)
 		if c.hit
 			and (not G.usable or usableBy(sp, info))
-			and (not G.afford or (not c.catalog and c.price <= gold)) then
+			and (not G.afford or (not c.catalog and c.price <= gold))
+			and campOk(res) then
 			local lf = leafOf(info, res)
 			c.wish, c.order, c.usable = isWished(res), lf and lf.order or 999, usableBy(sp, info)
 			out[#out + 1] = c
@@ -1172,12 +1201,13 @@ local function campaign(area)
 	end
 	return 6
 end
--- Text lines, sorted by campaign (o.camp[i] = its campaign), then sold, container, ground, carried.
-local KIND_RANK = { S = 1, C = 2, G = 3, K = 4 }
+-- Text lines, sorted by campaign (o.camp[i] = its campaign), then sold, container, ground, given, carried, carried
+-- by a creature that appears, random treasure.
+local KIND_RANK = { S = 1, C = 2, G = 3, D = 4, K = 5, P = 6, T = 7 }
 local function origins(res)
 	local o = G.fromCache[res]
 	if o then return o end
-	local list = {}
+	local list, dup = {}, {}
 	for entry in string.gmatch((PSXGM_FROM or {})[res] or '', '[^|]+') do
 		local kind, name, area = string.match(entry, '^(%a)~([^~]*)~(.*)$')
 		local text
@@ -1198,8 +1228,20 @@ local function origins(res)
 			if word == key then word = T('gm_ctype') end
 			local at = areaName(area)
 			text = at and T('gm_from_C', at, word) or T('gm_from_C0', word)
+		-- D: given by a dialogue or a script (its speaker or creature, its area); P: a creature that appears
+		elseif kind == 'D' then
+			local at = areaName(area)
+			if name ~= '' then text = at and T('gm_from_D', name, at) or T('gm_from_D1', name)
+			else text = at and T('gm_from_D2', at) or T('gm_from_D0') end
+		elseif kind == 'P' then
+			local at = areaName(area)
+			text = at and T('gm_from_P', name, at) or T('gm_from_P0', name)
+		elseif kind == 'T' then
+			text = T('gm_from_T')
 		end
-		if text then
+		-- several entries can read the same (creatures sharing a name, areas sharing a place)
+		if text and not dup[text] then
+			dup[text] = true
 			list[#list + 1] = { text = text, camp = campaign(area), rank = KIND_RANK[kind] or 5, n = #list }
 		end
 	end
@@ -1294,6 +1336,9 @@ function PSXGM_CanPage(d)
 	return (d < 0 and G.page > 1) or (d > 0 and G.page < (G.pages or 1))
 end
 
+function PSXGM_ToggleCamp(i) G.camps[i] = not G.camps[i] G.page = 1 end
+function PSXGM_CampFrame(i) return G.camps[i] and 2 or 0 end
+function PSXGM_CampText(i) return T('gm_cf_' .. i) end
 function PSXGM_ToggleUsable() G.usable = not G.usable G.page = 1 end
 function PSXGM_ToggleAfford() G.afford = not G.afford G.page = 1 end
 function PSXGM_FilterText(which)
@@ -1316,11 +1361,8 @@ function PSXGM_SortText() return T('gm_sort', T('gm_sort_' .. G.sort)) end
 -- Page background (John 2026-10-23): 1 = notice board assembled from pieces (PSXGMBA), 2 = the same redrawn by
 -- SwarmUI (PSXGMBB, the default: John 2026-10-23). Kept in Baldur.lua (per player, not per save).
 function PSXGM_Skin()
-	if not G.skin then
-		local ok, v = pcall(Infinity_GetINIValue, 'Party Stash', 'Camp Merchant Board', 2)
-		G.skin = (ok and tonumber(v) == 1) and 1 or 2
-	end
-	return G.skin
+	-- the painted board only (John 2026-10-24: the swap button is gone)
+	return 2
 end
 function PSXGM_NextSkin()
 	G.skin = PSXGM_Skin() == 1 and 2 or 1

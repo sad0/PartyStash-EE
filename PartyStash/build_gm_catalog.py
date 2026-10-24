@@ -241,20 +241,78 @@ CRE_TABLES = ('SPAWNGRP', 'NPCLVLDS')
 TOKEN_RE = re.compile(rb'[A-Za-z0-9_#!$-]{1,8}')
 
 
-def obtainable(g, frm):
+def owners(g, tlk):
+    """Who runs a dialogue or a script, for the given / spawned origins: { DLG: (creature name, area) } and
+    { BCS: (creature name or '', area) }; an area's own script -> ('', area); a dialogue or a script many creatures
+    share (generic) -> ('', '')."""
+    dlg, bcs = {}, {}
+
+    def put(table, key, val):
+        if not key:
+            return
+        table.setdefault(key, set()).add(val)
+
+    def name_of(d):
+        return tlk(struct.unpack_from('<i', d, 0x08)[0]) or tlk(struct.unpack_from('<i', d, 0x0C)[0]) or ''
+
+    cres = {}
+    for n in g.names('CRE'):
+        d = g.get(n, 'CRE')
+        if d and d[:8] == b'CRE V1.0' and len(d) > 0x2D4:
+            cres[n.upper()] = (name_of(d), res8(d[0x2CC:0x2D4]), [res8(d[o:o + 8]) for o in range(0x248, 0x270, 8)])
+    placed = set()
+    for n in g.names('ARE'):
+        d = g.get(n, 'ARE')
+        if not d or d[:8] != b'AREAV1.0' or len(d) < 0x11C:
+            continue
+        area = n.upper()
+        put(bcs, res8(d[0x94:0x9C]), ('', area))
+        aoff, acnt = struct.unpack_from('<IH', d, 0x54)
+        for k in range(acnt):
+            e = aoff + k * 0x110
+            if e + 0x110 > len(d):
+                break
+            c = res8(d[e + 0x80:e + 0x88])
+            nm, cd, cs = cres.get(c, ('', '', []))
+            placed.add(c)
+            put(dlg, res8(d[e + 0x48:e + 0x50]) or cd, (nm, area))
+            for sc in [res8(d[o:o + 8]) for o in range(e + 0x50, e + 0x80, 8)] + cs:
+                put(bcs, sc, (nm, area))
+    for c, (nm, cd, cs) in cres.items():  # joinable NPCs, created creatures: no area
+        if c not in placed:
+            if cd not in dlg:
+                put(dlg, cd, (nm, ''))
+            for sc in cs:
+                if sc not in bcs:
+                    put(bcs, sc, (nm, ''))
+
+    def one(vals):
+        return sorted(vals)[0] if len(vals) <= 2 else ('', '')
+
+    return {k: one(v) for k, v in dlg.items()}, {k: one(v) for k, v in bcs.items()}
+
+
+def obtainable(g, frm, tlk):
     """The items the player can come across in play (John 2026-10-24: the Codex lists only these): an origin of
     origins() (store, ground, container, placed creature), an item a script or a dialogue gives / creates / adds to a
     store, a random treasure or starting gear table, or a droppable item of a creature that a script, a dialogue, a
-    spawn point, a rest encounter, a spawn INI or a spawn table creates."""
+    spawn point, a rest encounter, a spawn INI or a spawn table creates.
+    It also adds those origins to frm (John 2026-10-24: every item says where it comes from): D~giver~area (given by
+    a dialogue or a script), P~creature~area (carried by a creature that appears), T~~ (random treasure)."""
     items = set(n.upper() for n in g.names('ITM'))
     cres = set(n.upper() for n in g.names('CRE'))
     got = {}  # item -> how: 'found' (store, ground, container), 'carried' (placed creature), 'give' (script /
     # dialogue), 'table' (random treasure, starting gear), 'spawn' (a created creature carries it)
-    spawned = set()
+    spawned = {}  # creature -> the areas it appears in ('' unknown)
+    more = []  # (item, origin entry), added to frm at the end
+    dlg_own, bcs_own = owners(g, tlk)
 
     def mark(res_set, how):
         for r in res_set:
             got.setdefault(r, set()).add(how)
+
+    def spawn(c, area):
+        spawned.setdefault(c, []).append(area)
 
     for r, lst in frm.items():
         mark({r}, 'found' if any(e[0] in 'SGC' for e in lst) else 'carried')
@@ -264,28 +322,39 @@ def obtainable(g, frm):
 
     for n in g.names('BCS'):
         d = g.get(n, 'BCS') or b''
+        who, area = bcs_own.get(n.upper(), ('', ''))
         for m in re.finditer(rb'AC\n(\d+)(.*?)AC\n', d, re.S):
             aid = int(m.group(1))
             if aid in ITEM_ACTIONS or aid in CRE_ACTIONS:
                 s = strings(m.group(2).split(b'OB\n')[-1])  # the action's own strings come after its objects
                 if aid in ITEM_ACTIONS:
                     mark(s & items, 'give')
+                    more += [(r, 'D~%s~%s' % (who, area)) for r in s & items]
                 else:
-                    spawned |= s & cres
+                    for c in s & cres:
+                        spawn(c, area)
     for n in g.names('DLG'):
         d = g.get(n, 'DLG') or b''
+        who, area = dlg_own.get(n.upper(), ('', ''))
         for m in ITEM_RE.finditer(d):
-            mark(strings(m.group(1)) & items, 'give')
+            s = strings(m.group(1)) & items
+            mark(s, 'give')
+            more += [(r, 'D~%s~%s' % (who, area)) for r in s]
         for m in CRE_RE.finditer(d):
-            spawned |= strings(m.group(1)) & cres
+            for c in strings(m.group(1)) & cres:
+                spawn(c, area)
     for n in g.names('2DA'):
         if n.upper() in ITEM_TABLES or n.upper() in CRE_TABLES:
             toks = set(t.decode('latin-1').upper() for t in TOKEN_RE.findall(g.get(n, '2DA') or b''))
             mark(toks & items, 'table')
-            spawned |= toks & cres
+            more += [(r, 'T~~') for r in toks & items]
+            for c in toks & cres:
+                spawn(c, '')
     for n in g.names('INI'):
         toks = set(t.decode('latin-1').upper() for t in TOKEN_RE.findall(g.get(n, 'INI') or b''))
-        spawned |= toks & cres
+        area = n.upper() if g.get(n, 'ARE') is not None else ''  # an area's spawn INI has its name
+        for c in toks & cres:
+            spawn(c, area)
     for n in g.names('ARE'):
         d = g.get(n, 'ARE')
         if not d or d[:8] != b'AREAV1.0' or len(d) < 0x11C:
@@ -297,21 +366,33 @@ def obtainable(g, frm):
                 break
             cnt = struct.unpack_from('<H', d, e + 0x74)[0]
             for k in range(min(cnt, 10)):
-                spawned.add(res8(d[e + 0x24 + k * 8:e + 0x2C + k * 8]))
+                spawn(res8(d[e + 0x24 + k * 8:e + 0x2C + k * 8]), n.upper())
         roff = struct.unpack_from('<I', d, 0xC0)[0]
         if roff and roff + 0xE4 <= len(d):
             for k in range(10):
-                spawned.add(res8(d[roff + 0x48 + k * 8:roff + 0x50 + k * 8]))
-    for n in spawned & cres:
+                spawn(res8(d[roff + 0x48 + k * 8:roff + 0x50 + k * 8]), n.upper())
+    for n in sorted(set(spawned) & cres):
         d = g.get(n, 'CRE')
         if d and d[:8] == b'CRE V1.0' and len(d) > 0x2C4:
+            name = tlk(struct.unpack_from('<i', d, 0x08)[0]) or tlk(struct.unpack_from('<i', d, 0x0C)[0]) or '?'
             ioff, icnt = struct.unpack_from('<II', d, 0x2BC)
             for i in range(icnt):
                 e = ioff + i * 0x14
                 if e + 0x14 > len(d):
                     break
                 if not struct.unpack_from('<I', d, e + 0x10)[0] & 0x8:  # undroppable
-                    mark({res8(d[e:e + 8])}, 'spawn')
+                    r = res8(d[e:e + 8])
+                    mark({r}, 'spawn')
+                    more += [(r, 'P~%s~%s' % (name, a)) for a in sorted(set(spawned[n]) - {''} or {''})]
+    # a creature that appears somewhere known: its line without a place goes (several CRE share a name)
+    known_by = set((r, e.rsplit('~', 1)[0]) for r, e in more if e[0] == 'P' and not e.endswith('~'))
+    for r, entry in more:
+        lst = frm.setdefault(r, [])
+        if entry[0] == 'P' and entry.endswith('~') and (r, entry[:-1]) in known_by:
+            continue
+        same = sum(1 for x in lst if x[0] == entry[0])
+        if entry not in lst and same < PER_KIND and len(lst) < MAX_FROM:
+            lst.append(entry)
     return got
 
 
@@ -361,7 +442,7 @@ def main():
             areas[k] = names[1] if lang.startswith('fr') else names[0]
     plc = places(g, tlk, areas)
     frm = origins(g, tlk)
-    got = obtainable(g, frm)
+    got = obtainable(g, frm, tlk)
     # an item only a creature carries must be droppable (ITM flag 0x4: no monster weapons, creature immunity rings...)
     keep = lambda n: n in got and (droppable[n] or bool(got[n] & {'found', 'give', 'table'}))
     left = [n for n in items if not keep(n.upper())]

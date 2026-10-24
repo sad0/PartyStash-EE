@@ -262,7 +262,11 @@ ACTION_CLEAR_ARRAY gm_kinds
 ACTION_DEFINE_ARRAY gm_kinds BEGIN S G C K END
 DEFINE_PATCH_MACRO ~gm_add_from~ BEGIN
 	TO_UPPER gm_r
-	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~K~ BEGIN SET gm_bit = 2 END ELSE BEGIN SET gm_bit = 1 END
+	SET gm_bit = 1
+	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~K~ BEGIN SET gm_bit = 2 END
+	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~D~ BEGIN SET gm_bit = 4 END
+	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~T~ BEGIN SET gm_bit = 8 END
+	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~P~ BEGIN SET gm_bit = 16 END
 	LAUNCH_PATCH_MACRO ~gm_mark~
 	PATCH_IF NOT VARIABLE_IS_SET $gm_from(~%gm_r%~) BEGIN TEXT_SPRINT $gm_from(~%gm_r%~) ~~ SET $gm_n(~%gm_r%~) = 0 END
 	PATCH_IF NOT VARIABLE_IS_SET $gm_k(~%gm_r%~ ~%gm_kind%~) BEGIN SET $gm_k(~%gm_r%~ ~%gm_kind%~) = 0 END
@@ -293,6 +297,8 @@ BUT_ONLY
 // each creature's dialogue, name and droppable items
 ACTION_CLEAR_ARRAY gm_cre
 ACTION_CLEAR_ARRAY gm_credlg
+ACTION_CLEAR_ARRAY gm_crenm
+ACTION_CLEAR_ARRAY gm_cresc
 COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
 	PATCH_IF SOURCE_SIZE > 0x2d4 BEGIN
 		READ_ASCII 0 gm_sig (8)
@@ -305,6 +311,13 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
 			READ_LONG 0x08 gm_s
 			TEXT_SPRINT gm_text ~?~
 			PATCH_IF gm_s > 0 AND gm_s < 0x7fffffff BEGIN GET_STRREF gm_s gm_text END
+			TEXT_SPRINT $gm_crenm(~%gm_c%~) ~%gm_text%~
+			TEXT_SPRINT gm_list ~~
+			FOR (i = 0; i < 5; ++i) BEGIN
+				READ_ASCII (0x248 + i * 8) gm_sc (8) NULL
+				PATCH_IF STRING_LENGTH ~%gm_sc%~ > 0 BEGIN TEXT_SPRINT gm_list ~%gm_list%%gm_sc%,~ END
+			END
+			TEXT_SPRINT $gm_cresc(~%gm_c%~) ~%gm_list%~
 			READ_LONG 0x2bc gm_io
 			READ_LONG 0x2c0 gm_ic
 			TEXT_SPRINT gm_list ~~
@@ -326,6 +339,39 @@ BUT_ONLY
 // travel regions (type 2: $gm_adj(AREA) = "NEIGHBOUR1,NEIGHBOUR2,", both ways)
 ACTION_CLEAR_ARRAY gm_adj
 ACTION_CLEAR_ARRAY gm_storeat
+// who runs a dialogue (D) or a script (B), for the given / spawned origins: $gm_ownn(T KEY) its name, $gm_owna(T KEY)
+// its area; more than 2 different owners = a generic one (no name, no area)
+ACTION_CLEAR_ARRAY gm_ownn
+ACTION_CLEAR_ARRAY gm_owna
+ACTION_CLEAR_ARRAY gm_ownk
+ACTION_CLEAR_ARRAY gm_placed
+DEFINE_PATCH_MACRO ~gm_own~ BEGIN
+	TO_UPPER gm_ok
+	PATCH_IF STRING_LENGTH ~%gm_ok%~ > 0 BEGIN
+		PATCH_IF NOT VARIABLE_IS_SET $gm_ownk(~%gm_ot%~ ~%gm_ok%~) BEGIN
+			SET $gm_ownk(~%gm_ot%~ ~%gm_ok%~) = 1
+			TEXT_SPRINT $gm_ownn(~%gm_ot%~ ~%gm_ok%~) ~%gm_on%~
+			TEXT_SPRINT $gm_owna(~%gm_ot%~ ~%gm_ok%~) ~%gm_oa%~
+		END ELSE BEGIN
+			TEXT_SPRINT gm_x1 $gm_ownn(~%gm_ot%~ ~%gm_ok%~)
+			TEXT_SPRINT gm_x2 $gm_owna(~%gm_ot%~ ~%gm_ok%~)
+			PATCH_IF NOT (~%gm_x1%~ STRING_EQUAL ~%gm_on%~ AND ~%gm_x2%~ STRING_EQUAL ~%gm_oa%~) BEGIN
+				SET $gm_ownk(~%gm_ot%~ ~%gm_ok%~) += 1
+			END
+		END
+	END
+END
+DEFINE_PATCH_MACRO ~gm_owner~ BEGIN
+	TO_UPPER gm_ok
+	TEXT_SPRINT gm_who ~~
+	TEXT_SPRINT gm_wa ~~
+	PATCH_IF VARIABLE_IS_SET $gm_ownk(~%gm_ot%~ ~%gm_ok%~) BEGIN
+		PATCH_IF $gm_ownk(~%gm_ot%~ ~%gm_ok%~) <= 2 BEGIN
+			TEXT_SPRINT gm_who $gm_ownn(~%gm_ot%~ ~%gm_ok%~)
+			TEXT_SPRINT gm_wa $gm_owna(~%gm_ot%~ ~%gm_ok%~)
+		END
+	END
+END
 DEFINE_PATCH_MACRO ~gm_link~ BEGIN
 	PATCH_IF NOT VARIABLE_IS_SET $gm_adj(~%gm_x%~) BEGIN TEXT_SPRINT $gm_adj(~%gm_x%~) ~~ END
 	TEXT_SPRINT gm_old $gm_adj(~%gm_x%~)
@@ -335,6 +381,9 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 	PATCH_IF SOURCE_SIZE >= 0x11c BEGIN
 		TEXT_SPRINT gm_area ~%SOURCE_RES%~
 		TO_UPPER gm_area
+		READ_ASCII 0x94 gm_ok (8) NULL
+		TEXT_SPRINT gm_ot ~B~ TEXT_SPRINT gm_on ~~ TEXT_SPRINT gm_oa ~%gm_area%~
+		LAUNCH_PATCH_MACRO ~gm_own~
 		READ_LONG 0x70 gm_co
 		READ_SHORT 0x74 gm_cc
 		READ_LONG 0x78 gm_io
@@ -368,6 +417,23 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 			READ_ASCII (gm_ao + a * 0x110 + 0x48) gm_d (8) NULL
 			TO_UPPER gm_d
 			PATCH_IF STRING_LENGTH ~%gm_d%~ = 0 AND VARIABLE_IS_SET $gm_credlg(~%gm_c%~) BEGIN TEXT_SPRINT gm_d $gm_credlg(~%gm_c%~) END
+			SET $gm_placed(~%gm_c%~) = 1
+			TEXT_SPRINT gm_on ~~
+			PATCH_IF VARIABLE_IS_SET $gm_crenm(~%gm_c%~) BEGIN TEXT_SPRINT gm_on $gm_crenm(~%gm_c%~) END
+			TEXT_SPRINT gm_oa ~%gm_area%~
+			TEXT_SPRINT gm_ot ~D~ TEXT_SPRINT gm_ok ~%gm_d%~
+			LAUNCH_PATCH_MACRO ~gm_own~
+			TEXT_SPRINT gm_ot ~B~
+			FOR (k = 0; k < 6; ++k) BEGIN
+				READ_ASCII (gm_ao + a * 0x110 + 0x50 + k * 8) gm_ok (8) NULL
+				LAUNCH_PATCH_MACRO ~gm_own~
+			END
+			PATCH_IF VARIABLE_IS_SET $gm_cresc(~%gm_c%~) BEGIN
+				TEXT_SPRINT gm_list $gm_cresc(~%gm_c%~)
+				INNER_PATCH ~%gm_list%~ BEGIN
+					REPLACE_EVALUATE ~\([^,]+\),~ BEGIN TEXT_SPRINT gm_ok ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_own~ END ~%MATCH0%~
+				END
+			END
 			PATCH_IF STRING_LENGTH ~%gm_d%~ > 0 AND VARIABLE_IS_SET $gm_dlgsto(~%gm_d%~) BEGIN
 				TEXT_SPRINT gm_list $gm_dlgsto(~%gm_d%~)
 				INNER_PATCH ~%gm_list%~ BEGIN
@@ -486,12 +552,36 @@ OUTER_TEXT_SPRINT gm_storeats ~~
 ACTION_PHP_EACH gm_storeat AS gm_s => gm_a BEGIN
 	OUTER_TEXT_SPRINT gm_storeats ~%gm_storeats%["%gm_s%"] = "%gm_a%",~
 END
+// the creatures with no area (joinable NPCs, created ones) own the dialogues and scripts nobody placed runs
+ACTION_PHP_EACH gm_crenm AS gm_c => gm_n BEGIN
+	ACTION_IF NOT VARIABLE_IS_SET $gm_placed(~%gm_c%~) BEGIN
+		OUTER_PATCH ~~ BEGIN
+			TEXT_SPRINT gm_on ~%gm_n%~ TEXT_SPRINT gm_oa ~~
+			TEXT_SPRINT gm_ok $gm_credlg(~%gm_c%~) TEXT_SPRINT gm_ot ~D~
+			PATCH_IF NOT VARIABLE_IS_SET $gm_ownk(~D~ ~%gm_ok%~) BEGIN LAUNCH_PATCH_MACRO ~gm_own~ END
+			TEXT_SPRINT gm_list $gm_cresc(~%gm_c%~) TEXT_SPRINT gm_ot ~B~
+			INNER_PATCH ~%gm_list%~ BEGIN
+				REPLACE_EVALUATE ~\([^,]+\),~ BEGIN
+					TEXT_SPRINT gm_ok ~%MATCH1%~
+					TO_UPPER gm_ok
+					PATCH_IF NOT VARIABLE_IS_SET $gm_ownk(~B~ ~%gm_ok%~) BEGIN LAUNCH_PATCH_MACRO ~gm_own~ END
+				END ~%MATCH0%~
+			END
+		END
+	END
+END
+// a created creature and the area it appears in: $gm_spawn(CRE) = "AREA1,AREA2," ("-" = not known)
 DEFINE_PATCH_MACRO ~gm_spawn_add~ BEGIN
 	TO_UPPER gm_c
-	SET $gm_spawn(~%gm_c%~) = 1
+	PATCH_IF STRING_LENGTH ~%gm_sa%~ = 0 BEGIN TEXT_SPRINT gm_sa ~-~ END
+	PATCH_IF NOT VARIABLE_IS_SET $gm_spawn(~%gm_c%~) BEGIN TEXT_SPRINT $gm_spawn(~%gm_c%~) ~~ END
+	TEXT_SPRINT gm_old $gm_spawn(~%gm_c%~)
+	PATCH_IF INDEX (CASE_SENSITIVE EXACT_MATCH ~,%gm_sa%,~ ~,%gm_old%~) < 0 BEGIN TEXT_SPRINT $gm_spawn(~%gm_c%~) ~%gm_old%%gm_sa%,~ END
 END
 // compiled scripts: AC <id> + 3 objects + the action's own strings ([^ -}] = the line break)
 COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
+	TEXT_SPRINT gm_ok ~%SOURCE_RES%~ TEXT_SPRINT gm_ot ~B~
+	LAUNCH_PATCH_MACRO ~gm_owner~
 	READ_ASCII 0 gm_buf (SOURCE_SIZE)
 	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~AC[^ -}]\([0-9]+\)OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"\([^"]*\)" "\([^"]*\)" AC~ BEGIN
@@ -499,12 +589,14 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
 		TEXT_SPRINT gm_s1 ~%MATCH2%~
 		TEXT_SPRINT gm_s2 ~%MATCH3%~
 		PATCH_IF gm_id = 82 OR gm_id = 140 OR gm_id = 256 OR gm_id = 363 BEGIN
-			SET gm_bit = 4
-			TEXT_SPRINT gm_r ~%gm_s1%~ PATCH_IF STRING_LENGTH ~%gm_r%~ BEGIN LAUNCH_PATCH_MACRO ~gm_mark~ END
-			TEXT_SPRINT gm_r ~%gm_s2%~ PATCH_IF STRING_LENGTH ~%gm_r%~ BEGIN LAUNCH_PATCH_MACRO ~gm_mark~ END
+			TEXT_SPRINT gm_kind ~D~ TEXT_SPRINT gm_name ~%gm_who%~ TEXT_SPRINT gm_area ~%gm_wa%~
+			TEXT_SPRINT gm_r ~%gm_s1%~ PATCH_IF STRING_LENGTH ~%gm_r%~ BEGIN LAUNCH_PATCH_MACRO ~gm_add_from~ END
+			TEXT_SPRINT gm_r ~%gm_s2%~ PATCH_IF STRING_LENGTH ~%gm_r%~ BEGIN LAUNCH_PATCH_MACRO ~gm_add_from~ END
 		END ELSE PATCH_IF gm_id = 7 OR gm_id = 227 OR gm_id = 228 OR (gm_id >= 231 AND gm_id <= 233) OR gm_id = 238
 				OR gm_id = 246 OR gm_id = 250 OR gm_id = 252 OR gm_id = 295 OR gm_id = 323 BEGIN
+			TEXT_SPRINT gm_sa ~%gm_wa%~
 			TEXT_SPRINT gm_c ~%gm_s1%~ PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+			TEXT_SPRINT gm_sa ~%gm_wa%~
 			TEXT_SPRINT gm_c ~%gm_s2%~ PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
 		END
 	END ~%MATCH0%~
@@ -512,17 +604,22 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
 BUT_ONLY
 // dialogues keep their actions as text (scanned in a copy: nothing is written)
 COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
+	TEXT_SPRINT gm_ok ~%SOURCE_RES%~ TEXT_SPRINT gm_ot ~D~
+	LAUNCH_PATCH_MACRO ~gm_owner~
 	READ_ASCII 0 gm_buf (SOURCE_SIZE)
 	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~\(GiveItemCreate\|CreateItem\|CreateItemGlobal\|AddStoreItem\)[ %TAB%]*(\([^)]*\))~ BEGIN
-		SET gm_bit = 4
 		INNER_PATCH ~%MATCH2%~ BEGIN
-			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN TEXT_SPRINT gm_r ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN
+				TEXT_SPRINT gm_r ~%MATCH1%~
+				TEXT_SPRINT gm_kind ~D~ TEXT_SPRINT gm_name ~%gm_who%~ TEXT_SPRINT gm_area ~%gm_wa%~
+				LAUNCH_PATCH_MACRO ~gm_add_from~
+			END ~%MATCH0%~
 		END
 	END ~%MATCH0%~
 	REPLACE_EVALUATE ~CreateCreature[A-Za-z]*[ %TAB%]*(\([^)]*\))~ BEGIN
 		INNER_PATCH ~%MATCH1%~ BEGIN
-			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN TEXT_SPRINT gm_c ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN TEXT_SPRINT gm_c ~%MATCH1%~ TEXT_SPRINT gm_sa ~%gm_wa%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
 		END
 	END ~%MATCH0%~
 	END
@@ -531,10 +628,17 @@ BUT_ONLY
 ACTION_FOR_EACH gm_t IN rndtres rndtreas rndscrol rndequip rndwep rndmagic 25stweap mpstweap bdstweap BEGIN
 	ACTION_IF FILE_EXISTS_IN_GAME ~%gm_t%.2da~ BEGIN
 		COPY_EXISTING ~%gm_t%.2da~ ~override~
-			SET gm_bit = 8
 			READ_ASCII 0 gm_buf (SOURCE_SIZE)
 			INNER_PATCH ~%gm_buf%~ BEGIN
-			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_r ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN
+				TEXT_SPRINT gm_r ~%MATCH0%~
+				PATCH_IF STRING_LENGTH ~%gm_r%~ <= 8 BEGIN
+					PATCH_IF FILE_EXISTS_IN_GAME ~%gm_r%.itm~ BEGIN
+						TEXT_SPRINT gm_kind ~T~ TEXT_SPRINT gm_name ~~ TEXT_SPRINT gm_area ~~
+						LAUNCH_PATCH_MACRO ~gm_add_from~
+					END
+				END
+			END ~%MATCH0%~
 			END
 		BUT_ONLY
 	END
@@ -544,34 +648,38 @@ ACTION_FOR_EACH gm_t IN spawngrp npclvlds BEGIN
 		COPY_EXISTING ~%gm_t%.2da~ ~override~
 			READ_ASCII 0 gm_buf (SOURCE_SIZE)
 			INNER_PATCH ~%gm_buf%~ BEGIN
-			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ TEXT_SPRINT gm_sa ~~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
 			END
 		BUT_ONLY
 	END
 END
 COPY_EXISTING_REGEXP GLOB ~^.+\.ini$~ ~override~
+	TEXT_SPRINT gm_ia ~~
+	PATCH_IF FILE_EXISTS_IN_GAME ~%SOURCE_RES%.are~ BEGIN TEXT_SPRINT gm_ia ~%SOURCE_RES%~ TO_UPPER gm_ia END
 	READ_ASCII 0 gm_buf (SOURCE_SIZE)
 	INNER_PATCH ~%gm_buf%~ BEGIN
-	REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+	REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ TEXT_SPRINT gm_sa ~%gm_ia%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
 	END
 BUT_ONLY
 // the areas' spawn points and rest encounters
 COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 	PATCH_IF SOURCE_SIZE >= 0x11c BEGIN
+		TEXT_SPRINT gm_ia ~%SOURCE_RES%~
+		TO_UPPER gm_ia
 		READ_LONG 0x60 gm_so
 		READ_SHORT 0x64 gm_sc
 		FOR (s = 0; s < gm_sc AND gm_so + s * 0xc8 + 0xc8 <= SOURCE_SIZE; ++s) BEGIN
 			READ_SHORT (gm_so + s * 0xc8 + 0x74) gm_n
 			FOR (k = 0; k < gm_n AND k < 10; ++k) BEGIN
 				READ_ASCII (gm_so + s * 0xc8 + 0x24 + k * 8) gm_c (8) NULL
-				PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+				PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN TEXT_SPRINT gm_sa ~%gm_ia%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
 			END
 		END
 		READ_LONG 0xc0 gm_ro
 		PATCH_IF gm_ro > 0 AND gm_ro + 0xe4 <= SOURCE_SIZE BEGIN
 			FOR (k = 0; k < 10; ++k) BEGIN
 				READ_ASCII (gm_ro + 0x48 + k * 8) gm_c (8) NULL
-				PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+				PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN TEXT_SPRINT gm_sa ~%gm_ia%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
 			END
 		END
 	END
@@ -579,10 +687,23 @@ BUT_ONLY
 // what the created creatures carry (their droppable items, read above in $gm_cre)
 ACTION_PHP_EACH gm_spawn AS gm_c => gm_v BEGIN
 	ACTION_IF VARIABLE_IS_SET $gm_cre(~%gm_c%~) BEGIN
-		OUTER_TEXT_SPRINT gm_list $gm_cre(~%gm_c%~)
-		OUTER_SET gm_bit = 16
-		OUTER_INNER_PATCH ~%gm_list%~ BEGIN
-			REPLACE_EVALUATE ~\([^,]+\),~ BEGIN TEXT_SPRINT gm_r ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+		OUTER_PATCH ~~ BEGIN
+			TEXT_SPRINT gm_areas2 ~%gm_v%~
+			PATCH_IF NOT ~%gm_areas2%~ STRING_EQUAL ~-,~ BEGIN
+				INNER_PATCH_SAVE gm_areas2 ~%gm_areas2%~ BEGIN REPLACE_TEXTUALLY EXACT_MATCH ~-,~ ~~ END
+			END
+			TEXT_SPRINT gm_list $gm_cre(~%gm_c%~)
+			TEXT_SPRINT gm_name $gm_cren(~%gm_c%~)
+			TEXT_SPRINT gm_kind ~P~
+			INNER_PATCH ~%gm_areas2%~ BEGIN
+				REPLACE_EVALUATE ~\([^,]+\),~ BEGIN
+					TEXT_SPRINT gm_area ~%MATCH1%~
+					PATCH_IF ~%gm_area%~ STRING_EQUAL ~-~ BEGIN TEXT_SPRINT gm_area ~~ END
+					INNER_PATCH ~%gm_list%~ BEGIN
+						REPLACE_EVALUATE ~\([^,]+\),~ BEGIN TEXT_SPRINT gm_r ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_add_from~ END ~%MATCH0%~
+					END
+				END ~%MATCH0%~
+			END
 		END
 	END
 END
