@@ -67,7 +67,8 @@ G.EN = {
 	gm_value = 'Value: %d gp', gm_never_seen = 'Never seen', gm_seen_1 = 'Seen for sale: %s', gm_seen_2 = 'Carried: %s',
 	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
 	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = '%s: on the ground',
-	gm_from_C = '%s: %s', gm_from_K = 'Carried by %s (%s)', gm_from_S2 = 'Sold at %s: %s', gm_at = '%s, %s',
+	gm_from_C = '%s: %s', gm_from_K = 'Carried by %s at %s', gm_from_K0 = 'Carried by %s', gm_from_G0 = 'On the ground',
+	gm_from_C0 = 'Container: %s', gm_from_S2 = 'Sold at %s: %s', gm_at = '%s, %s',
 	-- container types (ARE container type), "In a container" when unknown
 	gm_ctype = 'container', gm_ctype_1 = 'bag', gm_ctype_2 = 'chest', gm_ctype_3 = 'drawer', gm_ctype_5 = 'table',
 	gm_ctype_6 = 'shelf', gm_ctype_7 = 'altar', gm_ctype_8 = 'hidden', gm_ctype_9 = 'spellbook', gm_ctype_10 = 'body',
@@ -1164,13 +1165,19 @@ local function origins(res)
 		if kind == 'S' then
 			local at = areaName(area)
 			o[#o + 1] = at and T('gm_from_S2', at, name) or T('gm_from_S', name)
-		elseif kind == 'K' then o[#o + 1] = T('gm_from_K', name, placeName(area))
-		elseif kind == 'G' then o[#o + 1] = T('gm_from_G', placeName(area))
+		-- an area without a readable name shows no place (never a code)
+		elseif kind == 'K' then
+			local at = areaName(area)
+			o[#o + 1] = at and T('gm_from_K', name, at) or T('gm_from_K0', name)
+		elseif kind == 'G' then
+			local at = areaName(area)
+			o[#o + 1] = at and T('gm_from_G', at) or T('gm_from_G0')
 		elseif kind == 'C' then
 			local key = 'gm_ctype_' .. name
 			local word = T(key)
 			if word == key then word = T('gm_ctype') end
-			o[#o + 1] = T('gm_from_C', placeName(area), word)
+			local at = areaName(area)
+			o[#o + 1] = at and T('gm_from_C', at, word) or T('gm_from_C0', word)
 		end
 	end
 	G.fromCache[res] = o

@@ -44,6 +44,17 @@ UNNAMED = {
     'BG1200': ("Baldur's Gate, South", 'Porte de Baldur, sud'),
     'BG1300': ("Baldur's Gate, South-East", 'Porte de Baldur, sud-est'),
     'BG2600': ('Candlekeep', 'Château-Suif'),
+    # BG2 areas no world map names (John 2026-10-24: never show a code)
+    'AR0601': ("Irenicus' Dungeon", "Donjon d'Irenicus"),
+    'AR0602': ("Irenicus' Dungeon", "Donjon d'Irenicus"),
+    'AR0603': ("Irenicus' Dungeon", "Donjon d'Irenicus"),
+    'AR2900': ('Hell', 'Enfer'),
+    'AR2901': ('Hell', 'Enfer'),
+    'AR2902': ('Hell', 'Enfer'),
+    'AR2903': ('Hell', 'Enfer'),
+    'AR2904': ('Hell', 'Enfer'),
+    'AR2905': ('Hell', 'Enfer'),
+    'AR4500': ('Pocket Plane', 'Plan de poche'),
 }
 
 
