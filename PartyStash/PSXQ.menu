@@ -171,6 +171,11 @@ menu
 	}
 	label
 	{
+		area 242 313 420 2
+		fill 60 40 20 170
+	}
+	label
+	{
 		area 242 318 420 26
 		text lua "PSXQ_DetailTitle()"
 		text style "label_parchment"
@@ -178,7 +183,7 @@ menu
 	}
 	text
 	{
-		area 242 346 420 154
+		area 242 346 420 142
 		text lua "PSXQ_DetailText()"
 		text style "normal_parchment"
 		text align left top

@@ -117,6 +117,8 @@ def page():
 \t\tscrollbar 'GUISCRP'
 \t\taction "PSXQ_ListClick()"
 \t}''' % (PN, PN, GX, LY, MW, LH))
+    # a pencil line between the list and the selected quest (John 2026-10-24)
+    items.append(label((GX + 6, DY - 5, MW - 12, 2), extra='\t\tfill 60 40 20 170'))
     # the selected quest: which view, then its text (scrolls)
     items.append(label((GX + 6, DY, MW - 12, 26), 'PSXQ_DetailTitle()', style=P, align='left center'))
     items.append('''\ttext
@@ -126,7 +128,7 @@ def page():
 \t\ttext style "%s"
 \t\ttext align left top
 \t\tscrollbar 'GUISCRP'
-\t}''' % (GX + 6, DY + 28, MW - 12, 500 - DY - 28, PN))
+\t}''' % (GX + 6, DY + 28, MW - 12, 488 - DY - 28, PN))
     # the torn strip under the big notice: how many quests are listed
     items.append(label((GX + 10, 536, 410, 48), 'PSXQ_CountText()', style=PN, align='left center'))
     # the selected quest (top right poster)
