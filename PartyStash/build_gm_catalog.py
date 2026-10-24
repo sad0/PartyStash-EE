@@ -163,6 +163,7 @@ def origins(g, tlk):
 
     def add(res, entry):
         res = res.upper()
+        note_camp(res, entry)
         lst = out.setdefault(res, [])
         same = sum(1 for x in lst if x[0] == entry[0])
         if entry not in lst and same < PER_KIND and len(lst) < MAX_FROM:
@@ -270,6 +271,36 @@ def camp_of(g, n, ext):
         else:  # EET: only in the override (or EET's own BIFs) = BG1; BG2EE: a mod's file
             c = 1 if GAME_KIND == 'eet' else 0
     return '#%d' % c if c else ''
+
+
+CAMPS = {}  # item -> bitmask of the campaigns of ALL its origins (the list shown is cut at MAX_FROM: John 2026-10-24,
+# BG1 items hidden by the BG filter because their BG1 lines were cut)
+
+
+def area_camp(a):
+    """An origin's campaign (M_PSXGM.lua campaign(), the same): 1 BG, 2 SoD, 3 SoA, 4 ToB, 5 the Black Pits,
+    6 the Black Pits II, 7 elsewhere."""
+    if a[:1] == '#' and a[1:].isdigit():
+        return int(a[1:])
+    m = re.match(r'^([A-Za-z]{2})(\d{4})', a)
+    if not m:
+        return 7
+    p, n = m.group(1).upper(), int(m.group(2))
+    if p == 'BG':
+        return 1
+    if p == 'BD':
+        return 2
+    if p == 'BP':
+        return 5
+    if p == 'OH':
+        return 5 if n < 4000 or 9300 <= n < 9400 else 6
+    if p == 'AR':
+        return 1 if GAME_KIND == 'bgee' else (4 if n >= 4000 else 3)
+    return 7
+
+
+def note_camp(res, entry):
+    CAMPS[res] = CAMPS.get(res, 0) | (1 << area_camp(entry.rsplit('~', 1)[-1]))
 
 
 def owners(g, tlk):
@@ -420,6 +451,7 @@ def obtainable(g, frm, tlk):
     # a creature that appears somewhere known: its line without a place goes (several CRE share a name)
     known_by = set((r, e.rsplit('~', 1)[0]) for r, e in more if e[0] == 'P' and not e.endswith('~'))
     for r, entry in more:
+        note_camp(r, entry)
         lst = frm.setdefault(r, [])
         if entry[0] == 'P' and entry.endswith('~') and (r, entry[:-1]) in known_by:
             continue
@@ -500,6 +532,12 @@ def main():
     lines.append('}')
     # the game: on BGEE the AR areas are BG1's, on BG2EE and EET BG2's (the origins' campaigns)
     lines.append('PSXGM_GAME = %s' % q(GAME_KIND))
+    lines.append('-- The campaigns of all the origins of each item (bit 1 BG ... 7 elsewhere), for the Codex filters.')
+    lines.append('PSXGM_CAMPS = {')
+    for k in sorted(CAMPS):
+        if k in set(n.upper() for n in items):
+            lines.append('	["%s"] = %d,' % (k, CAMPS[k]))
+    lines.append('}')
     lines.append('-- The area each store\'s merchant stands in.')
     lines.append('PSXGM_STOREAT = {')
     for k in sorted(STORE_AT):

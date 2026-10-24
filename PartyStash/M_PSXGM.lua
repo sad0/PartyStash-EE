@@ -976,9 +976,15 @@ local function campOk(res)
 	local set = G.campOf[res]
 	if not set then
 		set = {}
-		local o = G.origins and G.origins(res) or { camp = {} }
-		for i = 1, #o do set[o.camp[i]] = true end
-		if #o == 0 then set[7] = true end
+		-- all the origins' campaigns (PSXGM_CAMPS, a bitmask: the list shown is cut at 12 lines), else the shown ones
+		local mask = (PSXGM_CAMPS or {})[res]
+		if mask then
+			for i = 1, 7 do set[i] = math.floor(mask / 2 ^ i) % 2 == 1 end
+		else
+			local o = G.origins and G.origins(res) or { camp = {} }
+			for i = 1, #o do set[o.camp[i]] = true end
+			if #o == 0 then set[7] = true end
+		end
 		G.campOf[res] = set
 	end
 	for i = 1, 7 do

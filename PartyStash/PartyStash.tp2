@@ -260,8 +260,33 @@ DEFINE_PATCH_MACRO ~gm_mark~ BEGIN
 END
 ACTION_CLEAR_ARRAY gm_kinds
 ACTION_DEFINE_ARRAY gm_kinds BEGIN S G C K END
+// the campaign of an origin's area (M_PSXGM.lua campaign(), build_gm_catalog.py area_camp): $gm_cs(RES) = the
+// bitmask of ALL the item's origins (the list shown is cut at 12: the Codex filters need them all)
+ACTION_CLEAR_ARRAY gm_cs
+DEFINE_PATCH_MACRO ~gm_note_camp~ BEGIN
+	SET gm_ac = 7
+	PATCH_IF ~%gm_area%~ STRING_MATCHES_REGEXP ~^#[0-9]$~ = 0 BEGIN
+		INNER_PATCH ~%gm_area%~ BEGIN READ_ASCII 1 gm_x (1) END
+		SET gm_ac = gm_x
+	END ELSE PATCH_IF ~%gm_area%~ STRING_MATCHES_REGEXP ~^[A-Za-z][A-Za-z][0-9][0-9][0-9][0-9].*~ = 0 BEGIN
+		INNER_PATCH ~%gm_area%~ BEGIN READ_ASCII 0 gm_pre (2) READ_ASCII 2 gm_num (4) END
+		TO_UPPER gm_pre
+		SET gm_num = gm_num
+		PATCH_IF ~%gm_pre%~ STRING_EQUAL ~BG~ BEGIN SET gm_ac = 1 END
+		ELSE PATCH_IF ~%gm_pre%~ STRING_EQUAL ~BD~ BEGIN SET gm_ac = 2 END
+		ELSE PATCH_IF ~%gm_pre%~ STRING_EQUAL ~BP~ BEGIN SET gm_ac = 5 END
+		ELSE PATCH_IF ~%gm_pre%~ STRING_EQUAL ~OH~ BEGIN SET gm_ac = (gm_num < 4000 OR (gm_num >= 9300 AND gm_num < 9400)) ? 5 : 6 END
+		ELSE PATCH_IF ~%gm_pre%~ STRING_EQUAL ~AR~ BEGIN
+			SET gm_ac = (gm_num >= 4000) ? 4 : 3
+			PATCH_IF ~%gm_ckind%~ STRING_EQUAL ~bgee~ BEGIN SET gm_ac = 1 END
+		END
+	END
+	PATCH_IF NOT VARIABLE_IS_SET $gm_cs(~%gm_r%~) BEGIN SET $gm_cs(~%gm_r%~) = 0 END
+	SET $gm_cs(~%gm_r%~) = $gm_cs(~%gm_r%~) BOR (1 << gm_ac)
+END
 DEFINE_PATCH_MACRO ~gm_add_from~ BEGIN
 	TO_UPPER gm_r
+	LAUNCH_PATCH_MACRO ~gm_note_camp~
 	SET gm_bit = 1
 	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~K~ BEGIN SET gm_bit = 2 END
 	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~D~ BEGIN SET gm_bit = 4 END
@@ -765,6 +790,7 @@ END
 // the encyclopedia: every item with an icon and a name (gold left out) that the player can come across; an item only
 // a creature carries must be droppable (ITM flag 0x4: no monster weapons, creature immunity rings...)
 OUTER_TEXT_SPRINT gm_all ~~
+OUTER_TEXT_SPRINT gm_camps ~~
 COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
 	PATCH_IF SOURCE_SIZE > 0x71 BEGIN
 		TEXT_SPRINT gm_res ~%SOURCE_RES%~
@@ -780,6 +806,10 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
 			GET_STRREF gm_name gm_text
 			PATCH_IF NOT ~%gm_text%~ STRING_EQUAL ~~ BEGIN
 				TEXT_SPRINT gm_all ~%gm_all%'%gm_res%',~
+				PATCH_IF VARIABLE_IS_SET $gm_cs(~%gm_res%~) BEGIN
+					SET gm_m = $gm_cs(~%gm_res%~)
+					TEXT_SPRINT gm_camps ~%gm_camps%["%gm_res%"] = %gm_m%,~
+				END
 			END
 		END
 	END
@@ -800,6 +830,7 @@ PSXGM_FROM = { GM_FROM_LIST }
 PSXGM_PLACES = { GM_PLACE_LIST }
 PSXGM_STOREAT = { GM_STOREAT_LIST }
 PSXGM_GAME = "GAMEKIND_VALUE"
+PSXGM_CAMPS = { CAMPMASK_LIST_VALUE }
 >>>>>>>>
 COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_ALL_LIST~ ~%gm_all%~
@@ -808,6 +839,7 @@ COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_PLACE_LIST~ ~%gm_places%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_STOREAT_LIST~ ~%gm_storeats%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GAMEKIND_VALUE~ ~%gm_game%~
+	REPLACE_TEXTUALLY EXACT_MATCH ~CAMPMASK_LIST_VALUE~ ~%gm_camps%~
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
