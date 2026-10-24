@@ -213,22 +213,12 @@ EXTRA = {
         'gm_in_stash': '%d dans le coffre', 'gm_value': 'Valeur : %d po', 'gm_never_seen': 'Jamais vu',
         'gm_seen_1': 'Vu en vente : %s', 'gm_seen_2': 'Porté : %s', 'gm_seen_3': 'Vu au sol : %s',
         'gm_seen_4': 'Vu dans un conteneur : %s', 'gm_origin': 'Provenance :', 'gm_more': '+%d autres',
-        'gm_from_S': 'Vendu par %s', 'gm_from_G': 'Au sol : %s', 'gm_from_C': 'Dans un conteneur : %s',
-        'gm_from_K': 'Porté par %s (%s)'},
+        'gm_from_S': 'Vendu par %s', 'gm_from_G': '%s : au sol', 'gm_from_C': '%s : %s',
+        'gm_from_K': 'Porté par %s (%s)', 'gm_from_S2': 'Vendu à %s : %s', 'gm_at': '%s, %s',
+        'gm_ctype': 'conteneur', 'gm_ctype_1': 'sac', 'gm_ctype_2': 'coffre', 'gm_ctype_3': 'tiroir',
+        'gm_ctype_5': 'table', 'gm_ctype_6': 'étagère', 'gm_ctype_7': 'autel', 'gm_ctype_8': 'cachette',
+        'gm_ctype_9': 'grimoire', 'gm_ctype_10': 'corps', 'gm_ctype_11': 'tonneau', 'gm_ctype_12': 'caisse'},
 }
-
-# The stock counts only the stores visited (John 2026-10-24: "1" next to a long "Sold by" list looked wrong).
-STOCK = {
-    'french': '%d en stock (marchands visités)', 'german': '%d auf Lager (besuchte Läden)',
-    'spanish': '%d en existencia (tiendas visitadas)', 'italian': '%d disponibili (negozi visitati)',
-    'polish': '%d w zapasie (odwiedzone sklepy)', 'russian': '%d в наличии (посещённые лавки)',
-    'portuguese': '%d em estoque (lojas visitadas)', 'czech': '%d na skladě (navštívené obchody)',
-    'hungarian': '%d raktáron (meglátogatott boltok)', 'turkish': '%d stokta (ziyaret edilen dükkânlar)',
-    'ukrainian': '%d в наявності (відвідані крамниці)', 'schinese': '库存 %d（已拜访的商店）',
-    'japanese': '在庫 %d（訪れた店）', 'korean': '재고 %d (방문한 상점)',
-}
-for _lang, _s in STOCK.items():
-    EXTRA.setdefault(_lang, {})['gm_stock'] = _s
 
 
 def lua_str(s):

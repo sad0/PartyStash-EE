@@ -79,5 +79,4 @@ PSXGM_Strings = {
 	gm_sell_marked = 'İşaretlileri sat: %s ap',
 	gm_sell_none = 'İşaretli yok',
 	gm_sold = 'Zuladan satıldı: %d ap',
-	gm_stock = '%d stokta (ziyaret edilen dükkânlar)',
 }

@@ -79,5 +79,4 @@ PSXGM_Strings = {
 	gm_sell_marked = '표시한 물건 판매: %s 골드',
 	gm_sell_none = '표시한 것 없음',
 	gm_sold = '보관함에서 판매: %d 골드',
-	gm_stock = '재고 %d (방문한 상점)',
 }

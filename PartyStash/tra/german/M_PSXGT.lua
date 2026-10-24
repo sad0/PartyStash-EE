@@ -79,5 +79,4 @@ PSXGM_Strings = {
 	gm_sell_marked = 'Markierte verkaufen: %s GM',
 	gm_sell_none = 'Nichts markiert',
 	gm_sold = 'Aus dem Lager verkauft: %d GM',
-	gm_stock = '%d auf Lager (besuchte Läden)',
 }

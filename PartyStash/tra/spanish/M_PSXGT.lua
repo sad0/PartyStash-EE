@@ -79,5 +79,4 @@ PSXGM_Strings = {
 	gm_sell_marked = 'Vender marcados: %s po',
 	gm_sell_none = 'Nada marcado',
 	gm_sold = 'Vendido del alijo: %d po',
-	gm_stock = '%d en existencia (tiendas visitadas)',
 }

@@ -175,28 +175,56 @@ END
 COPY ~PartyStash/PSXCHEST.STO~ ~override~
      ~PartyStash/PSXSEEN.STO~ ~override~
 OUTER_TEXT_SPRINT gm_areas ~~
-ACTION_IF FILE_EXISTS_IN_GAME ~worldmap.wmp~ BEGIN
-	COPY_EXISTING ~worldmap.wmp~ ~override~
+ACTION_CLEAR_ARRAY gm_wmp
+// every world map (EET, SoD: several): area -> caption
+COPY_EXISTING_REGEXP GLOB ~^.+\.wmp$~ ~override~
+	READ_ASCII 0 gm_sig (8)
+	PATCH_IF ~%gm_sig%~ STRING_EQUAL ~WMAPV1.0~ BEGIN
 		READ_LONG 0x08 gm_maps
 		READ_LONG 0x0c gm_moff
 		FOR (m = 0; m < gm_maps; ++m) BEGIN
 			READ_LONG (gm_moff + m * 0xb8 + 0x20) gm_na
 			READ_LONG (gm_moff + m * 0xb8 + 0x24) gm_ao
-			FOR (a = 0; a < gm_na; ++a) BEGIN
+			FOR (a = 0; a < gm_na AND gm_ao + a * 0xf0 + 0xf0 <= SOURCE_SIZE; ++a) BEGIN
 				READ_ASCII (gm_ao + a * 0xf0) gm_area (8) NULL
 				READ_LONG (gm_ao + a * 0xf0 + 0x40) gm_cap
-				PATCH_IF gm_cap > 0 AND gm_cap < 0x7fffffff BEGIN
+				TO_UPPER gm_area
+				PATCH_IF gm_cap > 0 AND gm_cap < 0x7fffffff AND NOT VARIABLE_IS_SET $gm_wmp(~%gm_area%~) BEGIN
 					GET_STRREF gm_cap gm_text
-					TO_UPPER gm_area
-					TEXT_SPRINT gm_areas ~%gm_areas%["%gm_area%"] = [[%gm_text%]],~
+					PATCH_IF STRING_LENGTH ~%gm_text%~ > 0 BEGIN
+						TEXT_SPRINT $gm_wmp(~%gm_area%~) ~%gm_text%~
+						TEXT_SPRINT gm_areas ~%gm_areas%["%gm_area%"] = [[%gm_text%]],~
+					END
 				END
 			END
 		END
-	BUT_ONLY
+	END
+BUT_ONLY
+// EET's world map has no caption for the Baldur's Gate districts and Candlekeep (BG1's AR0100... renamed BG0100...)
+ACTION_DEFINE_ASSOCIATIVE_ARRAY gm_unnamed_en BEGIN
+	BG0100 => ~Baldur's Gate, North-West~  BG0200 => ~Baldur's Gate, North~  BG0300 => ~Baldur's Gate, North-East~
+	BG0600 => ~Baldur's Gate, West~  BG0700 => ~Baldur's Gate, Center~  BG0800 => ~Baldur's Gate, East~
+	BG1100 => ~Baldur's Gate, South-West~  BG1200 => ~Baldur's Gate, South~  BG1300 => ~Baldur's Gate, South-East~
+	BG2600 => ~Candlekeep~
+END
+ACTION_DEFINE_ASSOCIATIVE_ARRAY gm_unnamed_fr BEGIN
+	BG0100 => ~Porte de Baldur, nord-ouest~  BG0200 => ~Porte de Baldur, nord~  BG0300 => ~Porte de Baldur, nord-est~
+	BG0600 => ~Porte de Baldur, ouest~  BG0700 => ~Porte de Baldur, centre~  BG0800 => ~Porte de Baldur, est~
+	BG1100 => ~Porte de Baldur, sud-ouest~  BG1200 => ~Porte de Baldur, sud~  BG1300 => ~Porte de Baldur, sud-est~
+	BG2600 => ~Château-Suif~
+END
+ACTION_PHP_EACH gm_unnamed_en AS gm_a => gm_en BEGIN
+	ACTION_IF NOT VARIABLE_IS_SET $gm_wmp(~%gm_a%~) AND FILE_EXISTS_IN_GAME ~%gm_a%.are~ BEGIN
+		OUTER_TEXT_SPRINT gm_text ~%gm_en%~
+		ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~french~ BEGIN OUTER_TEXT_SPRINT gm_text $gm_unnamed_fr(~%gm_a%~) END
+		OUTER_TEXT_SPRINT $gm_wmp(~%gm_a%~) ~%gm_text%~
+		OUTER_TEXT_SPRINT gm_areas ~%gm_areas%["%gm_a%"] = [[%gm_text%]],~
+	END
 END
 // Where each item comes from at the start of the game (build_gm_catalog.py origins(), the same): the stores that sell
-// it, the areas' ground piles and containers, the creatures placed in the areas (their droppable items); at most 4
-// per kind and 12 per item. Entries "kind~name~area" joined by "|" in $gm_from(RES).
+// it (with the area their merchant stands in), the areas' ground piles and containers (with the container type), the
+// creatures placed in the areas (their droppable items); at most 4 per kind and 12 per item. Entries
+// "kind~name~area" joined by "|" in $gm_from(RES).
 ACTION_CLEAR_ARRAY gm_from
 ACTION_CLEAR_ARRAY gm_how
 ACTION_CLEAR_ARRAY gm_spawn
@@ -225,36 +253,34 @@ DEFINE_PATCH_MACRO ~gm_add_from~ BEGIN
 		SET $gm_n(~%gm_r%~) += 1
 	END
 END
-COPY_EXISTING_REGEXP GLOB ~^.+\.sto$~ ~override~
-	PATCH_IF SOURCE_SIZE >= 0x9c BEGIN
-		READ_LONG 0x08 gm_t
-		READ_LONG 0x0c gm_s
-		PATCH_IF gm_t <= 3 BEGIN
-			TEXT_SPRINT gm_name ~%SOURCE_RES%~
-			PATCH_IF gm_s > 0 AND gm_s < 0x7fffffff BEGIN
-				GET_STRREF gm_s gm_text
-				PATCH_IF STRING_LENGTH ~%gm_text%~ > 0 AND STRING_LENGTH ~%gm_text%~ <= 40 BEGIN TEXT_SPRINT gm_name ~%gm_text%~ END
-			END
-			READ_LONG 0x34 gm_io
-			READ_LONG 0x38 gm_ic
-			FOR (i = 0; i < gm_ic AND gm_io + i * 0x1c + 0x1c <= SOURCE_SIZE; ++i) BEGIN
-				READ_ASCII (gm_io + i * 0x1c) gm_r (8) NULL
-				READ_LONG (gm_io + i * 0x1c + 0x14) gm_st
-				READ_LONG (gm_io + i * 0x1c + 0x18) gm_inf
-				PATCH_IF gm_st > 0 OR (gm_inf BAND 1) BEGIN
-					TEXT_SPRINT gm_kind ~S~ TEXT_SPRINT gm_area ~~
-					LAUNCH_PATCH_MACRO ~gm_add_from~
-				END
-			END
-		END
+// the dialogues that open a store: $gm_dlgsto(DLG) = "STORE1,STORE2,"
+ACTION_CLEAR_ARRAY gm_dlgsto
+COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
+	TEXT_SPRINT gm_d ~%SOURCE_RES%~
+	TO_UPPER gm_d
+	READ_ASCII 0 gm_buf (SOURCE_SIZE)
+	INNER_PATCH ~%gm_buf%~ BEGIN
+	REPLACE_EVALUATE CASE_INSENSITIVE ~StartStore[ %TAB%]*([ %TAB%]*"\([^"]+\)"~ BEGIN
+		TEXT_SPRINT gm_s ~%MATCH1%~
+		TO_UPPER gm_s
+		PATCH_IF NOT VARIABLE_IS_SET $gm_dlgsto(~%gm_d%~) BEGIN TEXT_SPRINT $gm_dlgsto(~%gm_d%~) ~~ END
+		TEXT_SPRINT gm_old $gm_dlgsto(~%gm_d%~)
+		TEXT_SPRINT $gm_dlgsto(~%gm_d%~) ~%gm_old%%gm_s%,~
+	END ~%MATCH0%~
 	END
 BUT_ONLY
-// each creature's name and droppable items, then the areas (piles, containers, actors)
+// each creature's dialogue, name and droppable items
 ACTION_CLEAR_ARRAY gm_cre
+ACTION_CLEAR_ARRAY gm_credlg
 COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
-	PATCH_IF SOURCE_SIZE > 0x2c4 BEGIN
+	PATCH_IF SOURCE_SIZE > 0x2d4 BEGIN
 		READ_ASCII 0 gm_sig (8)
 		PATCH_IF ~%gm_sig%~ STRING_EQUAL ~CRE V1.0~ BEGIN
+			TEXT_SPRINT gm_c ~%SOURCE_RES%~
+			TO_UPPER gm_c
+			READ_ASCII 0x2cc gm_d (8) NULL
+			TO_UPPER gm_d
+			TEXT_SPRINT $gm_credlg(~%gm_c%~) ~%gm_d%~
 			READ_LONG 0x08 gm_s
 			TEXT_SPRINT gm_text ~?~
 			PATCH_IF gm_s > 0 AND gm_s < 0x7fffffff BEGIN GET_STRREF gm_s gm_text END
@@ -269,14 +295,21 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
 				END
 			END
 			PATCH_IF NOT ~%gm_list%~ STRING_EQUAL ~~ BEGIN
-				TEXT_SPRINT gm_c ~%SOURCE_RES%~
-				TO_UPPER gm_c
 				TEXT_SPRINT $gm_cre(~%gm_c%~) ~%gm_list%~
 				TEXT_SPRINT $gm_cren(~%gm_c%~) ~%gm_text%~
 			END
 		END
 	END
 BUT_ONLY
+// the areas: piles, containers (with their type), actors (their items; the store their dialogue opens stands here),
+// travel regions (type 2: $gm_adj(AREA) = "NEIGHBOUR1,NEIGHBOUR2,", both ways)
+ACTION_CLEAR_ARRAY gm_adj
+ACTION_CLEAR_ARRAY gm_storeat
+DEFINE_PATCH_MACRO ~gm_link~ BEGIN
+	PATCH_IF NOT VARIABLE_IS_SET $gm_adj(~%gm_x%~) BEGIN TEXT_SPRINT $gm_adj(~%gm_x%~) ~~ END
+	TEXT_SPRINT gm_old $gm_adj(~%gm_x%~)
+	PATCH_IF INDEX (CASE_SENSITIVE EXACT_MATCH ~,%gm_y%,~ ~,%gm_old%~) < 0 BEGIN TEXT_SPRINT $gm_adj(~%gm_x%~) ~%gm_old%%gm_y%,~ END
+END
 COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 	PATCH_IF SOURCE_SIZE >= 0x11c BEGIN
 		TEXT_SPRINT gm_area ~%SOURCE_RES%~
@@ -288,11 +321,22 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 			READ_SHORT (gm_co + c * 0xc0 + 0x24) gm_ct
 			READ_LONG (gm_co + c * 0xc0 + 0x40) gm_first
 			READ_LONG (gm_co + c * 0xc0 + 0x44) gm_cnt
-			PATCH_IF gm_ct = 4 BEGIN TEXT_SPRINT gm_kind ~G~ END ELSE BEGIN TEXT_SPRINT gm_kind ~C~ END
-			TEXT_SPRINT gm_name ~~
+			PATCH_IF gm_ct = 4 BEGIN TEXT_SPRINT gm_kind ~G~ TEXT_SPRINT gm_name ~~ END
+			ELSE BEGIN TEXT_SPRINT gm_kind ~C~ TEXT_SPRINT gm_name ~%gm_ct%~ END
 			FOR (i = gm_first; i < gm_first + gm_cnt AND gm_io + i * 0x14 + 0x14 <= SOURCE_SIZE; ++i) BEGIN
 				READ_ASCII (gm_io + i * 0x14) gm_r (8) NULL
 				LAUNCH_PATCH_MACRO ~gm_add_from~
+			END
+		END
+		READ_SHORT 0x5a gm_rc
+		READ_LONG 0x5c gm_roff
+		FOR (r = 0; r < gm_rc AND gm_roff + r * 0xc4 + 0xc4 <= SOURCE_SIZE; ++r) BEGIN
+			READ_SHORT (gm_roff + r * 0xc4 + 0x20) gm_rt
+			READ_ASCII (gm_roff + r * 0xc4 + 0x38) gm_dest (8) NULL
+			TO_UPPER gm_dest
+			PATCH_IF gm_rt = 2 AND STRING_LENGTH ~%gm_dest%~ > 0 AND NOT ~%gm_dest%~ STRING_EQUAL ~%gm_area%~ BEGIN
+				TEXT_SPRINT gm_x ~%gm_area%~ TEXT_SPRINT gm_y ~%gm_dest%~ LAUNCH_PATCH_MACRO ~gm_link~
+				TEXT_SPRINT gm_x ~%gm_dest%~ TEXT_SPRINT gm_y ~%gm_area%~ LAUNCH_PATCH_MACRO ~gm_link~
 			END
 		END
 		READ_LONG 0x54 gm_ao
@@ -300,6 +344,18 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 		FOR (a = 0; a < gm_ac AND gm_ao + a * 0x110 + 0x110 <= SOURCE_SIZE; ++a) BEGIN
 			READ_ASCII (gm_ao + a * 0x110 + 0x80) gm_c (8) NULL
 			TO_UPPER gm_c
+			READ_ASCII (gm_ao + a * 0x110 + 0x48) gm_d (8) NULL
+			TO_UPPER gm_d
+			PATCH_IF STRING_LENGTH ~%gm_d%~ = 0 AND VARIABLE_IS_SET $gm_credlg(~%gm_c%~) BEGIN TEXT_SPRINT gm_d $gm_credlg(~%gm_c%~) END
+			PATCH_IF STRING_LENGTH ~%gm_d%~ > 0 AND VARIABLE_IS_SET $gm_dlgsto(~%gm_d%~) BEGIN
+				TEXT_SPRINT gm_list $gm_dlgsto(~%gm_d%~)
+				INNER_PATCH ~%gm_list%~ BEGIN
+					REPLACE_EVALUATE ~\([^,]+\),~ BEGIN
+						TEXT_SPRINT gm_s ~%MATCH1%~
+						PATCH_IF NOT VARIABLE_IS_SET $gm_storeat(~%gm_s%~) BEGIN TEXT_SPRINT $gm_storeat(~%gm_s%~) ~%gm_area%~ END
+					END ~%MATCH0%~
+				END
+			END
 			PATCH_IF VARIABLE_IS_SET $gm_cre(~%gm_c%~) BEGIN
 				TEXT_SPRINT gm_kind ~K~
 				TEXT_SPRINT gm_name $gm_cren(~%gm_c%~)
@@ -314,6 +370,101 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 		END
 	END
 BUT_ONLY
+// the stores: their items (S entries with the merchant's area), their type and name (an inn / tavern / temple names
+// the building it stands in)
+ACTION_CLEAR_ARRAY gm_bld
+COPY_EXISTING_REGEXP GLOB ~^.+\.sto$~ ~override~
+	PATCH_IF SOURCE_SIZE >= 0x9c BEGIN
+		READ_LONG 0x08 gm_t
+		READ_LONG 0x0c gm_s
+		PATCH_IF gm_t <= 3 BEGIN
+			TEXT_SPRINT gm_sres ~%SOURCE_RES%~
+			TO_UPPER gm_sres
+			TEXT_SPRINT gm_name ~%gm_sres%~
+			PATCH_IF gm_s > 0 AND gm_s < 0x7fffffff BEGIN
+				GET_STRREF gm_s gm_text
+				PATCH_IF STRING_LENGTH ~%gm_text%~ > 0 AND STRING_LENGTH ~%gm_text%~ <= 40 BEGIN TEXT_SPRINT gm_name ~%gm_text%~ END
+			END
+			TEXT_SPRINT gm_area ~~
+			PATCH_IF VARIABLE_IS_SET $gm_storeat(~%gm_sres%~) BEGIN TEXT_SPRINT gm_area $gm_storeat(~%gm_sres%~) END
+			PATCH_IF gm_t >= 1 AND STRING_LENGTH ~%gm_area%~ > 0 BEGIN
+				PATCH_IF NOT VARIABLE_IS_SET $gm_wmp(~%gm_area%~) AND NOT VARIABLE_IS_SET $gm_bld(~%gm_area%~) BEGIN
+					TEXT_SPRINT $gm_bld(~%gm_area%~) ~%gm_name%~
+				END
+			END
+			READ_LONG 0x34 gm_io
+			READ_LONG 0x38 gm_ic
+			FOR (i = 0; i < gm_ic AND gm_io + i * 0x1c + 0x1c <= SOURCE_SIZE; ++i) BEGIN
+				READ_ASCII (gm_io + i * 0x1c) gm_r (8) NULL
+				READ_LONG (gm_io + i * 0x1c + 0x14) gm_st
+				READ_LONG (gm_io + i * 0x1c + 0x18) gm_inf
+				PATCH_IF gm_st > 0 OR (gm_inf BAND 1) BEGIN
+					TEXT_SPRINT gm_kind ~S~
+					LAUNCH_PATCH_MACRO ~gm_add_from~
+				END
+			END
+		END
+	END
+BUT_ONLY
+// readable places: an area with a world map caption keeps it; another takes the nearest captioned area through the
+// travel regions (at most 6 steps), and the building its inn / tavern / temple names ("Beregost - Jovial Juggler")
+DEFINE_ACTION_MACRO ~gm_outer~ BEGIN
+	OUTER_TEXT_SPRINT gm_out ~~
+	OUTER_TEXT_SPRINT gm_queue ~%gm_start%,~
+	OUTER_TEXT_SPRINT gm_seenq ~,%gm_start%,~
+	OUTER_FOR (gm_depth = 0; gm_depth < 7 AND STRING_LENGTH ~%gm_out%~ = 0 AND STRING_LENGTH ~%gm_queue%~ > 0; ++gm_depth) BEGIN
+		OUTER_TEXT_SPRINT gm_next ~~
+		OUTER_INNER_PATCH ~%gm_queue%~ BEGIN
+			REPLACE_EVALUATE ~\([^,]+\),~ BEGIN
+				TEXT_SPRINT gm_q ~%MATCH1%~
+				PATCH_IF STRING_LENGTH ~%gm_out%~ = 0 BEGIN
+					PATCH_IF VARIABLE_IS_SET $gm_wmp(~%gm_q%~) BEGIN
+						TEXT_SPRINT gm_out $gm_wmp(~%gm_q%~)
+					END ELSE PATCH_IF VARIABLE_IS_SET $gm_adj(~%gm_q%~) BEGIN
+						TEXT_SPRINT gm_nb $gm_adj(~%gm_q%~)
+						INNER_PATCH ~%gm_nb%~ BEGIN
+							REPLACE_EVALUATE ~\([^,]+\),~ BEGIN
+								TEXT_SPRINT gm_z ~%MATCH1%~
+								PATCH_IF INDEX (CASE_SENSITIVE EXACT_MATCH ~,%gm_z%,~ ~%gm_seenq%~) < 0 BEGIN
+									TEXT_SPRINT gm_seenq ~%gm_seenq%%gm_z%,~
+									TEXT_SPRINT gm_next ~%gm_next%%gm_z%,~
+								END
+							END ~%MATCH0%~
+						END
+					END
+				END
+			END ~%MATCH0%~
+		END
+		OUTER_TEXT_SPRINT gm_queue ~%gm_next%~
+	END
+END
+ACTION_CLEAR_ARRAY gm_todo
+ACTION_PHP_EACH gm_adj AS gm_a => gm_v BEGIN OUTER_SET $gm_todo(~%gm_a%~) = 1 END
+ACTION_PHP_EACH gm_wmp AS gm_a => gm_v BEGIN OUTER_SET $gm_todo(~%gm_a%~) = 1 END
+ACTION_PHP_EACH gm_storeat AS gm_s => gm_a BEGIN OUTER_SET $gm_todo(~%gm_a%~) = 1 END
+OUTER_TEXT_SPRINT gm_places ~~
+ACTION_PHP_EACH gm_todo AS gm_a => gm_v BEGIN
+	OUTER_TEXT_SPRINT gm_label ~~
+	ACTION_IF VARIABLE_IS_SET $gm_wmp(~%gm_a%~) BEGIN
+		OUTER_TEXT_SPRINT gm_label $gm_wmp(~%gm_a%~)
+	END ELSE BEGIN
+		OUTER_TEXT_SPRINT gm_start ~%gm_a%~
+		LAUNCH_ACTION_MACRO ~gm_outer~
+		OUTER_TEXT_SPRINT gm_label ~%gm_out%~
+		ACTION_IF VARIABLE_IS_SET $gm_bld(~%gm_a%~) BEGIN
+			OUTER_TEXT_SPRINT gm_b $gm_bld(~%gm_a%~)
+			ACTION_IF STRING_LENGTH ~%gm_label%~ > 0 BEGIN OUTER_TEXT_SPRINT gm_label ~%gm_label% - %gm_b%~ END
+			ELSE BEGIN OUTER_TEXT_SPRINT gm_label ~%gm_b%~ END
+		END
+	END
+	ACTION_IF STRING_LENGTH ~%gm_label%~ > 0 BEGIN
+		OUTER_TEXT_SPRINT gm_places ~%gm_places%["%gm_a%"] = [[%gm_label%]],~
+	END
+END
+OUTER_TEXT_SPRINT gm_storeats ~~
+ACTION_PHP_EACH gm_storeat AS gm_s => gm_a BEGIN
+	OUTER_TEXT_SPRINT gm_storeats ~%gm_storeats%["%gm_s%"] = "%gm_a%",~
+END
 DEFINE_PATCH_MACRO ~gm_spawn_add~ BEGIN
 	TO_UPPER gm_c
 	SET $gm_spawn(~%gm_c%~) = 1
@@ -445,6 +596,8 @@ END
 PSXGM_ALL = { GM_ALL_LIST }
 PSXGM_AREAS = { GM_AREA_LIST }
 PSXGM_FROM = { GM_FROM_LIST }
+PSXGM_PLACES = { GM_PLACE_LIST }
+PSXGM_STOREAT = { GM_STOREAT_LIST }
 >>>>>>>>
 COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_ALL_LIST~ ~%gm_all%~

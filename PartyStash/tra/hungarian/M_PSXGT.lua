@@ -79,5 +79,4 @@ PSXGM_Strings = {
 	gm_sell_marked = 'Megjelöltek eladása: %s at',
 	gm_sell_none = 'Nincs megjelölve',
 	gm_sold = 'Eladva a raktárból: %d at',
-	gm_stock = '%d raktáron (meglátogatott boltok)',
 }

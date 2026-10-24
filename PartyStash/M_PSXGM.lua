@@ -56,7 +56,7 @@ G.EN = {
 	gm_search = 'Search', gm_usable = 'Usable', gm_affordable = 'Affordable', gm_sort = 'Sort: %s',
 	gm_sort_auto = 'Auto', gm_sort_type = 'Type', gm_sort_price = 'Price', gm_sort_name = 'Name',
 	gm_buy = 'Buy', gm_done = 'Done', gm_vanilla = 'Sell / vanilla view', gm_back = 'Camp merchant',
-	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock (stores visited)', gm_from = 'From: %s', gm_wished = 'Wishlist',
+	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock', gm_from = 'From: %s', gm_wished = 'Wishlist',
 	gm_items = '%d items', gm_empty = 'Nothing here yet: visit stores to fill the camp merchant.',
 	gm_no_gold = 'Not enough gold', gm_full = 'Backpack full: select another character', gm_cannot_buy = 'Cannot buy that now', gm_bought = 'Bought: %s x%d',
 	gm_select = 'Click: choose\nCtrl + click: wishlist\nRight click: description',
@@ -66,8 +66,12 @@ G.EN = {
 	gm_chest = 'Codex', gm_stash = 'Party stash', gm_take = 'Take', gm_in_stash = '%d in the stash',
 	gm_value = 'Value: %d gp', gm_never_seen = 'Never seen', gm_seen_1 = 'Seen for sale: %s', gm_seen_2 = 'Carried: %s',
 	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
-	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = 'On the ground: %s',
-	gm_from_C = 'In a container: %s', gm_from_K = 'Carried by %s (%s)',
+	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = '%s: on the ground',
+	gm_from_C = '%s: %s', gm_from_K = 'Carried by %s (%s)', gm_from_S2 = 'Sold at %s: %s', gm_at = '%s, %s',
+	-- container types (ARE container type), "In a container" when unknown
+	gm_ctype = 'container', gm_ctype_1 = 'bag', gm_ctype_2 = 'chest', gm_ctype_3 = 'drawer', gm_ctype_5 = 'table',
+	gm_ctype_6 = 'shelf', gm_ctype_7 = 'altar', gm_ctype_8 = 'hidden', gm_ctype_9 = 'spellbook', gm_ctype_10 = 'body',
+	gm_ctype_11 = 'barrel', gm_ctype_12 = 'crate',
 }
 -- PSXGM_Strings: the installed language's M_PSXGT.lua (build_gm_strings.py; component #8 copies it).
 local function T(key, ...)
@@ -542,12 +546,21 @@ local function scanSeen()
 end
 G.scanSeen = scanSeen
 
--- "Where": a store's name, or an area's (WORLDMAP caption from M_PSXCAT.lua; an inner area takes its outer one's).
+-- "Where": an area's readable name (PSXGM_PLACES from M_PSXCAT.lua: the outer area, and the building for an inner
+-- one; else the world map caption of it or of its "xx00" area), or a store as "place: store name".
+local function areaName(area)
+	if not area or area == '' then return nil end
+	local areas = PSXGM_AREAS or {}
+	return (PSXGM_PLACES or {})[area] or areas[area] or areas[string.sub(area, 1, 4) .. '00']
+end
 local function placeName(place)
 	if not place or place == '' then return '?' end
-	if G.storeNames[place] then return G.storeNames[place] end
-	local areas = PSXGM_AREAS or {}
-	return areas[place] or areas[string.sub(place, 1, 4) .. '00'] or place
+	local store = G.storeNames[place]
+	if store then
+		local at = areaName((PSXGM_STOREAT or {})[place])
+		return at and T('gm_at', at, store) or store
+	end
+	return areaName(place) or place
 end
 local function seenText(res)
 	local s = G.seen and G.seen[res]
@@ -1147,9 +1160,18 @@ local function origins(res)
 	o = {}
 	for entry in string.gmatch((PSXGM_FROM or {})[res] or '', '[^|]+') do
 		local kind, name, area = string.match(entry, '^(%a)~([^~]*)~(.*)$')
-		if kind == 'S' then o[#o + 1] = T('gm_from_S', name)
+		-- S: name~its area; C: its container type~area (John 2026-10-24: place first, readable names)
+		if kind == 'S' then
+			local at = areaName(area)
+			o[#o + 1] = at and T('gm_from_S2', at, name) or T('gm_from_S', name)
 		elseif kind == 'K' then o[#o + 1] = T('gm_from_K', name, placeName(area))
-		elseif kind == 'G' or kind == 'C' then o[#o + 1] = T('gm_from_' .. kind, placeName(area)) end
+		elseif kind == 'G' then o[#o + 1] = T('gm_from_G', placeName(area))
+		elseif kind == 'C' then
+			local key = 'gm_ctype_' .. name
+			local word = T(key)
+			if word == key then word = T('gm_ctype') end
+			o[#o + 1] = T('gm_from_C', placeName(area), word)
+		end
 	end
 	G.fromCache[res] = o
 	return o

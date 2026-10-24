@@ -79,5 +79,4 @@ PSXGM_Strings = {
 	gm_sell_marked = '出售已标记：%s 金币',
 	gm_sell_none = '没有标记的物品',
 	gm_sold = '已从储藏箱出售：%d 金币',
-	gm_stock = '库存 %d（已拜访的商店）',
 }
