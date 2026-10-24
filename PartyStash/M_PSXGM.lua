@@ -971,8 +971,13 @@ local function campKey()
 	for i = 1, 10 do k = k .. (G.camps[i] and '1' or '0') end
 	return k
 end
-local function campOk(res)
+local function campOk(res, sources)
 	if string.sub(campKey(), 1, 7) == '1111111' then return true end
+	-- the stores it was seen at (the camp merchant): their campaign counts too
+	for _, src in ipairs(sources or {}) do
+		local at = src.store and (PSXGM_STOREAT or {})[string.upper(src.store)]
+		if at and G.campaign and G.camps[G.campaign(at)] then return true end
+	end
 	local set = G.campOf[res]
 	if not set then
 		set = {}
@@ -983,7 +988,8 @@ local function campOk(res)
 		else
 			local o = G.origins and G.origins(res) or { camp = {} }
 			for i = 1, #o do set[o.camp[i]] = true end
-			if #o == 0 then set[7] = true end
+			-- no origin known (a quest item outside the Codex, in the stash): every campaign keeps it
+			if #o == 0 then set = { true, true, true, true, true, true, true } end
 		end
 		G.campOf[res] = set
 	end
@@ -1135,7 +1141,7 @@ local function rebuild()
 		if c.hit
 			and (not G.usable or usableBy(sp, info))
 			and (not G.afford or (not c.catalog and c.price <= gold))
-			and campOk(res)
+			and campOk(res, c.sources)
 			and (not G.camps[8] or (G.carried and G.carried[res]))
 			and ((G.seen and G.seen[res]) and G.camps[9] or (not (G.seen and G.seen[res]) and G.camps[10])) then
 			local lf = leafOf(info, res)
@@ -1255,6 +1261,7 @@ local function campaign(area)
 	end
 	return 7
 end
+G.campaign = campaign
 -- Text lines, sorted by campaign (o.camp[i] = its campaign), then sold, container, ground, given, carried, carried
 -- by a creature that appears, random treasure.
 local KIND_RANK = { S = 1, C = 2, G = 3, D = 4, K = 5, P = 6, T = 7 }
