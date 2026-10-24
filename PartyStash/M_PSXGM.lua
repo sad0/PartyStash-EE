@@ -991,6 +991,8 @@ local function campOk(res, sources)
 			-- no origin known (a quest item outside the Codex, in the stash): every campaign keeps it
 			if #o == 0 then set = { true, true, true, true, true, true, true } end
 		end
+		-- "Other" = no known campaign only (John 2026-10-24: an item of BG with one unknown origin is not "Other")
+		for i = 1, 6 do if set[i] then set[7] = false break end end
 		G.campOf[res] = set
 	end
 	for i = 1, 7 do
