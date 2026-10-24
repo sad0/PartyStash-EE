@@ -1596,6 +1596,9 @@ function PSXGM_Done()
 end
 function PSXGM_OnOpen()
 	G.dirty, G.msg = true, ''
+	-- the filters back to their defaults at every opening (John 2026-10-24): every campaign, found and not found
+	-- ticked, Carried off
+	G.camps = { true, true, true, true, true, true, true, false, true, true }
 	gmFindText = gmFindText or ''
 	G.findText = {}
 	buildTree() -- in the installed language (M_PSXGT.lua loads after this file)
