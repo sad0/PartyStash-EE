@@ -1491,6 +1491,70 @@ function PSXGM_Tick()
 	return false
 end
 
+-----------------------
+-- Public API         --
+-----------------------
+-- For other mods (SadoQoL / SadoEE Withers: the recruit's gear screen, 2026-10-24). Outside the store screen: the
+-- engine's store price (reputation, charisma) is not at hand, so one copy costs ITM price x the store's markup / 100.
+
+-- What the camp merchant sells right now: { [RES] = { price = gp for one (cheapest store), stock = n or -1 } }.
+-- Quest / critical items are left out, as on the page; the Party Stash is not part of it (PStash_List).
+function PSXGM_Pool()
+	local out = {}
+	local ok, err = pcall(function()
+		local agg = aggregate(false)
+		for res, a in pairs(agg) do
+			local info, s = itemInfo(res), a.sources[1]
+			if info and s then
+				out[res] = { price = math.floor(info.price * s.markup / 100 + 0.5), stock = a.inf and -1 or a.total }
+			end
+		end
+	end)
+	if not ok then print('[PSXGM] PSXGM_Pool: ' .. tostring(err)) end
+	return out
+end
+
+-- Party gold through CInfGame +0x7988 (as M_PSTASH.lua's addGold, both builds): false when the field does not match.
+local function payGold(n)
+	local p = EEex_UDToPtr(EEex_EngineGlobal_CBaldurChitin.m_pObjectGame)
+	local cur = game:GetPartyGold()
+	if cur < n or EEex_ReadU32(p + 0x7988) ~= cur then return false end
+	EEex_Write32(p + 0x7988, cur - n)
+	if game:GetPartyGold() == cur - n then return true end
+	EEex_Write32(p + 0x7988, cur)
+	return false
+end
+
+-- Takes `n` copies of `res` out of the stores (cheapest first, as the page buys them) and charges the party gold.
+-- Does NOT create the item: the caller does. Returns true, gp paid, or nil, reason ('not sold', 'stock', 'gold',
+-- 'gold field'). Prices as PSXGM_Pool.
+function PSXGM_PoolTake(res, n)
+	res, n = string.upper(res or ''), math.max(1, n or 1)
+	local agg = aggregate(false) -- fresh: the stores may have changed since PSXGM_Pool
+	local a = agg[res]
+	local info = itemInfo(res)
+	if not a or not info or #a.sources == 0 then return nil, 'not sold' end
+	if not a.inf and a.total < n then return nil, 'stock' end
+	local plan, left, cost = {}, n, 0
+	for _, s in ipairs(a.sources) do
+		if left <= 0 then break end
+		local k = s.inf and left or math.min(left, s.stock)
+		if k > 0 then
+			plan[#plan + 1] = { s = s, k = k }
+			cost = cost + k * math.floor(info.price * s.markup / 100 + 0.5)
+			left = left - k
+		end
+	end
+	if left > 0 then return nil, 'stock' end
+	if game:GetPartyGold() < cost then return nil, 'gold' end
+	if not payGold(cost) then return nil, 'gold field' end
+	for _, p in ipairs(plan) do
+		if not p.s.inf then takeFrom(p.s, res, p.k, a) end
+	end
+	G.dirty = true
+	return true, cost
+end
+
 -- The camp catalog from the known stores: { stores, items, infinite, units } (no listing: a long print crashed the game).
 function PSXGM_Catalog()
 	local agg = G.aggregate()
