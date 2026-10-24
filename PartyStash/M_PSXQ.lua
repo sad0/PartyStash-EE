@@ -453,11 +453,14 @@ function PSXQ_OnOpen()
 	qFindText = qFindText or ''
 end
 
+-- A full page (M_PSXPG.lua, John 2026-10-24): the game paused, the world veiled, the portrait bars still usable.
 function PSXQ_Open()
 	if type(quests) ~= 'table' then return end
+	if PSXPG_Open then PSXPG_Open('PSXQ_PAGE') return end
 	if not Infinity_IsMenuOnStack('PSXQ_PAGE') then Infinity_PushMenu('PSXQ_PAGE') end
 end
 function PSXQ_Close()
+	if PSXPG_Close then PSXPG_Close('PSXQ_PAGE') return end
 	if Infinity_IsMenuOnStack('PSXQ_PAGE') then Infinity_PopMenu('PSXQ_PAGE') end
 end
 -- The dialogue's check (Decard's reply shows when the page is installed).

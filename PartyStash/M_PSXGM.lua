@@ -1783,6 +1783,9 @@ if not G.pushWrapped then
 		local m = ...
 		local r = table.pack(push(...))
 		if m ~= 'PSXGM_TICK' then pcall(pushTick) end
+		-- the store panel opens: the page goes over it in the same frame (the throttled tick showed the game's
+		-- store screen for a moment first, John 2026-10-24)
+		if m == 'STORE_BUYSELL' then G.next = nil pcall(PSXGM_Tick) end
 		return table.unpack(r, 1, r.n)
 	end
 end

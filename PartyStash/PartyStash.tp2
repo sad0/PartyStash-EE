@@ -868,6 +868,9 @@ REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-M
 REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~sqcain.dlg~ @21
 COPY ~PartyStash/M_PSXQ.lua~ ~override~
      ~PartyStash/PSXQ.menu~ ~override~
+// full pages over the world (shared helper, John 2026-10-24): the game paused, the world veiled, the portrait bars live
+COPY ~PartyStash/M_PSXPG.lua~ ~override~
+     ~PartyStash/PSXPG.menu~ ~override~
 // the notice board and the paper tickets of the camp merchant's page (the same files as #8)
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
