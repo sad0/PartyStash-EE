@@ -320,6 +320,8 @@ DEFINE_PATCH_MACRO ~gm_spawn_add~ BEGIN
 END
 // compiled scripts: AC <id> + 3 objects + the action's own strings ([^ -}] = the line break)
 COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
+	READ_ASCII 0 gm_buf (SOURCE_SIZE)
+	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~AC[^ -}]\([0-9]+\)OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"\([^"]*\)" "\([^"]*\)" AC~ BEGIN
 		SET gm_id = MATCH1
 		TEXT_SPRINT gm_s1 ~%MATCH2%~
@@ -334,9 +336,12 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
 			TEXT_SPRINT gm_c ~%gm_s2%~ PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
 		END
 	END ~%MATCH0%~
+	END
 BUT_ONLY
-// dialogues keep their actions as text
+// dialogues keep their actions as text (scanned in a copy: nothing is written)
 COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
+	READ_ASCII 0 gm_buf (SOURCE_SIZE)
+	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~\(GiveItemCreate\|CreateItem\|CreateItemGlobal\|AddStoreItem\)[ %TAB%]*(\([^)]*\))~ BEGIN
 		SET gm_bit = 4
 		INNER_PATCH ~%MATCH2%~ BEGIN
@@ -348,25 +353,35 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
 			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN TEXT_SPRINT gm_c ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
 		END
 	END ~%MATCH0%~
+	END
 BUT_ONLY
 // random treasure and starting gear tables (items), random spawn and NPC level tables (creatures), spawn INIs
 ACTION_FOR_EACH gm_t IN rndtres rndtreas rndscrol rndequip rndwep rndmagic 25stweap mpstweap bdstweap BEGIN
 	ACTION_IF FILE_EXISTS_IN_GAME ~%gm_t%.2da~ BEGIN
 		COPY_EXISTING ~%gm_t%.2da~ ~override~
 			SET gm_bit = 8
+			READ_ASCII 0 gm_buf (SOURCE_SIZE)
+			INNER_PATCH ~%gm_buf%~ BEGIN
 			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_r ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+			END
 		BUT_ONLY
 	END
 END
 ACTION_FOR_EACH gm_t IN spawngrp npclvlds BEGIN
 	ACTION_IF FILE_EXISTS_IN_GAME ~%gm_t%.2da~ BEGIN
 		COPY_EXISTING ~%gm_t%.2da~ ~override~
+			READ_ASCII 0 gm_buf (SOURCE_SIZE)
+			INNER_PATCH ~%gm_buf%~ BEGIN
 			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+			END
 		BUT_ONLY
 	END
 END
 COPY_EXISTING_REGEXP GLOB ~^.+\.ini$~ ~override~
+	READ_ASCII 0 gm_buf (SOURCE_SIZE)
+	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+	END
 BUT_ONLY
 // the areas' spawn points and rest encounters
 COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
