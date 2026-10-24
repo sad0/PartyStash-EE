@@ -179,7 +179,7 @@ def origins(g, tlk):
                 break
             stock, inf = struct.unpack_from('<II', d, e + 0x14)
             if stock > 0 or inf & 1:
-                add(res8(d[e:e + 8]), 'S~%s~%s' % (nm, STORE_AT.get(n, '')))
+                add(res8(d[e:e + 8]), 'S~%s~%s' % (nm, STORE_AT.get(n) or camp_of(g, n, 'STO')))
     cre_items = {}
 
     def cre(n):
@@ -239,6 +239,35 @@ CRE_RE = re.compile(rb'CreateCreature\w*\s*\(([^)]*)\)', re.I)
 ITEM_TABLES = ('RNDTRES', 'RNDTREAS', 'RNDSCROL', 'RNDEQUIP', 'RNDWEP', 'RNDMAGIC', '25STWEAP', 'MPSTWEAP', 'BDSTWEAP')
 CRE_TABLES = ('SPAWNGRP', 'NPCLVLDS')
 TOKEN_RE = re.compile(rb'[A-Za-z0-9_#!$-]{1,8}')
+
+
+GAME_KIND = ''  # 'eet', 'bgee', 'bg2ee' (main())
+
+
+def camp_of(g, n, ext):
+    """An origin without an area gets its campaign from its file (John 2026-10-24: no "Other" when it can be traced):
+    '#1' BG, '#2' SoD, '#3' SoA, '#4' ToB, '#5' the Black Pits, '' unknown. SoD files start with BD, the Black Pits'
+    with OH / BP; in a BIF, ToB's are in 25*.bif, the Black Pits' in BlackPits.bif; EET keeps BG1 (and SoD) in its
+    override, BG2 in the BIFs."""
+    n = n.upper()
+    if n[:2] == 'BD':
+        c = 2
+    elif n[:2] in ('OH', 'BP'):
+        c = 5
+    else:
+        loc = g.res.get((n, build_items.TYP[ext]))
+        b = os.path.basename(g.bifs[loc >> 20]).upper() if loc is not None else ''
+        if GAME_KIND == 'bgee':
+            c = 1
+        elif b.startswith('25'):
+            c = 4
+        elif b.startswith('BLACKP'):
+            c = 5
+        elif b and not b.startswith('EET'):
+            c = 3
+        else:  # EET: only in the override (or EET's own BIFs) = BG1; BG2EE: a mod's file
+            c = 1 if GAME_KIND == 'eet' else 0
+    return '#%d' % c if c else ''
 
 
 def owners(g, tlk):
@@ -323,6 +352,7 @@ def obtainable(g, frm, tlk):
     for n in g.names('BCS'):
         d = g.get(n, 'BCS') or b''
         who, area = bcs_own.get(n.upper(), ('', ''))
+        area = area or camp_of(g, n, 'BCS')
         for m in re.finditer(rb'AC\n(\d+)(.*?)AC\n', d, re.S):
             aid = int(m.group(1))
             if aid in ITEM_ACTIONS or aid in CRE_ACTIONS:
@@ -336,6 +366,7 @@ def obtainable(g, frm, tlk):
     for n in g.names('DLG'):
         d = g.get(n, 'DLG') or b''
         who, area = dlg_own.get(n.upper(), ('', ''))
+        area = area or camp_of(g, n, 'DLG')
         for m in ITEM_RE.finditer(d):
             s = strings(m.group(1)) & items
             mark(s, 'give')
@@ -347,7 +378,7 @@ def obtainable(g, frm, tlk):
         if n.upper() in ITEM_TABLES or n.upper() in CRE_TABLES:
             toks = set(t.decode('latin-1').upper() for t in TOKEN_RE.findall(g.get(n, '2DA') or b''))
             mark(toks & items, 'table')
-            more += [(r, 'T~~') for r in toks & items]
+            more += [(r, 'T~~%s' % camp_of(g, n, '2DA')) for r in toks & items]
             for c in toks & cres:
                 spawn(c, '')
     for n in g.names('INI'):
@@ -383,7 +414,7 @@ def obtainable(g, frm, tlk):
                 if not struct.unpack_from('<I', d, e + 0x10)[0] & 0x8:  # undroppable
                     r = res8(d[e:e + 8])
                     mark({r}, 'spawn')
-                    more += [(r, 'P~%s~%s' % (name, a)) for a in sorted(set(spawned[n]) - {''} or {''})]
+                    more += [(r, 'P~%s~%s' % (name, a or camp_of(g, n, 'CRE'))) for a in sorted(set(spawned[n]) - {''} or {''})]
     # a creature that appears somewhere known: its line without a place goes (several CRE share a name)
     known_by = set((r, e.rsplit('~', 1)[0]) for r, e in more if e[0] == 'P' and not e.endswith('~'))
     for r, entry in more:
@@ -398,6 +429,8 @@ def obtainable(g, frm, tlk):
 
 def main():
     g = build_items.Game(GAME)
+    global GAME_KIND
+    GAME_KIND = 'eet' if g.get('BG0100', 'ARE') is not None else ('bg2ee' if g.get('AR6200', 'ARE') is not None else 'bgee')
     lang = 'en_US'  # the installed language (weidu.conf lang_dir), like the installer's own build
     conf = os.path.join(GAME, 'weidu.conf')
     if os.path.exists(conf):
@@ -464,8 +497,7 @@ def main():
         lines.append('\t["%s"] = %s,' % (k, q(plc[k])))
     lines.append('}')
     # the game: on BGEE the AR areas are BG1's, on BG2EE and EET BG2's (the origins' campaigns)
-    game = 'eet' if g.get('BG0100', 'ARE') is not None else ('bg2ee' if g.get('AR6200', 'ARE') is not None else 'bgee')
-    lines.append('PSXGM_GAME = %s' % q(game))
+    lines.append('PSXGM_GAME = %s' % q(GAME_KIND))
     lines.append('-- The area each store\'s merchant stands in.')
     lines.append('PSXGM_STOREAT = {')
     for k in sorted(STORE_AT):

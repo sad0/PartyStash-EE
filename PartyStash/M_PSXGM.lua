@@ -1187,8 +1187,11 @@ function PSXGM_CellWished(i) local c = cell(i) return c ~= nil and c.wish end
 -- Where the item comes from at the start of the game (PSXGM_FROM, M_PSXCAT.lua; John 2026-10-23): text lines.
 G.fromCache = G.fromCache or {}
 -- The campaign an area belongs to (John 2026-10-24: the origins grouped BG, SoD, BG2, ToB): 1 BG, 2 SoD, 3 SoA,
--- 4 ToB, 5 the Black Pits, 6 elsewhere (no area). AR is BG1 on BGEE, BG2 elsewhere (PSXGM_GAME, M_PSXCAT.lua).
+-- 4 ToB, 5 the Black Pits, 6 elsewhere (not known). AR is BG1 on BGEE, BG2 elsewhere (PSXGM_GAME, M_PSXCAT.lua).
 local function campaign(area)
+	-- an origin without an area carries its campaign ("#2", build_gm_catalog.py camp_of)
+	local c = tonumber(string.match(area or '', '^#(%d)$'))
+	if c then return c end
 	local pre, num = string.match(area or '', '^(%a%a)(%d%d%d%d)')
 	if not pre then return 6 end
 	pre, num = string.upper(pre), tonumber(num)

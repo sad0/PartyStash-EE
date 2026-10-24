@@ -278,6 +278,53 @@ DEFINE_PATCH_MACRO ~gm_add_from~ BEGIN
 		SET $gm_n(~%gm_r%~) += 1
 	END
 END
+// An origin without an area gets its campaign from its file (John 2026-10-24; build_gm_catalog.py camp_of, the same):
+// "#1" BG, "#2" SoD, "#3" SoA, "#4" ToB, "#5" the Black Pits, "" unknown. SoD files start with BD, the Black Pits'
+// with OH / BP; in a BIF (chitin.key, read only), ToB's are in 25*.bif, the Black Pits' in BlackPits.bif; EET keeps
+// BG1 (and SoD) in its override, BG2 in the BIFs. $gm_bifc(TYPE NAME) = the campaign of the BIF holding it.
+OUTER_TEXT_SPRINT gm_ckind ~bgee~
+ACTION_IF GAME_IS ~eet~ BEGIN OUTER_TEXT_SPRINT gm_ckind ~eet~ END
+ACTION_IF GAME_IS ~bg2ee~ BEGIN OUTER_TEXT_SPRINT gm_ckind ~bg2ee~ END
+ACTION_CLEAR_ARRAY gm_bifc
+COPY - ~chitin.key~ ~override~
+	READ_LONG 0x08 gm_nb
+	READ_LONG 0x0c gm_nr
+	READ_LONG 0x10 gm_ob
+	READ_LONG 0x14 gm_or
+	FOR (i = 0; i < gm_nb; ++i) BEGIN
+		READ_LONG (gm_ob + i * 12 + 4) gm_no
+		READ_SHORT (gm_ob + i * 12 + 8) gm_nl
+		READ_ASCII gm_no gm_bn (gm_nl) NULL
+		TO_UPPER gm_bn
+		SET gm_cc = 3
+		PATCH_IF ~%gm_ckind%~ STRING_EQUAL ~bgee~ BEGIN SET gm_cc = 1 END
+		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?25.*~ = 0 BEGIN SET gm_cc = 4 END
+		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?BLACKP.*~ = 0 BEGIN SET gm_cc = 5 END
+		ELSE PATCH_IF ~%gm_bn%~ STRING_MATCHES_REGEXP ~^\(DATA[/\\]\)?EET.*~ = 0 BEGIN SET gm_cc = (~%gm_ckind%~ STRING_EQUAL ~eet~) ? 1 : 0 END
+		SET $gm_bifn(~%i%~) = gm_cc
+	END
+	FOR (i = 0; i < gm_nr; ++i) BEGIN
+		READ_SHORT (gm_or + i * 14 + 8) gm_t
+		PATCH_IF gm_t = 0x3f1 OR gm_t = 0x3f3 OR gm_t = 0x3f6 OR gm_t = 0x3ef OR gm_t = 0x3f4 BEGIN
+			READ_ASCII (gm_or + i * 14) gm_n (8) NULL
+			TO_UPPER gm_n
+			READ_LONG (gm_or + i * 14 + 10) gm_loc
+			SET gm_b = gm_loc >> 20
+			SET $gm_bifc(~%gm_t%~ ~%gm_n%~) = $gm_bifn(~%gm_b%~)
+		END
+	END
+BUT_ONLY
+// gm_cn (resref) + gm_ctyp (0x3f1 CRE, 0x3f3 DLG, 0x3f6 STO, 0x3ef BCS, 0x3f4 2DA) -> gm_cmp ("#2", or "")
+DEFINE_PATCH_MACRO ~gm_camp~ BEGIN
+	TO_UPPER gm_cn
+	SET gm_cc = 0
+	PATCH_IF ~%gm_cn%~ STRING_MATCHES_REGEXP ~^BD.*~ = 0 BEGIN SET gm_cc = 2 END
+	ELSE PATCH_IF ~%gm_cn%~ STRING_MATCHES_REGEXP ~^\(OH\|BP\).*~ = 0 BEGIN SET gm_cc = 5 END
+	ELSE PATCH_IF VARIABLE_IS_SET $gm_bifc(~%gm_ctyp%~ ~%gm_cn%~) BEGIN SET gm_cc = $gm_bifc(~%gm_ctyp%~ ~%gm_cn%~) END
+	ELSE PATCH_IF ~%gm_ckind%~ STRING_EQUAL ~bgee~ OR ~%gm_ckind%~ STRING_EQUAL ~eet~ BEGIN SET gm_cc = 1 END
+	TEXT_SPRINT gm_cmp ~~
+	PATCH_IF gm_cc > 0 BEGIN TEXT_SPRINT gm_cmp ~#%gm_cc%~ END
+END
 // the dialogues that open a store: $gm_dlgsto(DLG) = "STORE1,STORE2,"
 ACTION_CLEAR_ARRAY gm_dlgsto
 COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
@@ -474,6 +521,7 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.sto$~ ~override~
 			END
 			TEXT_SPRINT gm_area ~~
 			PATCH_IF VARIABLE_IS_SET $gm_storeat(~%gm_sres%~) BEGIN TEXT_SPRINT gm_area $gm_storeat(~%gm_sres%~) END
+			ELSE BEGIN TEXT_SPRINT gm_cn ~%gm_sres%~ SET gm_ctyp = 0x3f6 LAUNCH_PATCH_MACRO ~gm_camp~ TEXT_SPRINT gm_bcmp ~%gm_cmp%~ END
 			PATCH_IF gm_t >= 1 AND STRING_LENGTH ~%gm_area%~ > 0 BEGIN
 				PATCH_IF NOT VARIABLE_IS_SET $gm_wmp(~%gm_area%~) AND NOT VARIABLE_IS_SET $gm_bld(~%gm_area%~) BEGIN
 					TEXT_SPRINT $gm_bld(~%gm_area%~) ~%gm_name%~
@@ -487,6 +535,7 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.sto$~ ~override~
 				READ_LONG (gm_io + i * 0x1c + 0x18) gm_inf
 				PATCH_IF gm_st > 0 OR (gm_inf BAND 1) BEGIN
 					TEXT_SPRINT gm_kind ~S~
+					PATCH_IF STRING_LENGTH ~%gm_area%~ = 0 BEGIN TEXT_SPRINT gm_area ~%gm_bcmp%~ END
 					LAUNCH_PATCH_MACRO ~gm_add_from~
 				END
 			END
@@ -582,6 +631,7 @@ END
 COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
 	TEXT_SPRINT gm_ok ~%SOURCE_RES%~ TEXT_SPRINT gm_ot ~B~
 	LAUNCH_PATCH_MACRO ~gm_owner~
+	PATCH_IF STRING_LENGTH ~%gm_wa%~ = 0 BEGIN TEXT_SPRINT gm_cn ~%SOURCE_RES%~ SET gm_ctyp = 0x3ef LAUNCH_PATCH_MACRO ~gm_camp~ TEXT_SPRINT gm_wa ~%gm_cmp%~ END
 	READ_ASCII 0 gm_buf (SOURCE_SIZE)
 	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~AC[^ -}]\([0-9]+\)OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"\([^"]*\)" "\([^"]*\)" AC~ BEGIN
@@ -606,6 +656,7 @@ BUT_ONLY
 COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
 	TEXT_SPRINT gm_ok ~%SOURCE_RES%~ TEXT_SPRINT gm_ot ~D~
 	LAUNCH_PATCH_MACRO ~gm_owner~
+	PATCH_IF STRING_LENGTH ~%gm_wa%~ = 0 BEGIN TEXT_SPRINT gm_cn ~%SOURCE_RES%~ SET gm_ctyp = 0x3f3 LAUNCH_PATCH_MACRO ~gm_camp~ TEXT_SPRINT gm_wa ~%gm_cmp%~ END
 	READ_ASCII 0 gm_buf (SOURCE_SIZE)
 	INNER_PATCH ~%gm_buf%~ BEGIN
 	REPLACE_EVALUATE ~\(GiveItemCreate\|CreateItem\|CreateItemGlobal\|AddStoreItem\)[ %TAB%]*(\([^)]*\))~ BEGIN
@@ -628,13 +679,14 @@ BUT_ONLY
 ACTION_FOR_EACH gm_t IN rndtres rndtreas rndscrol rndequip rndwep rndmagic 25stweap mpstweap bdstweap BEGIN
 	ACTION_IF FILE_EXISTS_IN_GAME ~%gm_t%.2da~ BEGIN
 		COPY_EXISTING ~%gm_t%.2da~ ~override~
+			TEXT_SPRINT gm_cn ~%gm_t%~ SET gm_ctyp = 0x3f4 LAUNCH_PATCH_MACRO ~gm_camp~
 			READ_ASCII 0 gm_buf (SOURCE_SIZE)
 			INNER_PATCH ~%gm_buf%~ BEGIN
 			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN
 				TEXT_SPRINT gm_r ~%MATCH0%~
 				PATCH_IF STRING_LENGTH ~%gm_r%~ <= 8 BEGIN
 					PATCH_IF FILE_EXISTS_IN_GAME ~%gm_r%.itm~ BEGIN
-						TEXT_SPRINT gm_kind ~T~ TEXT_SPRINT gm_name ~~ TEXT_SPRINT gm_area ~~
+						TEXT_SPRINT gm_kind ~T~ TEXT_SPRINT gm_name ~~ TEXT_SPRINT gm_area ~%gm_cmp%~
 						LAUNCH_PATCH_MACRO ~gm_add_from~
 					END
 				END
@@ -698,7 +750,9 @@ ACTION_PHP_EACH gm_spawn AS gm_c => gm_v BEGIN
 			INNER_PATCH ~%gm_areas2%~ BEGIN
 				REPLACE_EVALUATE ~\([^,]+\),~ BEGIN
 					TEXT_SPRINT gm_area ~%MATCH1%~
-					PATCH_IF ~%gm_area%~ STRING_EQUAL ~-~ BEGIN TEXT_SPRINT gm_area ~~ END
+					PATCH_IF ~%gm_area%~ STRING_EQUAL ~-~ BEGIN
+						TEXT_SPRINT gm_cn ~%gm_c%~ SET gm_ctyp = 0x3f1 LAUNCH_PATCH_MACRO ~gm_camp~ TEXT_SPRINT gm_area ~%gm_cmp%~
+					END
 					INNER_PATCH ~%gm_list%~ BEGIN
 						REPLACE_EVALUATE ~\([^,]+\),~ BEGIN TEXT_SPRINT gm_r ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_add_from~ END ~%MATCH0%~
 					END
@@ -744,7 +798,7 @@ PSXGM_AREAS = { GM_AREA_LIST }
 PSXGM_FROM = { GM_FROM_LIST }
 PSXGM_PLACES = { GM_PLACE_LIST }
 PSXGM_STOREAT = { GM_STOREAT_LIST }
-PSXGM_GAME = "GM_GAME"
+PSXGM_GAME = "GAMEKIND_VALUE"
 >>>>>>>>
 COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_ALL_LIST~ ~%gm_all%~
@@ -752,7 +806,7 @@ COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_FROM_LIST~ ~%gm_froms%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_PLACE_LIST~ ~%gm_places%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_STOREAT_LIST~ ~%gm_storeats%~
-	REPLACE_TEXTUALLY EXACT_MATCH ~GM_GAME~ ~%gm_game%~
+	REPLACE_TEXTUALLY EXACT_MATCH ~GAMEKIND_VALUE~ ~%gm_game%~
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
