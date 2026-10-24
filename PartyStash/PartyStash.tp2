@@ -171,26 +171,9 @@ ACTION_IF FILE_EXISTS ~PartyStash/tra/%LANGUAGE%/M_PSXGT.lua~ BEGIN
 END
 // The camp chest (2026-10-23): its store (the stash + what the known stores sell, taken / bought there), the hidden
 // bag of the items seen (the save's log), and its encyclopedia built from the player's own game and language: every
-// item with an icon and a name (gold left out), and the world map's area names (build_gm_catalog.py = the same, dev).
+// item the player can come across (see below), and the world map's area names (build_gm_catalog.py = the same, dev).
 COPY ~PartyStash/PSXCHEST.STO~ ~override~
      ~PartyStash/PSXSEEN.STO~ ~override~
-OUTER_TEXT_SPRINT gm_all ~~
-COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
-	PATCH_IF SOURCE_SIZE > 0x71 BEGIN
-		READ_SHORT 0x1c gm_type
-		READ_ASCII 0x3a gm_icon (8) NULL
-		READ_LONG 0x0c gm_name
-		PATCH_IF gm_name <= 0 OR gm_name >= 0x7fffffff BEGIN READ_LONG 0x08 gm_name END
-		PATCH_IF gm_type != 33 AND gm_name > 0 AND gm_name < 0x7fffffff AND FILE_EXISTS_IN_GAME ~%gm_icon%.bam~ BEGIN
-			GET_STRREF gm_name gm_text
-			PATCH_IF NOT ~%gm_text%~ STRING_EQUAL ~~ BEGIN
-				TEXT_SPRINT gm_res ~%SOURCE_RES%~
-				TO_UPPER gm_res
-				TEXT_SPRINT gm_all ~%gm_all%'%gm_res%',~
-			END
-		END
-	END
-BUT_ONLY
 OUTER_TEXT_SPRINT gm_areas ~~
 ACTION_IF FILE_EXISTS_IN_GAME ~worldmap.wmp~ BEGIN
 	COPY_EXISTING ~worldmap.wmp~ ~override~
@@ -215,10 +198,23 @@ END
 // it, the areas' ground piles and containers, the creatures placed in the areas (their droppable items); at most 4
 // per kind and 12 per item. Entries "kind~name~area" joined by "|" in $gm_from(RES).
 ACTION_CLEAR_ARRAY gm_from
+ACTION_CLEAR_ARRAY gm_how
+ACTION_CLEAR_ARRAY gm_spawn
+// What the player can come across in play (John 2026-10-24: the Codex lists only these; build_gm_catalog.py
+// obtainable(), the same). $gm_how(RES) bits: 1 found (store, ground, container), 2 carried (placed creature),
+// 4 given (a script or a dialogue gives / creates it, adds it to a store), 8 table (random treasure, starting gear),
+// 16 spawned (a creature a script, a dialogue, a spawn point, a rest encounter, a spawn INI or table creates carries it).
+DEFINE_PATCH_MACRO ~gm_mark~ BEGIN
+	TO_UPPER gm_r
+	PATCH_IF NOT VARIABLE_IS_SET $gm_how(~%gm_r%~) BEGIN SET $gm_how(~%gm_r%~) = 0 END
+	SET $gm_how(~%gm_r%~) = $gm_how(~%gm_r%~) BOR gm_bit
+END
 ACTION_CLEAR_ARRAY gm_kinds
 ACTION_DEFINE_ARRAY gm_kinds BEGIN S G C K END
 DEFINE_PATCH_MACRO ~gm_add_from~ BEGIN
 	TO_UPPER gm_r
+	PATCH_IF ~%gm_kind%~ STRING_EQUAL ~K~ BEGIN SET gm_bit = 2 END ELSE BEGIN SET gm_bit = 1 END
+	LAUNCH_PATCH_MACRO ~gm_mark~
 	PATCH_IF NOT VARIABLE_IS_SET $gm_from(~%gm_r%~) BEGIN TEXT_SPRINT $gm_from(~%gm_r%~) ~~ SET $gm_n(~%gm_r%~) = 0 END
 	PATCH_IF NOT VARIABLE_IS_SET $gm_k(~%gm_r%~ ~%gm_kind%~) BEGIN SET $gm_k(~%gm_r%~ ~%gm_kind%~) = 0 END
 	TEXT_SPRINT gm_old $gm_from(~%gm_r%~)
@@ -314,6 +310,113 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
 						LAUNCH_PATCH_MACRO ~gm_add_from~
 					END ~~
 				END
+			END
+		END
+	END
+BUT_ONLY
+DEFINE_PATCH_MACRO ~gm_spawn_add~ BEGIN
+	TO_UPPER gm_c
+	SET $gm_spawn(~%gm_c%~) = 1
+END
+// compiled scripts: AC <id> + 3 objects + the action's own strings ([^ -}] = the line break)
+COPY_EXISTING_REGEXP GLOB ~^.+\.bcs$~ ~override~
+	REPLACE_EVALUATE ~AC[^ -}]\([0-9]+\)OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"[^"]*"OB[^"]*"\([^"]*\)" "\([^"]*\)" AC~ BEGIN
+		SET gm_id = MATCH1
+		TEXT_SPRINT gm_s1 ~%MATCH2%~
+		TEXT_SPRINT gm_s2 ~%MATCH3%~
+		PATCH_IF gm_id = 82 OR gm_id = 140 OR gm_id = 256 OR gm_id = 363 BEGIN
+			SET gm_bit = 4
+			TEXT_SPRINT gm_r ~%gm_s1%~ PATCH_IF STRING_LENGTH ~%gm_r%~ BEGIN LAUNCH_PATCH_MACRO ~gm_mark~ END
+			TEXT_SPRINT gm_r ~%gm_s2%~ PATCH_IF STRING_LENGTH ~%gm_r%~ BEGIN LAUNCH_PATCH_MACRO ~gm_mark~ END
+		END ELSE PATCH_IF gm_id = 7 OR gm_id = 227 OR gm_id = 228 OR (gm_id >= 231 AND gm_id <= 233) OR gm_id = 238
+				OR gm_id = 246 OR gm_id = 250 OR gm_id = 252 OR gm_id = 295 OR gm_id = 323 BEGIN
+			TEXT_SPRINT gm_c ~%gm_s1%~ PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+			TEXT_SPRINT gm_c ~%gm_s2%~ PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+		END
+	END ~%MATCH0%~
+BUT_ONLY
+// dialogues keep their actions as text
+COPY_EXISTING_REGEXP GLOB ~^.+\.dlg$~ ~override~
+	REPLACE_EVALUATE ~\(GiveItemCreate\|CreateItem\|CreateItemGlobal\|AddStoreItem\)[ %TAB%]*(\([^)]*\))~ BEGIN
+		SET gm_bit = 4
+		INNER_PATCH ~%MATCH2%~ BEGIN
+			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN TEXT_SPRINT gm_r ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+		END
+	END ~%MATCH0%~
+	REPLACE_EVALUATE ~CreateCreature[A-Za-z]*[ %TAB%]*(\([^)]*\))~ BEGIN
+		INNER_PATCH ~%MATCH1%~ BEGIN
+			REPLACE_EVALUATE ~"\([^"]+\)"~ BEGIN TEXT_SPRINT gm_c ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+		END
+	END ~%MATCH0%~
+BUT_ONLY
+// random treasure and starting gear tables (items), random spawn and NPC level tables (creatures), spawn INIs
+ACTION_FOR_EACH gm_t IN rndtres rndtreas rndscrol rndequip rndwep rndmagic 25stweap mpstweap bdstweap BEGIN
+	ACTION_IF FILE_EXISTS_IN_GAME ~%gm_t%.2da~ BEGIN
+		COPY_EXISTING ~%gm_t%.2da~ ~override~
+			SET gm_bit = 8
+			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_r ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+		BUT_ONLY
+	END
+END
+ACTION_FOR_EACH gm_t IN spawngrp npclvlds BEGIN
+	ACTION_IF FILE_EXISTS_IN_GAME ~%gm_t%.2da~ BEGIN
+		COPY_EXISTING ~%gm_t%.2da~ ~override~
+			REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+		BUT_ONLY
+	END
+END
+COPY_EXISTING_REGEXP GLOB ~^.+\.ini$~ ~override~
+	REPLACE_EVALUATE ~[A-Za-z0-9_#!$-]+~ BEGIN TEXT_SPRINT gm_c ~%MATCH0%~ LAUNCH_PATCH_MACRO ~gm_spawn_add~ END ~%MATCH0%~
+BUT_ONLY
+// the areas' spawn points and rest encounters
+COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
+	PATCH_IF SOURCE_SIZE >= 0x11c BEGIN
+		READ_LONG 0x60 gm_so
+		READ_SHORT 0x64 gm_sc
+		FOR (s = 0; s < gm_sc AND gm_so + s * 0xc8 + 0xc8 <= SOURCE_SIZE; ++s) BEGIN
+			READ_SHORT (gm_so + s * 0xc8 + 0x74) gm_n
+			FOR (k = 0; k < gm_n AND k < 10; ++k) BEGIN
+				READ_ASCII (gm_so + s * 0xc8 + 0x24 + k * 8) gm_c (8) NULL
+				PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+			END
+		END
+		READ_LONG 0xc0 gm_ro
+		PATCH_IF gm_ro > 0 AND gm_ro + 0xe4 <= SOURCE_SIZE BEGIN
+			FOR (k = 0; k < 10; ++k) BEGIN
+				READ_ASCII (gm_ro + 0x48 + k * 8) gm_c (8) NULL
+				PATCH_IF STRING_LENGTH ~%gm_c%~ BEGIN LAUNCH_PATCH_MACRO ~gm_spawn_add~ END
+			END
+		END
+	END
+BUT_ONLY
+// what the created creatures carry (their droppable items, read above in $gm_cre)
+ACTION_PHP_EACH gm_spawn AS gm_c => gm_v BEGIN
+	ACTION_IF VARIABLE_IS_SET $gm_cre(~%gm_c%~) BEGIN
+		OUTER_TEXT_SPRINT gm_list $gm_cre(~%gm_c%~)
+		OUTER_SET gm_bit = 16
+		OUTER_INNER_PATCH ~%gm_list%~ BEGIN
+			REPLACE_EVALUATE ~\([^,]+\),~ BEGIN TEXT_SPRINT gm_r ~%MATCH1%~ LAUNCH_PATCH_MACRO ~gm_mark~ END ~%MATCH0%~
+		END
+	END
+END
+// the encyclopedia: every item with an icon and a name (gold left out) that the player can come across; an item only
+// a creature carries must be droppable (ITM flag 0x4: no monster weapons, creature immunity rings...)
+OUTER_TEXT_SPRINT gm_all ~~
+COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
+	PATCH_IF SOURCE_SIZE > 0x71 BEGIN
+		TEXT_SPRINT gm_res ~%SOURCE_RES%~
+		TO_UPPER gm_res
+		SET gm_h = 0
+		PATCH_IF VARIABLE_IS_SET $gm_how(~%gm_res%~) BEGIN SET gm_h = $gm_how(~%gm_res%~) END
+		READ_LONG 0x18 gm_iflags
+		READ_SHORT 0x1c gm_type
+		READ_ASCII 0x3a gm_icon (8) NULL
+		READ_LONG 0x0c gm_name
+		PATCH_IF gm_name <= 0 OR gm_name >= 0x7fffffff BEGIN READ_LONG 0x08 gm_name END
+		PATCH_IF ((gm_h BAND 13) OR (gm_h AND (gm_iflags BAND 4))) AND gm_type != 33 AND gm_name > 0 AND gm_name < 0x7fffffff AND FILE_EXISTS_IN_GAME ~%gm_icon%.bam~ BEGIN
+			GET_STRREF gm_name gm_text
+			PATCH_IF NOT ~%gm_text%~ STRING_EQUAL ~~ BEGIN
+				TEXT_SPRINT gm_all ~%gm_all%'%gm_res%',~
 			END
 		END
 	END
