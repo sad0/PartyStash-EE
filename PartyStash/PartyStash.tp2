@@ -467,3 +467,34 @@ END ELSE BEGIN
 END
 // Decard's Codex page (the chest mode, John 2026-10-24): the same word in every language
 COPY ~PartyStash/PSXGMTC.BAM~ ~override~
+
+// #9 Quest chronicle (John 2026-10-24): Decard, the camp's old scholar, opens a page with every quest of the game
+// (the game's own quest table and journal: status, entries), searchable, with hints and a full solution per quest
+// (quests/data/<language>.lua, built by quests/build_q_lua.py). M_PSXQ.lua + PSXQ.menu (build_q_menu.py).
+BEGIN @20 DESIGNATED 9
+LABEL ~PARTYSTASH-QUEST-CHRONICLE~
+REQUIRE_PREDICATE GAME_IS ~bgee bg2ee eet~ @2
+REQUIRE_PREDICATE MOD_IS_INSTALLED ~EEex.tp2~ (ID_OF_LABEL ~EEex.tp2~ ~B3-EEex-Main~) @2
+REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~sqcain.dlg~ @21
+COPY ~PartyStash/M_PSXQ.lua~ ~override~
+     ~PartyStash/PSXQ.menu~ ~override~
+// the notice board and the paper tickets of the camp merchant's page (the same files as #8)
+COPY ~PartyStash/PSXGMBA.MOS~ ~override~
+     ~PartyStash/PSXGMBB.MOS~ ~override~
+     ~PartyStash/PSXGMBN2.BAM~ ~override~
+     ~PartyStash/PSXGMBN4.BAM~ ~override~
+     ~PartyStash/PSXGMCIR.BAM~ ~override~
+// hints and solutions in the install language (English when there is none yet), the title lettering likewise
+ACTION_IF FILE_EXISTS ~PartyStash/quests/data/%LANGUAGE%.lua~ BEGIN
+	COPY ~PartyStash/quests/data/%LANGUAGE%.lua~ ~override/M_PSXQD.lua~
+END ELSE BEGIN
+	COPY ~PartyStash/quests/data/english.lua~ ~override/M_PSXQD.lua~
+END
+ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~french~ BEGIN
+	COPY ~PartyStash/PSXQTFR.BAM~ ~override/PSXQT.BAM~
+END ELSE BEGIN
+	COPY ~PartyStash/PSXQTEN.BAM~ ~override/PSXQT.BAM~
+END
+COMPILE ~PartyStash/quests/PSXQCAIN.d~ USING ~PartyStash/tra/%LANGUAGE%/quests.tra~
+// the quests other mods add (the page's Mods tab): read from the player's own install
+INCLUDE ~PartyStash/quests/mod_quests.tpa~
