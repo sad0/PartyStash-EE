@@ -79,4 +79,5 @@ PSXGM_Strings = {
 	gm_sell_marked = 'Prodat označené: %s zl',
 	gm_sell_none = 'Nic označeno',
 	gm_sold = 'Prodáno ze skrýše: %d zl',
+	gm_stock = '%d na skladě (navštívené obchody)',
 }

@@ -79,4 +79,5 @@ PSXGM_Strings = {
 	gm_sell_marked = 'Vendi segnati: %s mo',
 	gm_sell_none = 'Niente segnato',
 	gm_sold = 'Venduto dalla scorta: %d mo',
+	gm_stock = '%d disponibili (negozi visitati)',
 }

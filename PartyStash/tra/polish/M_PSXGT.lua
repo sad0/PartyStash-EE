@@ -79,4 +79,5 @@ PSXGM_Strings = {
 	gm_sell_marked = 'Sprzedaj oznaczone: %s szt. zł.',
 	gm_sell_none = 'Nic nie oznaczono',
 	gm_sold = 'Sprzedano ze skrytki: %d szt. zł.',
+	gm_stock = '%d w zapasie (odwiedzone sklepy)',
 }

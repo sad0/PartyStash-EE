@@ -95,4 +95,5 @@ PSXGM_Strings = {
 	gm_from_G = 'Au sol : %s',
 	gm_from_C = 'Dans un conteneur : %s',
 	gm_from_K = 'Porté par %s (%s)',
+	gm_stock = '%d en stock (marchands visités)',
 }

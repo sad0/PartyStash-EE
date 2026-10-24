@@ -217,6 +217,19 @@ EXTRA = {
         'gm_from_K': 'Porté par %s (%s)'},
 }
 
+# The stock counts only the stores visited (John 2026-10-24: "1" next to a long "Sold by" list looked wrong).
+STOCK = {
+    'french': '%d en stock (marchands visités)', 'german': '%d auf Lager (besuchte Läden)',
+    'spanish': '%d en existencia (tiendas visitadas)', 'italian': '%d disponibili (negozi visitati)',
+    'polish': '%d w zapasie (odwiedzone sklepy)', 'russian': '%d в наличии (посещённые лавки)',
+    'portuguese': '%d em estoque (lojas visitadas)', 'czech': '%d na skladě (navštívené obchody)',
+    'hungarian': '%d raktáron (meglátogatott boltok)', 'turkish': '%d stokta (ziyaret edilen dükkânlar)',
+    'ukrainian': '%d в наявності (відвідані крамниці)', 'schinese': '库存 %d（已拜访的商店）',
+    'japanese': '在庫 %d（訪れた店）', 'korean': '재고 %d (방문한 상점)',
+}
+for _lang, _s in STOCK.items():
+    EXTRA.setdefault(_lang, {})['gm_stock'] = _s
+
 
 def lua_str(s):
     return "'" + s.replace('\\', '\\\\').replace("'", "\\'").replace('\n', '\\n') + "'"

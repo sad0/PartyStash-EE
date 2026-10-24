@@ -56,7 +56,7 @@ G.EN = {
 	gm_search = 'Search', gm_usable = 'Usable', gm_affordable = 'Affordable', gm_sort = 'Sort: %s',
 	gm_sort_auto = 'Auto', gm_sort_type = 'Type', gm_sort_price = 'Price', gm_sort_name = 'Name',
 	gm_buy = 'Buy', gm_done = 'Done', gm_vanilla = 'Sell / vanilla view', gm_back = 'Camp merchant',
-	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock', gm_from = 'From: %s', gm_wished = 'Wishlist',
+	gm_price = '%d gp', gm_unlimited = 'Unlimited', gm_stock = '%d in stock (stores visited)', gm_from = 'From: %s', gm_wished = 'Wishlist',
 	gm_items = '%d items', gm_empty = 'Nothing here yet: visit stores to fill the camp merchant.',
 	gm_no_gold = 'Not enough gold', gm_full = 'Backpack full: select another character', gm_cannot_buy = 'Cannot buy that now', gm_bought = 'Bought: %s x%d',
 	gm_select = 'Click: choose\nCtrl + click: wishlist\nRight click: description',

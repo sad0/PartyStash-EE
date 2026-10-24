@@ -79,4 +79,5 @@ PSXGM_Strings = {
 	gm_sell_marked = '印を売却: %s GP',
 	gm_sell_none = '印なし',
 	gm_sold = '収納箱から売却: %d GP',
+	gm_stock = '在庫 %d（訪れた店）',
 }
