@@ -200,18 +200,39 @@ COPY_EXISTING_REGEXP GLOB ~^.+\.wmp$~ ~override~
 		END
 	END
 BUT_ONLY
-// EET's world map has no caption for the Baldur's Gate districts and Candlekeep (BG1's AR0100... renamed BG0100...)
+// EET's world map has no caption for the Baldur's Gate districts and Candlekeep (BG1's AR0100... renamed BG0100...),
+// nor BG2 for Irenicus' dungeon, Hell and the Pocket Plane
 ACTION_DEFINE_ASSOCIATIVE_ARRAY gm_unnamed_en BEGIN
 	BG0100 => ~Baldur's Gate, North-West~  BG0200 => ~Baldur's Gate, North~  BG0300 => ~Baldur's Gate, North-East~
 	BG0600 => ~Baldur's Gate, West~  BG0700 => ~Baldur's Gate, Center~  BG0800 => ~Baldur's Gate, East~
 	BG1100 => ~Baldur's Gate, South-West~  BG1200 => ~Baldur's Gate, South~  BG1300 => ~Baldur's Gate, South-East~
 	BG2600 => ~Candlekeep~
+	AR0601 => ~Irenicus' Dungeon~
+	AR0602 => ~Irenicus' Dungeon~
+	AR0603 => ~Irenicus' Dungeon~
+	AR2900 => ~Hell~
+	AR2901 => ~Hell~
+	AR2902 => ~Hell~
+	AR2903 => ~Hell~
+	AR2904 => ~Hell~
+	AR2905 => ~Hell~
+	AR4500 => ~Pocket Plane~
 END
 ACTION_DEFINE_ASSOCIATIVE_ARRAY gm_unnamed_fr BEGIN
 	BG0100 => ~Porte de Baldur, nord-ouest~  BG0200 => ~Porte de Baldur, nord~  BG0300 => ~Porte de Baldur, nord-est~
 	BG0600 => ~Porte de Baldur, ouest~  BG0700 => ~Porte de Baldur, centre~  BG0800 => ~Porte de Baldur, est~
 	BG1100 => ~Porte de Baldur, sud-ouest~  BG1200 => ~Porte de Baldur, sud~  BG1300 => ~Porte de Baldur, sud-est~
 	BG2600 => ~Château-Suif~
+	AR0601 => ~Donjon d'Irenicus~
+	AR0602 => ~Donjon d'Irenicus~
+	AR0603 => ~Donjon d'Irenicus~
+	AR2900 => ~Enfer~
+	AR2901 => ~Enfer~
+	AR2902 => ~Enfer~
+	AR2903 => ~Enfer~
+	AR2904 => ~Enfer~
+	AR2905 => ~Enfer~
+	AR4500 => ~Plan de poche~
 END
 ACTION_PHP_EACH gm_unnamed_en AS gm_a => gm_en BEGIN
 	ACTION_IF NOT VARIABLE_IS_SET $gm_wmp(~%gm_a%~) AND FILE_EXISTS_IN_GAME ~%gm_a%.are~ BEGIN
@@ -603,6 +624,8 @@ COPY ~.../PartyStash-inlined/M_PSXCAT.lua~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_ALL_LIST~ ~%gm_all%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_AREA_LIST~ ~%gm_areas%~
 	REPLACE_TEXTUALLY EXACT_MATCH ~GM_FROM_LIST~ ~%gm_froms%~
+	REPLACE_TEXTUALLY EXACT_MATCH ~GM_PLACE_LIST~ ~%gm_places%~
+	REPLACE_TEXTUALLY EXACT_MATCH ~GM_STOREAT_LIST~ ~%gm_storeats%~
 // the page's two notice board backgrounds (art/build_gm_board.py), swapped in game
 COPY ~PartyStash/PSXGMBA.MOS~ ~override~
      ~PartyStash/PSXGMBB.MOS~ ~override~
