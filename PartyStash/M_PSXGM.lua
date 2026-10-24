@@ -1429,15 +1429,22 @@ function PSXGM_ShowBack()
 	return G.vanilla == true and atCamp() and onStack('STORE_BUYSELL')
 end
 
+-- No vanilla view any more (John 2026-10-24): the page stays while the camp store or the chest is open. Party
+-- Stash's own "Sell Marked" menu (PSTASH_STORE, for the vanilla panel) is pushed after the page opens: the page is
+-- pushed again over it once per visit, so only the page's own Sell marked ticket shows.
 local function syncMenus()
 	local p, res = openStore()
 	local buysell = p ~= nil and onStack('STORE_BUYSELL')
-	local want = buysell and (res == G.CAMP or res == G.CHEST) and not G.vanilla
+	local want = buysell and (res == G.CAMP or res == G.CHEST)
 	local shown = onStack('PSXGM_PAGE')
 	if want and not shown then Infinity_PushMenu('PSXGM_PAGE') elseif shown and not want then Infinity_PopMenu('PSXGM_PAGE') end
-	local wantBack = buysell and res == G.CAMP and G.vanilla == true
-	local backShown = onStack('PSXGM_BACK')
-	if wantBack and not backShown then Infinity_PushMenu('PSXGM_BACK') elseif backShown and not wantBack then Infinity_PopMenu('PSXGM_BACK') end
+	if want and shown and onStack('PSTASH_STORE') and G.overStash ~= p then
+		G.overStash = p
+		Infinity_PopMenu('PSXGM_PAGE')
+		Infinity_PushMenu('PSXGM_PAGE')
+	end
+	if not want then G.overStash = nil end
+	if onStack('PSXGM_BACK') then Infinity_PopMenu('PSXGM_BACK') end
 end
 
 -- Tick (PSXGM_TICK's enabled check, every frame; throttled).

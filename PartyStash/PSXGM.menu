@@ -1483,18 +1483,7 @@ menu
 	}
 	button
 	{
-		enabled "PSXGM_Mode() == 'camp'"
-		area 692 564 144 32
-		text lua "PSXGM_T('gm_vanilla')"
-		text style "label_parchment"
-		text align center center
-		action "PSXGM_Vanilla()"
-		bam PSXGMBN2
-		sequence 0
-	}
-	button
-	{
-		area 692 604 144 32
+		area 692 584 144 32
 		text lua "PSXGM_T('gm_done')"
 		text style "label_parchment"
 		text align center center

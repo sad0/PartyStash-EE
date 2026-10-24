@@ -168,11 +168,8 @@ def page():
     items.append(label((RX + 22, 394, RW - 44, 22), 'Infinity_GetSelectedCharacterName()', style=PN,
                        align='center center'))
     items.append(label((RX + 22, 416, RW - 44, 26), 'PSXGM_GoldText()', style=P, align='center center'))
-    # sell / done ticket
-    # (the camp chest only gives and sells: no vanilla view there)
-    items.append(pbutton((RX + 8, 564, 144, 32), "PSXGM_T('gm_vanilla')", 'PSXGM_Vanilla()', 'PSXGMBN2',
-                         enabled="PSXGM_Mode() == 'camp'"))
-    items.append(pbutton((RX + 8, 604, 144, 32), "PSXGM_T('gm_done')", 'PSXGM_Done()', 'PSXGMBN2'))
+    # done ticket (no vanilla view: John 2026-10-24; selling = the Sell marked ticket)
+    items.append(pbutton((RX + 8, 584, 144, 32), "PSXGM_T('gm_done')", 'PSXGM_Done()', 'PSXGMBN2'))
     # board swap (bottom left, a paper tag on the wood)
     items.append(pbutton((20, 674, 196, 28), 'PSXGM_SkinText()', 'PSXGM_NextSkin()', 'PSXGMBN4'))
     return '''menu
