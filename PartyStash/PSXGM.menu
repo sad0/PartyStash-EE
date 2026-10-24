@@ -1584,4 +1584,23 @@ menu
 		area 456 656 80 26
 		action "PSXGM_ToggleCamp(5)"
 	}
+	label
+	{
+		area 540 659 20 20
+		bam ROUNDBUT
+		scaleToClip
+		frame lua "PSXGM_CampFrame(6)"
+	}
+	label
+	{
+		area 564 656 54 26
+		text lua "PSXGM_CampText(6)"
+		text style "label_parchment"
+		text align left center
+	}
+	button
+	{
+		area 538 656 80 26
+		action "PSXGM_ToggleCamp(6)"
+	}
 }

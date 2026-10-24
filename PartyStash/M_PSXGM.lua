@@ -71,6 +71,7 @@ G.EN = {
 	gm_from_D = 'Given by %s at %s', gm_from_D1 = 'Given by %s', gm_from_D2 = 'Given at %s',
 	gm_from_D0 = 'Given in a quest or a dialogue', gm_from_P = 'Carried by %s (appears) at %s',
 	gm_from_P0 = 'Carried by %s (appears)', gm_from_T = 'Random treasure',
+	gm_equipped_by = 'Equipped by %s', gm_in_pack = "In %s's pack", gm_cf_6 = 'Carried',
 	gm_cf_1 = 'BG', gm_cf_2 = 'SoD', gm_cf_3 = 'BG2', gm_cf_4 = 'ToB', gm_cf_5 = 'Other',
 	gm_camp_1 = "Baldur's Gate", gm_camp_2 = 'Siege of Dragonspear', gm_camp_3 = 'Shadows of Amn', gm_camp_4 = 'Throne of Bhaal',
 	gm_camp_5 = 'The Black Pits', gm_camp_6 = 'Elsewhere',
@@ -959,15 +960,15 @@ G.view = G.view or {}
 G.wishV = G.wishV or 0
 -- Campaign filters (John 2026-10-24): 1 BG, 2 SoD, 3 BG2, 4 ToB, 5 other (the Black Pits, elsewhere); all ticked
 -- by default. An item shows when one of its origins (G.origins, its campaigns) is ticked.
-G.camps = G.camps or { true, true, true, true, true }
+G.camps = G.camps or { true, true, true, true, true }  -- [6] = carried only (off)
 G.campOf = G.campOf or {}
 local function campKey()
 	local k = ''
-	for i = 1, 5 do k = k .. (G.camps[i] and '1' or '0') end
+	for i = 1, 6 do k = k .. (G.camps[i] and '1' or '0') end
 	return k
 end
 local function campOk(res)
-	if campKey() == '11111' then return true end
+	if string.sub(campKey(), 1, 5) == '11111' then return true end
 	local set = G.campOf[res]
 	if not set then
 		set = {}
@@ -1077,7 +1078,44 @@ local function findHit(q, name, info, res, sources)
 	end
 end
 
+-- What the party carries (John 2026-10-24): G.carried[RES] = { eq = { names }, bag = { names } }; inventory slots
+-- 18 to 33 = the pack, the others = equipped (worn, weapons, quiver, quick items).
+local function scanCarried()
+	local out = {}
+	for p = 0, (PSXP7_LastPortrait and PSXP7_LastPortrait() or 5) do
+		local sp = EEex_Sprite_GetInPortrait(p)
+		if sp then
+			local name = sp:getName()
+			local items = sp.m_equipment.m_items
+			for slot = 0, 38 do
+				local ok, it = pcall(function() return items:get(slot) end)
+				if ok and it then
+					local res = string.upper(it.pRes.resref:get())
+					local e = out[res] or { eq = {}, bag = {}, seen = {} }
+					out[res] = e
+					local key = (slot >= 18 and slot <= 33) and 'bag' or 'eq'
+					if not e.seen[key .. name] then
+						e.seen[key .. name] = true
+						e[key][#e[key] + 1] = name
+					end
+				end
+			end
+		end
+	end
+	G.carried = out
+end
+local function carriedText(res)
+	local e = G.carried and G.carried[res]
+	if not e then return nil end
+	local t = {}
+	if #e.eq > 0 then t[#t + 1] = T('gm_equipped_by', table.concat(e.eq, ', ')) end
+	if #e.bag > 0 then t[#t + 1] = T('gm_in_pack', table.concat(e.bag, ', ')) end
+	return #t > 0 and table.concat(t, '\n') or nil
+end
+G.carriedText = carriedText
+
 local function rebuild()
+	scanCarried()
 	local list = store and store.storeItems or {}
 	local out, sp, gold, campMk = {}, selectedSprite(), partyGold(), campMarkup()
 	local q = fold(gmFindText):gsub('^%s+', ''):gsub('%s+$', '')
@@ -1087,7 +1125,8 @@ local function rebuild()
 		if c.hit
 			and (not G.usable or usableBy(sp, info))
 			and (not G.afford or (not c.catalog and c.price <= gold))
-			and campOk(res) then
+			and campOk(res)
+			and (not G.camps[6] or (G.carried and G.carried[res])) then
 			local lf = leafOf(info, res)
 			c.wish, c.order, c.usable = isWished(res), lf and lf.order or 999, usableBy(sp, info)
 			out[#out + 1] = c
@@ -1287,7 +1326,8 @@ G.infoLines = infoLines
 function PSXGM_CellTip(i)
 	local c = cell(i)
 	if not c then return '' end
-	local s = c.name .. '\n' .. infoLines(c, true)
+	local cr = carriedText(c.res)
+	local s = c.name .. '\n' .. (cr and (cr .. '\n') or '') .. infoLines(c, true)
 	if c.wish then s = s .. '\n* ' .. T('gm_wished') end
 	return s
 end
@@ -1309,6 +1349,8 @@ local function describe(c)
 	local ref = c.info.idDesc
 	if not ref or ref <= 0 or ref >= 0x7FFFFFFF then ref = c.info.unidDesc end
 	local lines = { seenText(c.res) }
+	local cr = carriedText(c.res)
+	if cr then table.insert(lines, 1, cr) end
 	local o, last = origins(c.res), nil
 	for i, text in ipairs(o) do
 		-- a sub-title per campaign

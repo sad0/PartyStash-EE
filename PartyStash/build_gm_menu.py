@@ -170,8 +170,8 @@ def page():
     # done ticket (no vanilla view: John 2026-10-24; selling = the Sell marked ticket)
     items.append(pbutton((RX + 8, 584, 144, 32), "PSXGM_T('gm_done')", 'PSXGM_Done()', 'PSXGMBN2'))
     # campaign filters (John 2026-10-24, the small pinned paper under the grid): an item shows when one of its origins
-    # is in a ticked campaign (BG, SoD, BG2, ToB, other); the board swap button is gone (the painted board stays)
-    for k in range(5):
+    # is in a ticked campaign (BG, SoD, BG2, ToB, other), and "Carried" keeps the party's items only; the board swap button is gone (the painted board stays)
+    for k in range(6):  # the 6th: carried by the party only
         cx, cy = 456 + (k % 2) * 82, 600 + (k // 2) * 28
         items.append(label((cx + 2, cy + 3, 20, 20), extra='\n'.join([
             '\t\tbam ROUNDBUT', '\t\tscaleToClip', f'\t\tframe lua "PSXGM_CampFrame({k + 1})"'])))
