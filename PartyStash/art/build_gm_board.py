@@ -410,13 +410,15 @@ def charcoal(src, size):
 def title():
     sys.argv = sys.argv[:1]
     import build_art
-    for lang in ('en', 'fr'):
-        img = charcoal(os.path.join(GM, 'title_%s.png' % lang), (340, 42))
-        img.save(os.path.join(GM, 'title_%s_charcoal.png' % lang))
+    # PSXGMTEN / PSXGMTFR: the camp merchant in each language; PSXGMTC: "Codex" (Decard's page, the same word in
+    # English and French; John 2026-10-24)
+    for key, bam in (('en', 'PSXGMTEN'), ('fr', 'PSXGMTFR'), ('codex', 'PSXGMTC')):
+        img = charcoal(os.path.join(GM, 'title_%s.png' % key), (340, 42))
+        img.save(os.path.join(GM, 'title_%s_charcoal.png' % key))
         # BAM V1 is 1-bit transparent: keep the solid strokes, drop the faint smudge
         img.putalpha(img.getchannel('A').point(lambda a: 255 if a > 100 else 0))
-        build_art.write_bam(img, os.path.join(HERE, '..', 'PSXGMT%s.BAM' % lang.upper()))
-        print('written PSXGMT%s.BAM' % lang.upper())
+        build_art.write_bam(img, os.path.join(HERE, '..', bam + '.BAM'))
+        print('written', bam + '.BAM')
 
 
 # --- buttons ------------------------------------------------------------------------------------------------------

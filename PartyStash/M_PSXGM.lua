@@ -63,7 +63,7 @@ G.EN = {
 	gm_total = 'Total: %d gp',
 	gm_skin = 'Board: %s', gm_skin_1 = 'pinned notices', gm_skin_2 = 'painted',
 	gm_sell_marked = 'Sell marked: %s gp', gm_sell_none = 'Nothing marked', gm_sold = 'Sold from the stash: %d gp',
-	gm_chest = 'Camp chest', gm_stash = 'Party stash', gm_take = 'Take', gm_in_stash = '%d in the stash',
+	gm_chest = 'Codex', gm_stash = 'Party stash', gm_take = 'Take', gm_in_stash = '%d in the stash',
 	gm_value = 'Value: %d gp', gm_never_seen = 'Never seen', gm_seen_1 = 'Seen for sale: %s', gm_seen_2 = 'Carried: %s',
 	gm_seen_3 = 'Seen on the ground: %s', gm_seen_4 = 'Seen in a container: %s',
 	gm_origin = 'Where it comes from:', gm_more = '+%d more', gm_from_S = 'Sold by %s', gm_from_G = 'On the ground: %s',

@@ -347,3 +347,5 @@ ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~french~ BEGIN
 END ELSE BEGIN
 	COPY ~PartyStash/PSXGMTEN.BAM~ ~override/PSXGMTT.BAM~
 END
+// Decard's Codex page (the chest mode, John 2026-10-24): the same word in every language
+COPY ~PartyStash/PSXGMTC.BAM~ ~override~

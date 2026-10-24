@@ -72,11 +72,10 @@ def page():
     items.append(label((0, 0, W, H), enabled='PSXGM_Skin() == 2', extra='\t\tmosaic PSXGMBB'))
     items.append(button((0, 0, W, H), extra='\t\taction ""'))  # eats the clicks meant for STORE_BUYSELL underneath
     items.append(label((0, 0, 0, 0), enabled='PSXGM_Tick()'))  # the tick also runs from the page itself
-    # the title in charcoal (art/build_gm_board.py title, PSXGMTT.BAM = the installed language); the camp chest has
-    # no charcoal title yet: its name in the game's title font
+    # the title in charcoal (art/build_gm_board.py title): PSXGMTT.BAM = the camp merchant in the installed language,
+    # PSXGMTC.BAM = "Codex" (Decard's page, the chest mode: the same word in every language)
     items.append(label((GX + 46, 14, 340, 42), enabled="PSXGM_Mode() == 'camp'", extra='\t\tbam PSXGMTT'))
-    items.append(label((GX, 16, COLS * PITCH, 40), "PSXGM_T('gm_chest')", style='title', align='center center',
-                       enabled="PSXGM_Mode() == 'chest'"))
+    items.append(label((GX + 46, 14, 340, 42), enabled="PSXGM_Mode() == 'chest'", extra='\t\tbam PSXGMTC'))
     # category tree (the tall notice on the left): the chosen category circled in pencil (PSXGMCIR frame 1)
     items.append('''\tlist
 \t{

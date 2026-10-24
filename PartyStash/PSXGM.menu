@@ -77,10 +77,8 @@ menu
 	label
 	{
 		enabled "PSXGM_Mode() == 'chest'"
-		area 236 16 432 40
-		text lua "PSXGM_T('gm_chest')"
-		text style "title"
-		text align center center
+		area 282 14 340 42
+		bam PSXGMTC
 	}
 	list
 	{

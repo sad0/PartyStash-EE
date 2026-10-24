@@ -209,7 +209,7 @@ T = {
 # The camp chest (2026-10-23): French for now, the other languages fall back to English.
 EXTRA = {
     'french': {
-        'gm_chest': 'Coffre du camp', 'gm_stash': 'Coffre du groupe', 'gm_take': 'Prendre',
+        'gm_chest': 'Codex', 'gm_stash': 'Coffre du groupe', 'gm_take': 'Prendre',
         'gm_in_stash': '%d dans le coffre', 'gm_value': 'Valeur : %d po', 'gm_never_seen': 'Jamais vu',
         'gm_seen_1': 'Vu en vente : %s', 'gm_seen_2': 'Porté : %s', 'gm_seen_3': 'Vu au sol : %s',
         'gm_seen_4': 'Vu dans un conteneur : %s', 'gm_origin': 'Provenance :', 'gm_more': '+%d autres',
