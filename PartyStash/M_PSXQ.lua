@@ -310,6 +310,11 @@ local function rebuildList()
 	table.sort(out, function(a, b)
 		if a.game ~= b.game then return (gameRank[a.game] or 9) < (gameRank[b.game] or 9) end
 		if a.kind ~= b.kind then return (kindRank[a.kind] or 9) < (kindRank[b.kind] or 9) end
+		-- main story: the scenario's order (data field o, John 2026-10-24), whatever the status
+		if a.kind == 'main' then
+			local oa, ob = (a.data.o or 0) > 0 and a.data.o or 9999, (b.data.o or 0) > 0 and b.data.o or 9999
+			if oa ~= ob then return oa < ob end
+		end
 		if a.status ~= b.status then return STATUS_RANK[a.status] < STATUS_RANK[b.status] end
 		local fa, fb = fold(a.title), fold(b.title)
 		if fa ~= fb then return fa < fb end

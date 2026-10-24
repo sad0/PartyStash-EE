@@ -31,6 +31,24 @@ FR_UI = {
 }
 
 
+# Main story in the scenario's order (John 2026-10-24), title strrefs; "Important Events" first. o = the position.
+STORY = [
+    # BG1
+    231270, 227561, 231344, 231406, 231306, 231280, 231279, 231327, 231342, 231393, 231389, 231288, 231374, 231314,
+    231396, 231416,
+    # SoD
+    267432, 266700, 259621, 259615, 259711, 262483, 264446, 264981, 259717, 266743, 259718, 259732, 259722, 259734,
+    259626,
+    # BG2
+    74295, 74414, 74319, 74412, 74424, 74376, 74374, 74375, 74358, 74445, 74332, 74390, 74409, 74407, 74336, 74391,
+    74388, 74343, 74380, 74381, 74399, 74476, 74362, 74369, 74355, 74400, 74459, 74384, 74337, 74364, 74341, 74353,
+    74342,
+    # ToB
+    74503, 74506, 74489, 74488, 74491, 74492, 74504, 74493, 74494, 74495, 74505,
+]
+ORDER = {t: i + 1 for i, t in enumerate(STORY)}
+
+
 def lua_str(s):
     s = str(s).replace('\r', '')
     n = 0
@@ -58,8 +76,9 @@ def write(lang, quests):
         hints = q.get('hints_' + sfx) or q.get('hints_en') or []
         sol = q.get('solution_' + sfx) or q.get('solution_en') or ''
         where = q.get('where_' + sfx) or q.get('where_en') or ''
-        out.append('[%d] = { g = %s, k = %s, c = %s, w = %s, h = { %s }, s = %s },' % (
-            strref, lua_str(q.get('game', '')), lua_str(q.get('kind', 'side')), lua_str(q.get('chapter', '')),
+        kind = 'main' if strref in ORDER else q.get('kind', 'side')
+        out.append('[%d] = { g = %s, k = %s, o = %d, c = %s, w = %s, h = { %s }, s = %s },' % (
+            strref, lua_str(q.get('game', '')), lua_str(kind), ORDER.get(strref, 0), lua_str(q.get('chapter', '')),
             lua_str(where), ', '.join(lua_str(h) for h in hints), lua_str(sol)))
     out.append('}')
     if lang == 'french':
