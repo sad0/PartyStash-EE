@@ -53,13 +53,13 @@ P.EN = {
 	dump_backpack = 'Backpack', dump_stashpage = 'Stash page',
 	container_tip = 'Put the backpack or the last stash page shown into this container (not the valuable or quest items)',
 	help_stash_title = 'This is your stash',
-	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant); again: valuable (golden, never sold)\n'
+	help_stash = 'Click: take an item (double-click: take and equip)\nCtrl + click: mark it for sale (Sell Marked at a merchant)\nAlt + click: valuable (golden, never sold)\n'
 		.. 'Right-click: description. Mouse wheel: scroll\n*Tabs: filter the stash by category (wheel or arrows to see them all)\n'
 		.. '*Weapons: damage per round in the tooltip',
 	help_pack_title = "This is your character's inventory (the 2 top rows)",
 	help_pack = 'Shift + double-click, or drag onto the stash: store an item\nSpace or Store all: store the whole backpack\n'
 		.. '*The chest in the last slot: your stash; the game counts its items as carried (quests).\n'
-		.. 'Ctrl + click: mark for sale (it goes to the stash); again: valuable; again: clear',
+		.. 'Ctrl + click: mark for sale (it goes to the stash)\nAlt + click: valuable (golden, never sold)',
 	help_storeall = 'Space: store the whole backpack.\nQuest items stay in the backpack; bags ask first.',
 	help_sort = 'Click: change the sort\nRight-click: reverse it\n*Auto: each tab its own order (weapons by damage '
 		.. 'per round for the shown character, armor by AC, scrolls by class and level...).\n*Also: Date, Quality, Type, Price, '
@@ -242,6 +242,30 @@ local function setBagCount(res, n)
 	P.covered = nil
 end
 
+-- Bags the install-time list (P.BAG_RES) does not know: a mod installed after this one added them (issue #2: Tweaks
+-- Anthology bags, an NPC mod's gem bag). Collecting one records it in the save, string globals PSTBX_1..PSTBX_<n>
+-- (count PSTBX_N), and bagList() merges them in, so they stay in the Bags tab after a reload too.
+local function knownBag(res)
+	for _, r in ipairs(P.BAG_RES or {}) do if r == res then return true end end
+	return false
+end
+local function bagList()
+	P.BAG_RES = P.BAG_RES or {}
+	for i = 1, EEex_GameState_GetGlobalInt('PSTBX_N') do
+		local r = string.upper(EEex_GameState_GetGlobalString('PSTBX_' .. i) or '')
+		if r ~= '' and not knownBag(r) then P.BAG_RES[#P.BAG_RES + 1] = r end
+	end
+	return P.BAG_RES
+end
+local function recordBag(res)
+	bagList()
+	if knownBag(res) then return end
+	local n = EEex_GameState_GetGlobalInt('PSTBX_N') + 1
+	EEex_GameState_SetGlobalString('PSTBX_' .. n, res)
+	EEex_GameState_SetGlobalInt('PSTBX_N', n)
+	P.BAG_RES[#P.BAG_RES + 1] = res
+end
+
 -- Item types a bag holds: its store's purchase list (STO 0x2C/0x30); a bag of holding (30+ types) holds all.
 P.bagTypesCache = P.bagTypesCache or {}
 local function bagTypes(res)
@@ -265,7 +289,7 @@ end
 -- them behind our back (a cache kept the reduction after loading a save without the bags).
 local function coveredTypes()
 	local cov = {}
-	for _, res in ipairs(P.BAG_RES or {}) do
+	for _, res in ipairs(bagList()) do
 		if bagCount(res) > 0 then
 			for t in pairs(bagTypes(res)) do cov[t] = true end
 		end
@@ -1173,7 +1197,7 @@ local function rebuild()
 	local p = shownPortrait()
 	local known = knownByAll()
 	if P.TABS[P.tab] and P.TABS[P.tab].bags then
-		for order, res in ipairs(P.BAG_RES or {}) do
+		for order, res in ipairs(bagList()) do
 			local n, info = bagCount(res), PStash_ItemInfo(res)
 			if n > 0 and info then
 				P.view[#P.view + 1] = { res = res, bag = true, icon = info.icon, units = n, order = order,
@@ -1654,7 +1678,12 @@ end
 function PStash_CtrlDown()
 	return EEex_Key_IsDown(EEex_Key_GetFromName('Left Ctrl')) or EEex_Key_IsDown(EEex_Key_GetFromName('Right Ctrl'))
 end
--- Ctrl + click on a backpack / equipment slot (a button over it, enabled only while Ctrl is down).
+function PStash_AltDown()
+	return EEex_Key_IsDown(EEex_Key_GetFromName('Left Alt')) or EEex_Key_IsDown(EEex_Key_GetFromName('Right Alt'))
+end
+-- Ctrl or Alt down: a click marks instead of taking (Ctrl = to sell, Alt = valuable).
+function PStash_MarkKeyDown() return PStash_CtrlDown() or PStash_AltDown() end
+-- Ctrl / Alt + click on a backpack / equipment slot (a button over it, enabled only while one is down).
 -- A backpack item just marked to sell goes straight to the stash, where Sell Marked sells it (John 2026-10-22): an
 -- item taken out of a backpack slot while a store is open crashed the game, so not at a store.
 function PStash_SlotToggle(name)
@@ -1743,8 +1772,8 @@ function PStash_CellClick(i, equip)
 	local c = cell(i)
 	if not c then return end
 	if c.bag then P.msg = T('msg_bags_kept') return end
-	-- Ctrl + click (John 2026-10-19): mark / unmark the item for sale instead of taking it.
-	if EEex_Key_IsDown(EEex_Key_GetFromName('Left Ctrl')) or EEex_Key_IsDown(EEex_Key_GetFromName('Right Ctrl')) then
+	-- Ctrl + click: mark / unmark the item for sale; Alt + click: valuable (John 2026-10-24), instead of taking it.
+	if PStash_MarkKeyDown() then
 		PStash_ToggleMark(c.res)
 		return
 	end
@@ -1821,6 +1850,7 @@ function PStash_CollectBag(p, slot)
 	if not hasStore(res) then return nil, 'not a container bag' end
 	sp.m_equipment.m_items:set(slot, nil)
 	PStash_Eng_AddDisposableItem(gamePtr(), EEex_UDToPtr(it))
+	recordBag(res)
 	setBagCount(res, bagCount(res) + 1)
 	pourBag(p, res)
 	P.list, P.dirty = nil, true
@@ -2467,8 +2497,11 @@ P.hoverCell = P.hoverCell or -1
 P.gtop = P.gtop or 0
 function PStash_Hover(i) P.hoverCell = i end
 
--- Ctrl + click cycles: nothing -> to sell -> valuable -> nothing.
-function PStash_ToggleMark(res) EEex_GameState_SetGlobalInt(markKey(res), (markOf(res) + 1) % 3) end
+-- John 2026-10-24: Ctrl + click toggles "to sell", Alt + click toggles "valuable" (was one Ctrl cycle of both).
+function PStash_ToggleMark(res)
+	local want = PStash_AltDown() and 2 or 1
+	EEex_GameState_SetGlobalInt(markKey(res), markOf(res) == want and 0 or want)
+end
 
 -- Space in the inventory (John 2026-10-19): "Store all", wherever the mouse is (marking is Ctrl + click now).
 function PStash_OnKey(key)
@@ -2641,7 +2674,7 @@ local function takeSnapshot()
 	for _, e in ipairs(PStash_List(P.RES)) do
 		snap.items[#snap.items + 1] = { res = e.res, count = e.count, uses = e.uses, identified = e.identified }
 	end
-	for _, res in ipairs(P.BAG_RES or {}) do
+	for _, res in ipairs(bagList()) do
 		local n = bagCount(res)
 		if n > 0 then snap.bags[res] = n end
 	end
@@ -2686,8 +2719,16 @@ local function campaignWatch()
 			addGold(P.snapshot.gold - game:GetPartyGold())
 		end
 		if not opt('losestash') then
-			for res, n in pairs(P.snapshot.bags) do setBagCount(res, n) end
+			for res, n in pairs(P.snapshot.bags) do recordBag(res); setBagCount(res, n) end
 			P.restore = P.snapshot.items
+		else
+			-- hardcore: the stash is lost, but never the quest items (the Quest tab's), which the story may still need
+			P.restore = {}
+			for _, e in ipairs(P.snapshot.items) do
+				local info = PStash_ItemInfo(e.res)
+				if info and questItem(info, e.res) then P.restore[#P.restore + 1] = e end
+			end
+			if #P.restore == 0 then P.restore = nil end
 		end
 		P.snapshot = nil
 	end
@@ -2704,9 +2745,13 @@ local function campaignWatch()
 		if opt('losestash') then
 			local g = gamePtr()
 			for _, e in ipairs(PStash_List(P.RES)) do
-				PStash_Eng_TakeItemFromStore(g, resRef(P.RES), resRef(e.res, 32), math.max(1, e.count))
+				local info = PStash_ItemInfo(e.res)
+				-- hardcore keeps the quest items (critical, the keep list, P.QUEST: the Quest tab)
+				if not (info and questItem(info, e.res)) then
+					PStash_Eng_TakeItemFromStore(g, resRef(P.RES), resRef(e.res, 32), math.max(1, e.count))
+				end
 			end
-			for _, res in ipairs(P.BAG_RES or {}) do setBagCount(res, 0) end
+			for _, res in ipairs(bagList()) do setBagCount(res, 0) end
 			P.list, P.dirty = nil, true
 		end
 	end
@@ -2763,7 +2808,7 @@ function PStash_EmptyAll()
 	local sp = EEex_Sprite_GetInPortrait(p) or EEex_Sprite_GetInPortrait(0)
 	if not sp then return 0 end
 	local bags = {}
-	for _, res in ipairs(P.BAG_RES or {}) do
+	for _, res in ipairs(bagList()) do
 		if bagCount(res) > 0 then bags[#bags + 1] = { res = res, types = bagTypes(res), n = bagCount(res) } end
 	end
 	table.sort(bags, function(a, b) return (a.types.all and 1 or 0) < (b.types.all and 1 or 0) end)
