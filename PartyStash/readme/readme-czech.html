@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="cs"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Nekonečná truhla sdílená celou družinou ve stylu <strong>Pillars of Eternity</strong>, zabudovaná do přepracované stránky inventáře. Pro <strong>Baldur's Gate: Enhanced Edition</strong> (se <strong>Siege of Dragonspear</strong> i bez), <strong>Baldur's Gate II: Enhanced Edition</strong> a <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventář, vzhled Baldur&#x27;s Gate 1"></p>
 <h2>Funkce</h2>
@@ -17,7 +17,7 @@
 <li>Náboje viditelné na hůlkách</li>
 </ul>
 <h3>Prodej harampádí, nech si poklady</h3><ul>
-<li><strong><span class="k">Ctrl + kliknutí</span></strong>: k prodeji → cenný → zrušit</li>
+<li><strong><span class="k">Ctrl + kliknutí</span></strong>: k prodeji; <strong><span class="k">Alt + kliknutí</span></strong>: cenný</li>
 <li>Prodat označené prodá vše najednou u libovolného obchodníka</li>
 <li>Cenné předměty se nikdy neprodají ani nezahodí</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Všechny podrobnosti</summary><ul>
 <li><strong>Sdílená truhla</strong>: všichni členové družiny mají na stránce inventáře přístup ke stejné nekonečné truhle. Úkoly předměty v ní dál vidí.</li>
 <li><strong>Nová stránka inventáře</strong>: batoh a truhla v jedné posuvné mřížce, sloupec země a kompaktní statistiky 2×2 (vlastnosti zkrácené na 3 písmena).</li>
-<li><strong>Karty</strong>: Vše, Zbraně, Zbroj, Výbava, Munice, Drahokamy, Svitky, Lektvary, Úkoly, Různé, Vaky.</li>
-<li><strong>Řazení</strong>: Auto (každá karta má vlastní pořadí: zbraně podle zranění za kolo pro zobrazenou postavu, zbroje podle OČ, svitky podle povolání a úrovně…), Datum, Kvalita, Typ, Cena, Cena/váha. Pravé kliknutí na tlačítko řazení ho obrátí.</li>
+<li><strong>Karty</strong>: Vše, Zbraně, Zbroj, Výbava, Munice, Drahokamy, Svitky, Lektvary, Úkoly, Poznámky (knihy, dopisy, poznámky a svitky, které nelze seslat), Různé, Vaky.</li>
+<li><strong>Řazení</strong>: Auto (každá karta má vlastní pořadí: zbraně podle zranění za kolo pro zobrazenou postavu, zbroje podle OČ, svitky podle povolání a úrovně…), Datum, Kvalita, Typ, Cena, Cena/váha. Pravé kliknutí na tlačítko řazení ho obrátí. Popisek Auto ukazuje, podle čeho na zobrazené kartě řadí, např. Auto (DPS).</li>
 <li><strong>Značky</strong>: červená = zobrazená postava nemůže použít, modrá = neidentifikováno, + = vylepšení pro ni (nebo svitek, který se mág družiny ještě může naučit).</li>
-<li><strong>Značky</strong>: <strong><span class="k">Ctrl + kliknutí</span></strong> na předmět (truhla, batoh nebo nasazený) ho označí k prodeji (ztmavený), znovu z něj udělá cenný (zlatý), znovu značku zruší. Prodat označené prodá najednou všechny předměty označené k prodeji u libovolného obchodníka, s celkovou částkou na tlačítku.</li>
+<li><strong>Značky</strong>: <strong><span class="k">Ctrl + kliknutí</span></strong> na předmět (truhla, batoh nebo nasazený) ho označí k prodeji (ztmavený), <strong><span class="k">Alt + kliknutí</span></strong> z něj udělá cenný (zlatý); stejné kliknutí znovu značku zruší. Prodat označené prodá najednou všechny předměty označené k prodeji u libovolného obchodníka, s celkovou částkou na tlačítku.</li>
 <li><strong>Zranění za kolo</strong>: popisky zbraní ukazují zranění za kolo a THAC0 pro zobrazenou postavu (síla, odbornosti, útoky za kolo, obě ruce při boji dvěma zbraněmi); statistiky ukazují útoky za kolo.</li>
 <li><strong>Náboje</strong>: hůlky a další předměty s náboji ukazují náboje v rohu svého políčka.</li>
 <li><strong>Cenné předměty</strong>: nikdy se neprodají, Uložit vše a výběr u obchodníků je přeskočí a nelze je položit na zem. Předmět z batohu označený k prodeji jde rovnou do truhly.</li>
 <li><strong>Odložit</strong>: pravé kliknutí na velký vak vedle váhy, pak otevřete kontejner a zvolte, zda do něj vložit batoh, nebo zobrazenou stránku truhly (cenné a úkolové předměty zůstanou).</li>
-<li><strong>Volby (samostatné komponenty)</strong>: truhla nic neváží; ponechat zlato družiny při změnách kampaně (BG1 do SoD, SoD do BG2 v <strong>EET</strong>); hardcore: tyto změny vyprázdní i truhlu.</li>
+<li><strong>Volby (samostatné komponenty)</strong>: truhla nic neváží; ponechat zlato družiny při změnách kampaně (BG1 do SoD, SoD do BG2 v <strong>EET</strong>); hardcore: tyto změny vyprázdní i truhlu (úkolové předměty zůstanou).</li>
 <li><strong>Vaky</strong>: vak uložený do truhly se do ní vysype a zůstane na kartě Vaky; předměty v truhle, které pojme, nic neváží (Vak beztíže: celá truhla).</li>
 <li><strong>Váha</strong>: truhla se počítá do součtu nosností členů; nad ním je družina zpomalena.</li>
+<li><strong>Úkolové předměty</strong>: všechny úkolové předměty z BG1, SoD a BG2 (klíčové předměty a každý předmět, který rozhovor nebo skript hry kontroluje či bere) při instalaci přestanou cokoli vážit.</li>
 <li><strong>Dva vzhledy</strong>: styl Baldur's Gate 1 nebo Baldur's Gate II, v obou hrách.</li>
 <li><strong>Seřazená kořist (volitelné)</strong>: hromádky na zemi, kontejnery a lišta kořisti ukazují nejdřív úkolové předměty, pak předměty bez váhy, pak zbytek podle ceny/váhy.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Vzít předmět z truhly</td><td class="k"><strong>Kliknutí (dvojklik: vzít a nasadit)</strong></td></tr>
 <tr><td>Uložit předmět z batohu</td><td class="k"><strong>Shift + dvojklik, nebo jej pustit na mřížku truhly</strong></td></tr>
 <tr><td>Uložit celý batoh</td><td class="k"><strong>Tlačítko Uložit vše, nebo mezerník</strong></td></tr>
-<tr><td>Označit k prodeji / cenný / zrušit</td><td class="k"><strong>Ctrl + kliknutí na předmět (truhla, batoh nebo nasazený)</strong></td></tr>
+<tr><td>Označit k prodeji</td><td class="k"><strong>Ctrl + kliknutí na předmět (truhla, batoh nebo nasazený); znovu: zrušit</strong></td></tr>
+<tr><td>Označit jako cenný</td><td class="k"><strong>Alt + kliknutí na předmět (truhla, batoh nebo nasazený); znovu: zrušit</strong></td></tr>
 <tr><td>Popis</td><td class="k"><strong>Pravé kliknutí</strong></td></tr>
 <tr><td>Posouvání mřížky, karet, země</td><td class="k"><strong>Kolečko myši, šipky</strong></td></tr>
 <tr><td>Nápověda: co <strong>Party Stash</strong> přidává na tuto stránku</td><td class="k"><strong>Zlaté tlačítko ? vpravo nahoře</strong></td></tr>

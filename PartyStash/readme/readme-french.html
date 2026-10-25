@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Un coffre infini partagé par tout le groupe, façon <strong>Pillars of Eternity</strong>, intégré à une page d'inventaire repensée. Pour <strong>Baldur's Gate: Enhanced Edition</strong> (avec ou sans <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> et <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventaire, look Baldur&#x27;s Gate 1"></p>
 <h2>Fonctionnalités</h2>
@@ -17,7 +17,7 @@
 <li>Charges affichées sur les baguettes</li>
 </ul>
 <h3>Vendre le bazar, garder les trésors</h3><ul>
-<li><strong><span class="k">Ctrl + clic</span></strong> : à vendre → précieux → effacer</li>
+<li><strong><span class="k">Ctrl + clic</span></strong> : à vendre ; <strong><span class="k">Alt + clic</span></strong> : précieux</li>
 <li>Vendre cochés vend tout d'un coup, chez n'importe quel marchand</li>
 <li>Les objets précieux ne sont jamais vendus ni jetés</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Tous les détails</summary><ul>
 <li><strong>Coffre partagé</strong> : tous les membres du groupe accèdent au même coffre infini sur la page d'inventaire. Les quêtes voient toujours les objets rangés dedans.</li>
 <li><strong>Nouvelle page d'inventaire</strong> : sac à dos et coffre dans une seule grille défilante, une colonne pour le sol, des stats compactes en 2×2 (caractéristiques en 3 lettres).</li>
-<li><strong>Onglets</strong> : Tout, Armes, Armure, Équipement, Munitions, Gemmes, Parchemins, Potions, Quête, Divers, Sacs.</li>
-<li><strong>Tri</strong> : Auto (chaque onglet a son ordre : armes par dégâts par round pour le perso affiché, armures par CA, parchemins par classe et niveau…), Date, Qualité, Type, Prix, Valeur/poids. <strong><span class="k">Clic droit</span></strong> sur le bouton de tri pour l'inverser.</li>
+<li><strong>Onglets</strong> : Tout, Armes, Armure, Équipement, Munitions, Gemmes, Parchemins, Potions, Quête, Notes (livres, lettres, notes et parchemins impossibles à lancer), Divers, Sacs.</li>
+<li><strong>Tri</strong> : Auto (chaque onglet a son ordre : armes par dégâts par round pour le perso affiché, armures par CA, parchemins par classe et niveau…), Date, Qualité, Type, Prix, Valeur/poids. <strong><span class="k">Clic droit</span></strong> sur le bouton de tri pour l'inverser. Le libellé Auto indique selon quoi il trie l'onglet affiché, par exemple Auto (DPS).</li>
 <li><strong>Repères</strong> : rouge = inutilisable par le perso affiché, bleu = non identifié, + = une amélioration pour lui (ou un parchemin qu'un mage du groupe peut encore apprendre).</li>
-<li><strong>Marques</strong> : <strong><span class="k">Ctrl + clic</span></strong> sur un objet (coffre, sac à dos ou équipé) pour le cocher pour la vente (assombri), encore pour le rendre précieux (doré), encore pour l'effacer. Vendre cochés vend d'un coup tous les objets cochés chez n'importe quel marchand, avec le total sur le bouton.</li>
+<li><strong>Marques</strong> : <strong><span class="k">Ctrl + clic</span></strong> sur un objet (coffre, sac à dos ou équipé) pour le cocher pour la vente (assombri), <strong><span class="k">Alt + clic</span></strong> pour le rendre précieux (doré) ; le même clic une seconde fois efface la marque. Vendre cochés vend d'un coup tous les objets cochés chez n'importe quel marchand, avec le total sur le bouton.</li>
 <li><strong>Dégâts par round</strong> : les infobulles des armes affichent les dégâts par round et le TAC0 pour le perso affiché (force, compétences, attaques par round, les deux mains en combat à deux armes) ; les stats affichent les attaques par round.</li>
 <li><strong>Charges</strong> : les baguettes et autres objets à charges affichent leurs charges dans le coin de leur case.</li>
 <li><strong>Objets précieux</strong> : jamais vendus, ignorés par Tout ranger et par la sélection des marchands, et impossibles à poser au sol. Un objet du sac à dos coché pour la vente part directement au coffre.</li>
 <li><strong>Dépôt</strong> : <strong><span class="k">clic droit</span></strong> sur le gros sac à côté du poids, puis ouvrez un conteneur, et choisissez d'y déposer le sac à dos ou la page du coffre affichée (les objets précieux et de quête restent).</li>
-<li><strong>Options (composants séparés)</strong> : le coffre ne pèse rien ; garder l'or du groupe aux changements de campagne (BG1 vers SoD, SoD vers BG2 dans <strong>EET</strong>) ; hardcore : ces changements vident aussi le coffre.</li>
+<li><strong>Options (composants séparés)</strong> : le coffre ne pèse rien ; garder l'or du groupe aux changements de campagne (BG1 vers SoD, SoD vers BG2 dans <strong>EET</strong>) ; hardcore : ces changements vident aussi le coffre (les objets de quête restent).</li>
 <li><strong>Sacs</strong> : un sac rangé dans le coffre y est vidé et gardé dans l'onglet Sacs ; les objets du coffre qu'il peut contenir ne pèsent rien (un Sac de contenance : tout le coffre).</li>
 <li><strong>Poids</strong> : le coffre compte dans la somme des charges maximales des membres ; au-delà, le groupe est ralenti.</li>
+<li><strong>Objets de quête</strong> : tous les objets de quête de BG1, SoD et BG2 (les objets indispensables et tout objet qu'un dialogue ou un script du jeu vérifie ou reprend) ne pèsent plus rien, dès l'installation.</li>
 <li><strong>Deux looks</strong> : style Baldur's Gate 1 ou Baldur's Gate II, sur les deux jeux.</li>
 <li><strong>Butin trié (optionnel)</strong> : au sol, dans les contenants et dans la barre de butin, les objets de quête, puis les objets sans poids, puis le reste par valeur/poids.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Prendre un objet du coffre</td><td class="k"><strong>Clic (double-clic : prendre et équiper)</strong></td></tr>
 <tr><td>Ranger un objet du sac à dos</td><td class="k"><strong>Maj + double-clic, ou le déposer sur la grille du coffre</strong></td></tr>
 <tr><td>Tout ranger</td><td class="k"><strong>Bouton Tout ranger, ou Espace</strong></td></tr>
-<tr><td>Cocher pour la vente / précieux / effacer</td><td class="k"><strong>Ctrl + clic sur un objet (coffre, sac à dos ou équipé)</strong></td></tr>
+<tr><td>Cocher pour la vente</td><td class="k"><strong>Ctrl + clic sur un objet (coffre, sac à dos ou équipé) ; encore pour effacer</strong></td></tr>
+<tr><td>Marquer comme précieux</td><td class="k"><strong>Alt + clic sur un objet (coffre, sac à dos ou équipé) ; encore pour effacer</strong></td></tr>
 <tr><td>Description</td><td class="k"><strong>Clic droit</strong></td></tr>
 <tr><td>Faire défiler la grille, les onglets, le sol</td><td class="k"><strong>Molette, flèches</strong></td></tr>
 <tr><td>Aide : ce que <strong>Party Stash</strong> ajoute à cette page</td><td class="k"><strong>Le bouton ? doré en haut à droite</strong></td></tr>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>One infinite stash shared by the whole party, <strong>Pillars of Eternity</strong> style, built into a redesigned inventory page. For <strong>Baldur's Gate: Enhanced Edition</strong> (with or without <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> and <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventory, Baldur&#x27;s Gate 1 look"></p>
 <h2>Features</h2>
@@ -17,7 +17,7 @@
 <li>Charges shown on wands</li>
 </ul>
 <h3>Sell the junk, keep the treasure</h3><ul>
-<li><strong><span class="k">Ctrl + click</span></strong>: for sale → valuable → clear</li>
+<li><strong><span class="k">Ctrl + click</span></strong>: for sale; <strong><span class="k">Alt + click</span></strong>: valuable</li>
 <li>Sell Marked sells all the junk at once, at any merchant</li>
 <li>Valuable items are never sold or dropped</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>All the details</summary><ul>
 <li><strong>Shared stash</strong>: every party member reaches the same infinite stash on the inventory page. Quests still see the items stored in it.</li>
 <li><strong>New inventory page</strong>: backpack and stash in one scrollable grid, a ground column, compact 2×2 stats (attributes in 3 letters).</li>
-<li><strong>Tabs</strong>: All, Weapons, Armor, Gear, Ammo, Gems, Scrolls, Potions, Quest, Misc, Bags.</li>
-<li><strong>Sorting</strong>: Auto (each tab its own order: weapons by damage per round for the shown character, armor by AC, scrolls by class and level…), Date, Quality, Type, Price, Value/weight. <strong><span class="k">Right-click</span></strong> the sort button to reverse it.</li>
+<li><strong>Tabs</strong>: All, Weapons, Armor, Gear, Ammo, Gems, Scrolls, Potions, Quest, Notes (books, letters, notes and the scrolls that cannot be cast), Misc, Bags.</li>
+<li><strong>Sorting</strong>: Auto (each tab its own order: weapons by damage per round for the shown character, armor by AC, scrolls by class and level…), Date, Quality, Type, Price, Value/weight. <strong><span class="k">Right-click</span></strong> the sort button to reverse it. The Auto label shows what it sorts by on the shown tab, e.g. Auto (DPS).</li>
 <li><strong>Hints</strong>: red = unusable by the shown character, blue = unidentified, + = an upgrade for him (or a scroll a party mage can still learn).</li>
-<li><strong>Marks</strong>: <strong><span class="k">Ctrl + click</span></strong> an item (stash, backpack or equipped) to mark it for sale (darkened), again to make it valuable (golden), again to clear it. Sell Marked sells all the items marked for sale at once at any merchant, with the total on the button.</li>
+<li><strong>Marks</strong>: <strong><span class="k">Ctrl + click</span></strong> an item (stash, backpack or equipped) to mark it for sale (darkened), or <strong><span class="k">Alt + click</span></strong> it to make it valuable (golden); the same click again clears the mark. Sell Marked sells all the items marked for sale at once at any merchant, with the total on the button.</li>
 <li><strong>Damage per round</strong>: weapon tooltips show the damage per round and THAC0 for the shown character (strength, proficiencies, attacks per round, both hands when dual-wielding); the stats show the attacks per round.</li>
 <li><strong>Charges</strong>: wands and other charged items show their charges in the corner of their cell.</li>
 <li><strong>Valuable items</strong>: never sold, skipped by Store all and by the merchants' selection, and they cannot be dropped on the ground. A backpack item marked for sale goes straight to the stash.</li>
 <li><strong>Put away</strong>: <strong><span class="k">right-click</span></strong> the big bag next to the weight, then open a container, and choose to put the backpack or the shown stash page in it (valuable and quest items stay).</li>
-<li><strong>Options (separate components)</strong>: the stash weighs nothing; keep the party gold through the campaign changes (BG1 to SoD, SoD to BG2 in <strong>EET</strong>); hardcore: those changes empty the stash too.</li>
+<li><strong>Options (separate components)</strong>: the stash weighs nothing; keep the party gold through the campaign changes (BG1 to SoD, SoD to BG2 in <strong>EET</strong>); hardcore: those changes empty the stash too (quest items stay).</li>
 <li><strong>Bags</strong>: a bag put in the stash is emptied into it and kept in the Bags tab; the stash items it can hold weigh nothing (a Bag of Holding: the whole stash).</li>
 <li><strong>Weight</strong>: the stash counts against the sum of the members' weight allowances; above it, the party is slowed down.</li>
+<li><strong>Quest items</strong>: every quest item of BG1, SoD and BG2 (the critical items and any item a dialog or script of the game checks or takes) is made weightless at install.</li>
 <li><strong>Two looks</strong>: Baldur's Gate 1 or Baldur's Gate II style, on either game.</li>
 <li><strong>Sorted loot (optional)</strong>: ground piles, containers and the loot bar list quest items, then weightless items, then the rest by value/weight.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Take an item from the stash</td><td class="k"><strong>Click (double-click: take and equip)</strong></td></tr>
 <tr><td>Store a backpack item</td><td class="k"><strong>Shift + double-click, or drop it on the stash grid</strong></td></tr>
 <tr><td>Store the whole backpack</td><td class="k"><strong>Store all button, or Space</strong></td></tr>
-<tr><td>Mark for sale / valuable / clear</td><td class="k"><strong>Ctrl + click an item (stash, backpack or equipped)</strong></td></tr>
+<tr><td>Mark for sale</td><td class="k"><strong>Ctrl + click an item (stash, backpack or equipped); again to clear</strong></td></tr>
+<tr><td>Mark valuable</td><td class="k"><strong>Alt + click an item (stash, backpack or equipped); again to clear</strong></td></tr>
 <tr><td>Description</td><td class="k"><strong>Right-click</strong></td></tr>
 <tr><td>Scroll the grid, tabs, ground</td><td class="k"><strong>Mouse wheel, arrows</strong></td></tr>
 <tr><td>Help: what <strong>Party Stash</strong> adds to this page</td><td class="k"><strong>The gold ? button at the top right</strong></td></tr>

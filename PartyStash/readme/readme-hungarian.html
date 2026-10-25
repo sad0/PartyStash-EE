@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="hu"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Végtelen láda az egész csapatnak, a <strong>Pillars of Eternity</strong> mintájára, egy újratervezett felszerelés oldalba építve. A <strong>Baldur's Gate: Enhanced Edition</strong>höz (<strong>Siege of Dragonspear</strong>rel vagy anélkül), a <strong>Baldur's Gate II: Enhanced Edition</strong>höz és az <strong>EET</strong>-hez.</p>
 <p><img src="inventory_bg1.png" alt="Felszerelés, Baldur&#x27;s Gate 1 kinézet"></p>
 <h2>Funkciók</h2>
@@ -17,7 +17,7 @@
 <li>Töltetek a pálcákon</li>
 </ul>
 <h3>Add el a kacatot, tartsd meg a kincset</h3><ul>
-<li><strong><span class="k">Ctrl + kattintás</span></strong>: eladásra → értékes → törlés</li>
+<li><strong><span class="k">Ctrl + kattintás</span></strong>: eladásra; <strong><span class="k">Alt + kattintás</span></strong>: értékes</li>
 <li>A Jelöltek eladása egyszerre elad minden kacatot, bármelyik kereskedőnél</li>
 <li>Az értékes tárgyakat sosem adja el és nem dobja el</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Minden részlet</summary><ul>
 <li><strong>Közös láda</strong>: a csapat minden tagja ugyanazt a végtelen ládát éri el a felszerelés oldalon. A küldetések továbbra is látják a benne lévő tárgyakat.</li>
 <li><strong>Új felszerelés oldal</strong>: hátizsák és láda egyetlen görgethető rácsban, egy oszlop a földnek, tömör 2×2-es értékek (tulajdonságok 3 betűvel).</li>
-<li><strong>Fülek</strong>: Mind, Fegyverek, Páncél, Felszerelés, Lőszer, Drágakövek, Tekercsek, Italok, Küldetés, Egyéb, Zsákok.</li>
-<li><strong>Rendezés</strong>: Auto (minden fül saját sorrenddel: fegyverek a mutatott karakter körönkénti sebzése szerint, páncélok VO szerint, tekercsek kaszt és szint szerint…), Dátum, Minőség, Típus, Ár, Érték/súly. Jobb kattintás a rendezés gombon megfordítja.</li>
+<li><strong>Fülek</strong>: Mind, Fegyverek, Páncél, Felszerelés, Lőszer, Drágakövek, Tekercsek, Italok, Küldetés, Jegyzetek (könyvek, levelek, jegyzetek és a nem használható tekercsek), Egyéb, Zsákok.</li>
+<li><strong>Rendezés</strong>: Auto (minden fül saját sorrenddel: fegyverek a mutatott karakter körönkénti sebzése szerint, páncélok VO szerint, tekercsek kaszt és szint szerint…), Dátum, Minőség, Típus, Ár, Érték/súly. Jobb kattintás a rendezés gombon megfordítja. Az Auto felirat mutatja, mi szerint rendez a mutatott fülön, pl. Auto (DPS).</li>
 <li><strong>Jelzések</strong>: piros = a mutatott karakter nem használhatja, kék = azonosítatlan, + = fejlesztés számára (vagy tekercs, amit a csapat varázslója még megtanulhat).</li>
-<li><strong>Jelölések</strong>: <strong><span class="k">Ctrl + kattintás</span></strong> egy tárgyra (láda, hátizsák vagy felszerelt) eladásra jelöli (sötétített), újra értékessé teszi (aranyszínű), újra törli a jelölést. A Jelöltek eladása egyszerre eladja az összes eladásra jelölt tárgyat bármelyik kereskedőnél, az összeggel a gombon.</li>
+<li><strong>Jelölések</strong>: <strong><span class="k">Ctrl + kattintás</span></strong> egy tárgyra (láda, hátizsák vagy felszerelt) eladásra jelöli (sötétített), az <strong><span class="k">Alt + kattintás</span></strong> értékessé teszi (aranyszínű); ugyanaz a kattintás újra törli a jelölést. A Jelöltek eladása egyszerre eladja az összes eladásra jelölt tárgyat bármelyik kereskedőnél, az összeggel a gombon.</li>
 <li><strong>Körönkénti sebzés</strong>: a fegyverek súgója a mutatott karakter körönkénti sebzését és THAC0 értékét mutatja (erő, jártasságok, körönkénti támadások, mindkét kéz két fegyveres harcnál); a statisztikák a körönkénti támadásokat mutatják.</li>
 <li><strong>Töltetek</strong>: a pálcák és más töltettel bíró tárgyak a mezőjük sarkában mutatják a töltetek számát.</li>
 <li><strong>Értékes tárgyak</strong>: sosem kerülnek eladásra, a Mindet elrak és a kereskedők kiválasztása kihagyja őket, és nem tehetők a földre. Az eladásra jelölt hátizsák tárgy egyenesen a ládába kerül.</li>
 <li><strong>Elpakolás</strong>: jobb kattintás a súly melletti nagy zsákra, majd nyisson ki egy tárolót, és válassza, hogy a hátizsákot vagy a mutatott ládaoldalt teszi bele (az értékes és küldetéstárgyak maradnak).</li>
-<li><strong>Lehetőségek (külön komponensek)</strong>: a láda nem nyom semmit; a csapat aranya megmarad a hadjáratváltásoknál (BG1-ből SoD, SoD-ből BG2 az <strong>EET</strong>-ben); hardcore: ezek a váltások a ládát is kiürítik.</li>
+<li><strong>Lehetőségek (külön komponensek)</strong>: a láda nem nyom semmit; a csapat aranya megmarad a hadjáratváltásoknál (BG1-ből SoD, SoD-ből BG2 az <strong>EET</strong>-ben); hardcore: ezek a váltások a ládát is kiürítik (a küldetéstárgyak maradnak).</li>
 <li><strong>Zsákok</strong>: a ládába tett zsák kiürül bele, és a Zsákok fülön marad; a láda tárgyai, amelyeket befogad, nem nyomnak semmit (feneketlen zsák: az egész láda).</li>
 <li><strong>Súly</strong>: a láda a tagok teherbírásának összegébe számít; felette a csapat lelassul.</li>
+<li><strong>Küldetéstárgyak</strong>: a BG1, a SoD és a BG2 minden küldetéstárgya (a nélkülözhetetlen tárgyak és minden tárgy, amelyet a játék egy párbeszéde vagy szkriptje ellenőriz vagy elvesz) a telepítéskor súlytalanná válik.</li>
 <li><strong>Két kinézet</strong>: Baldur's Gate 1 vagy Baldur's Gate II stílus, mindkét játékban.</li>
 <li><strong>Rendezett zsákmány (választható)</strong>: a földi kupacok, tárolók és a zsákmánysáv először a küldetéstárgyakat mutatják, aztán a súlytalanokat, majd a többit érték/súly szerint.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Tárgy kivétele a ládából</td><td class="k"><strong>Kattintás (dupla: kivétel és felvétel)</strong></td></tr>
 <tr><td>Hátizsák tárgyának elrakása</td><td class="k"><strong>Shift + dupla kattintás, vagy ráhúzás a láda rácsára</strong></td></tr>
 <tr><td>Az egész hátizsák elrakása</td><td class="k"><strong>Mindet elrak gomb, vagy Szóköz</strong></td></tr>
-<tr><td>Eladásra / értékesnek jelölés / törlés</td><td class="k"><strong>Ctrl + kattintás egy tárgyra (láda, hátizsák vagy felszerelt)</strong></td></tr>
+<tr><td>Eladásra jelölés</td><td class="k"><strong>Ctrl + kattintás egy tárgyra (láda, hátizsák vagy felszerelt); újra: törlés</strong></td></tr>
+<tr><td>Értékesnek jelölés</td><td class="k"><strong>Alt + kattintás egy tárgyra (láda, hátizsák vagy felszerelt); újra: törlés</strong></td></tr>
 <tr><td>Leírás</td><td class="k"><strong>Jobb kattintás</strong></td></tr>
 <tr><td>Rács, fülek, föld görgetése</td><td class="k"><strong>Egérgörgő, nyilak</strong></td></tr>
 <tr><td>Súgó: mit ad hozzá a <strong>Party Stash</strong> ehhez az oldalhoz</td><td class="k"><strong>A jobb felső arany ? gomb</strong></td></tr>

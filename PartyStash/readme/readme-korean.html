@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>파티 전체가 공유하는 무한 보관함을 <strong>Pillars of Eternity</strong> 방식으로, 새로 디자인한 인벤토리 화면에 넣었습니다. <strong>Baldur's Gate: Enhanced Edition</strong>(<strong>Siege of Dragonspear</strong> 포함 여부 무관), <strong>Baldur's Gate II: Enhanced Edition</strong>, <strong>EET</strong>용.</p>
 <p><img src="inventory_bg1.png" alt="인벤토리, 발더스 게이트 1 외형"></p>
 <h2>기능</h2>
@@ -17,7 +17,7 @@
 <li>완드에 충전 수 표시</li>
 </ul>
 <h3>잡동사니는 팔고, 보물은 지키고</h3><ul>
-<li><strong><span class="k">Ctrl + 클릭</span></strong>: 판매 → 귀중품 → 해제</li>
+<li><strong><span class="k">Ctrl + 클릭</span></strong>: 판매, <strong><span class="k">Alt + 클릭</span></strong>: 귀중품</li>
 <li>표시 판매 로 아무 상인에게서나 한꺼번에 판매</li>
 <li>귀중품은 절대 팔리거나 버려지지 않음</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>모든 세부 사항</summary><ul>
 <li><strong>공유 보관함</strong>: 모든 파티원이 인벤토리 화면에서 같은 무한 보관함을 사용합니다. 퀘스트는 보관함 안의 아이템도 인식합니다.</li>
 <li><strong>새 인벤토리 화면</strong>: 배낭과 보관함을 하나의 스크롤 격자로, 바닥 열, 간결한 2×2 능력치(능력치 이름은 3글자).</li>
-<li><strong>탭</strong>: 전체, 무기, 갑옷, 장비, 탄약, 보석, 두루마리, 물약, 퀘스트, 기타, 가방.</li>
-<li><strong>정렬</strong>: 자동(탭마다 고유 순서: 무기는 표시된 캐릭터의 라운드당 피해, 갑옷은 AC, 두루마리는 직업과 레벨…), 날짜, 품질, 종류, 가격, 가치/무게. 정렬 버튼을 오른쪽 클릭하면 순서가 뒤집힙니다.</li>
+<li><strong>탭</strong>: 전체, 무기, 갑옷, 장비, 탄약, 보석, 두루마리, 물약, 퀘스트, 메모(책, 편지, 메모, 시전할 수 없는 두루마리), 기타, 가방.</li>
+<li><strong>정렬</strong>: 자동(탭마다 고유 순서: 무기는 표시된 캐릭터의 라운드당 피해, 갑옷은 AC, 두루마리는 직업과 레벨…), 날짜, 품질, 종류, 가격, 가치/무게. 정렬 버튼을 오른쪽 클릭하면 순서가 뒤집힙니다. "자동" 표시에는 보이는 탭에서 무엇을 기준으로 정렬하는지 나옵니다(예: 자동 (DPS)).</li>
 <li><strong>표시</strong>: 빨강 = 선택한 캐릭터가 사용 불가, 파랑 = 미감정, + = 그 캐릭터에게 업그레이드(또는 파티 마법사가 아직 배울 수 있는 두루마리).</li>
-<li><strong>표시</strong>: 아이템(보관함, 배낭 또는 장착)을 <strong><span class="k">Ctrl + 클릭하면</span></strong> 판매 표시(어둡게), 한 번 더 하면 귀중품(금색), 한 번 더 하면 해제됩니다. "표시 판매"는 판매 표시된 모든 아이템을 아무 상인에게서나 한꺼번에 팔며, 버튼에 합계가 표시됩니다.</li>
+<li><strong>표시</strong>: 아이템(보관함, 배낭 또는 장착)을 <strong><span class="k">Ctrl + 클릭하면</span></strong> 판매 표시(어둡게), <strong><span class="k">Alt + 클릭하면</span></strong> 귀중품(금색)이 되며, 같은 클릭을 한 번 더 하면 해제됩니다. "표시 판매"는 판매 표시된 모든 아이템을 아무 상인에게서나 한꺼번에 팔며, 버튼에 합계가 표시됩니다.</li>
 <li><strong>라운드당 피해</strong>: 무기 툴팁에 표시된 캐릭터의 라운드당 피해와 THAC0이 나옵니다(근력, 숙련, 라운드당 공격 횟수, 쌍수 전투 시 양손); 능력치에는 라운드당 공격 횟수가 나옵니다.</li>
 <li><strong>충전</strong>: 완드 등 충전식 아이템은 칸 모서리에 남은 충전 수를 표시합니다.</li>
 <li><strong>귀중품</strong>: 절대 팔리지 않고, "모두 보관"과 상인 선택에서 제외되며, 땅에 내려놓을 수 없습니다. 판매 표시된 배낭 아이템은 바로 보관함으로 갑니다.</li>
 <li><strong>넣어 두기</strong>: 무게 옆의 큰 가방을 오른쪽 클릭한 뒤 용기를 열고, 배낭과 표시된 보관함 페이지 중 무엇을 넣을지 고릅니다(귀중품과 퀘스트 아이템은 남습니다).</li>
-<li><strong>옵션(별도 구성 요소)</strong>: 보관함은 무게가 없음; 캠페인 전환 시 파티 골드 유지(BG1에서 SoD, <strong>EET</strong>에서 SoD에서 BG2); 하드코어: 이 전환 시 보관함도 비워짐.</li>
+<li><strong>옵션(별도 구성 요소)</strong>: 보관함은 무게가 없음; 캠페인 전환 시 파티 골드 유지(BG1에서 SoD, <strong>EET</strong>에서 SoD에서 BG2); 하드코어: 이 전환 시 보관함도 비워짐(퀘스트 아이템은 남음).</li>
 <li><strong>가방</strong>: 보관함에 넣은 가방은 내용물이 보관함으로 옮겨지고 가방 탭에 남습니다. 그 가방이 담을 수 있는 보관함 아이템은 무게가 없습니다(소지의 가방: 보관함 전체).</li>
 <li><strong>무게</strong>: 보관함은 구성원 최대 적재량의 합에 포함되며, 이를 넘으면 파티가 느려집니다.</li>
+<li><strong>퀘스트 아이템</strong>: BG1, SoD, BG2의 모든 퀘스트 아이템(필수 아이템과 게임의 대화나 스크립트가 확인하거나 가져가는 모든 아이템)은 설치 시 무게가 0이 됩니다.</li>
 <li><strong>두 가지 외형</strong>: 두 게임 모두에서 발더스 게이트 1 또는 발더스 게이트 II 스타일.</li>
 <li><strong>정렬된 전리품(선택)</strong>: 바닥 더미, 컨테이너, 전리품 바에서 퀘스트 아이템, 무게 없는 아이템, 나머지는 가치/무게 순으로 표시.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>보관함에서 아이템 꺼내기</td><td class="k"><strong>클릭(더블클릭: 꺼내서 장착)</strong></td></tr>
 <tr><td>배낭 아이템 보관</td><td class="k"><strong>Shift + 더블클릭, 또는 보관함 격자에 놓기</strong></td></tr>
 <tr><td>배낭 전체 보관</td><td class="k"><strong>&quot;모두 보관&quot; 버튼 또는 스페이스</strong></td></tr>
-<tr><td>판매/귀중품 표시/해제</td><td class="k"><strong>아이템을 Ctrl + 클릭(보관함, 배낭 또는 장착)</strong></td></tr>
+<tr><td>판매 표시</td><td class="k"><strong>아이템을 Ctrl + 클릭(보관함, 배낭 또는 장착), 한 번 더: 해제</strong></td></tr>
+<tr><td>귀중품 표시</td><td class="k"><strong>아이템을 Alt + 클릭(보관함, 배낭 또는 장착), 한 번 더: 해제</strong></td></tr>
 <tr><td>설명</td><td class="k"><strong>오른쪽 클릭</strong></td></tr>
 <tr><td>격자, 탭, 바닥 스크롤</td><td class="k"><strong>마우스 휠, 화살표</strong></td></tr>
 <tr><td>도움말: <strong>Party Stash</strong>가 이 페이지에 더하는 것</td><td class="k"><strong>오른쪽 위의 금색 ? 버튼</strong></td></tr>

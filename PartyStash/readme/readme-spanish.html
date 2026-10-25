@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Un baúl infinito compartido por todo el grupo, al estilo de <strong>Pillars of Eternity</strong>, integrado en una página de inventario rediseñada. Para <strong>Baldur's Gate: Enhanced Edition</strong> (con o sin <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> y <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventario, aspecto Baldur&#x27;s Gate 1"></p>
 <h2>Características</h2>
@@ -17,7 +17,7 @@
 <li>Cargas visibles en las varitas</li>
 </ul>
 <h3>Vende la chatarra, guarda el tesoro</h3><ul>
-<li><strong><span class="k">Ctrl + clic</span></strong>: vender → valioso → quitar</li>
+<li><strong><span class="k">Ctrl + clic</span></strong>: vender; <strong><span class="k">Alt + clic</span></strong>: valioso</li>
 <li>Vender marcados vende toda la chatarra de golpe, en cualquier mercader</li>
 <li>Los objetos valiosos nunca se venden ni se tiran</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Todos los detalles</summary><ul>
 <li><strong>Baúl compartido</strong>: todos los miembros del grupo acceden al mismo baúl infinito en la página de inventario. Las misiones siguen viendo los objetos guardados en él.</li>
 <li><strong>Nueva página de inventario</strong>: mochila y baúl en una sola cuadrícula desplazable, una columna para el suelo y estadísticas compactas en 2×2 (características en 3 letras).</li>
-<li><strong>Pestañas</strong>: Todo, Armas, Armadura, Equipo, Munición, Gemas, Pergaminos, Pociones, Misión, Varios, Bolsas.</li>
-<li><strong>Orden</strong>: Auto (cada pestaña con su orden: armas por daño por asalto para el personaje mostrado, armaduras por CA, pergaminos por clase y nivel…), Fecha, Calidad, Tipo, Precio, Valor/peso. Clic derecho en el botón de orden para invertirlo.</li>
+<li><strong>Pestañas</strong>: Todo, Armas, Armadura, Equipo, Munición, Gemas, Pergaminos, Pociones, Misión, Notas (libros, cartas, notas y los pergaminos que no se pueden lanzar), Varios, Bolsas.</li>
+<li><strong>Orden</strong>: Auto (cada pestaña con su orden: armas por daño por asalto para el personaje mostrado, armaduras por CA, pergaminos por clase y nivel…), Fecha, Calidad, Tipo, Precio, Valor/peso. Clic derecho en el botón de orden para invertirlo. La etiqueta Auto indica por qué criterio ordena la pestaña mostrada, p. ej. Auto (DPS).</li>
 <li><strong>Indicaciones</strong>: rojo = inutilizable por el personaje mostrado, azul = sin identificar, + = una mejora para él (o un pergamino que un mago del grupo aún puede aprender).</li>
-<li><strong>Marcas</strong>: <strong><span class="k">Ctrl + clic</span></strong> en un objeto (baúl, mochila o equipado) lo marca para vender (oscurecido), otra vez lo vuelve valioso (dorado), otra vez lo desmarca. Vender marcados vende a la vez todos los objetos marcados para vender en cualquier mercader, con el total en el botón.</li>
+<li><strong>Marcas</strong>: <strong><span class="k">Ctrl + clic</span></strong> en un objeto (baúl, mochila o equipado) lo marca para vender (oscurecido), <strong><span class="k">Alt + clic</span></strong> lo vuelve valioso (dorado); el mismo clic otra vez lo desmarca. Vender marcados vende a la vez todos los objetos marcados para vender en cualquier mercader, con el total en el botón.</li>
 <li><strong>Daño por asalto</strong>: las descripciones emergentes de las armas muestran el daño por asalto y el GAC0 para el personaje mostrado (fuerza, competencias, ataques por asalto, ambas manos al luchar con dos armas); las estadísticas muestran los ataques por asalto.</li>
 <li><strong>Cargas</strong>: las varitas y otros objetos con cargas muestran sus cargas en la esquina de su casilla.</li>
 <li><strong>Objetos valiosos</strong>: nunca se venden, Guardar todo y la selección de los mercaderes los omiten, y no se pueden dejar en el suelo. Un objeto de la mochila marcado para vender va directo al baúl.</li>
 <li><strong>Depositar</strong>: clic derecho en la bolsa grande junto al peso, luego abra un contenedor y elija meter en él la mochila o la página del baúl mostrada (los objetos valiosos y de misión se quedan).</li>
-<li><strong>Opciones (componentes aparte)</strong>: el baúl no pesa nada; conservar el oro del grupo en los cambios de campaña (BG1 a SoD, SoD a BG2 en <strong>EET</strong>); hardcore: esos cambios también vacían el baúl.</li>
+<li><strong>Opciones (componentes aparte)</strong>: el baúl no pesa nada; conservar el oro del grupo en los cambios de campaña (BG1 a SoD, SoD a BG2 en <strong>EET</strong>); hardcore: esos cambios también vacían el baúl (los objetos de misión se quedan).</li>
 <li><strong>Bolsas</strong>: una bolsa guardada en el baúl se vacía en él y se conserva en la pestaña Bolsas; los objetos del baúl que puede contener no pesan nada (una Bolsa de contención: todo el baúl).</li>
 <li><strong>Peso</strong>: el baúl cuenta para la suma de las cargas máximas de los miembros; por encima, el grupo va más lento.</li>
+<li><strong>Objetos de misión</strong>: todos los objetos de misión de BG1, SoD y BG2 (los objetos imprescindibles y cualquier objeto que un diálogo o script del juego comprueba o se lleva) pasan a no pesar nada al instalar.</li>
 <li><strong>Dos aspectos</strong>: estilo Baldur's Gate 1 o Baldur's Gate II, en ambos juegos.</li>
 <li><strong>Botín ordenado (opcional)</strong>: montones del suelo, contenedores y la barra de botín muestran primero los objetos de misión, luego los objetos sin peso y luego el resto por valor/peso.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Coger un objeto del baúl</td><td class="k"><strong>Clic (doble clic: coger y equipar)</strong></td></tr>
 <tr><td>Guardar un objeto de la mochila</td><td class="k"><strong>Mayús + doble clic, o soltarlo en la cuadrícula del baúl</strong></td></tr>
 <tr><td>Guardar toda la mochila</td><td class="k"><strong>Botón Guardar todo, o Espacio</strong></td></tr>
-<tr><td>Marcar para vender / valioso / desmarcar</td><td class="k"><strong>Ctrl + clic en un objeto (baúl, mochila o equipado)</strong></td></tr>
+<tr><td>Marcar para vender</td><td class="k"><strong>Ctrl + clic en un objeto (baúl, mochila o equipado); otra vez: desmarcar</strong></td></tr>
+<tr><td>Marcar como valioso</td><td class="k"><strong>Alt + clic en un objeto (baúl, mochila o equipado); otra vez: desmarcar</strong></td></tr>
 <tr><td>Descripción</td><td class="k"><strong>Clic derecho</strong></td></tr>
 <tr><td>Desplazar la cuadrícula, pestañas, suelo</td><td class="k"><strong>Rueda del ratón, flechas</strong></td></tr>
 <tr><td>Ayuda: lo que <strong>Party Stash</strong> añade a esta página</td><td class="k"><strong>El botón ? dorado arriba a la derecha</strong></td></tr>

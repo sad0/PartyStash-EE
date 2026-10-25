@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="tr"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Tüm grubun paylaştığı sonsuz bir sandık, <strong>Pillars of Eternity</strong> tarzında, yeniden tasarlanmış bir envanter sayfasına yerleştirildi. <strong>Baldur's Gate: Enhanced Edition</strong> (<strong>Siege of Dragonspear</strong> ile veya olmadan), <strong>Baldur's Gate II: Enhanced Edition</strong> ve <strong>EET</strong> için.</p>
 <p><img src="inventory_bg1.png" alt="Envanter, Baldur&#x27;s Gate 1 görünümü"></p>
 <h2>Özellikler</h2>
@@ -17,7 +17,7 @@
 <li>Asalarda şarjlar görünür</li>
 </ul>
 <h3>Hurdayı sat, hazineyi tut</h3><ul>
-<li><strong><span class="k">Ctrl + tıklama</span></strong>: satılık → değerli → kaldır</li>
+<li><strong><span class="k">Ctrl + tıklama</span></strong>: satılık; <strong><span class="k">Alt + tıklama</span></strong>: değerli</li>
 <li>İşaretlileri sat tüm hurdayı herhangi bir tüccarda bir kerede satar</li>
 <li>Değerli eşyalar asla satılmaz ya da atılmaz</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Tüm ayrıntılar</summary><ul>
 <li><strong>Ortak sandık</strong>: grubun tüm üyeleri envanter sayfasında aynı sonsuz sandığa erişir. Görevler sandıktaki eşyaları görmeye devam eder.</li>
 <li><strong>Yeni envanter sayfası</strong>: sırt çantası ve sandık tek bir kaydırılabilir ızgarada, bir zemin sütunu ve kompakt 2×2 değerler (nitelikler 3 harfle).</li>
-<li><strong>Sekmeler</strong>: Tümü, Silahlar, Zırh, Teçhizat, Mühimmat, Mücevherler, Parşömenler, İksirler, Görev, Diğer, Çantalar.</li>
-<li><strong>Sıralama</strong>: Oto (her sekmenin kendi sırası: silahlar gösterilen karakter için tur başına hasara, zırhlar ZS'ye, parşömenler sınıf ve seviyeye göre…), Tarih, Kalite, Tür, Fiyat, Değer/ağırlık. Ters çevirmek için sıralama düğmesine sağ tıklayın.</li>
+<li><strong>Sekmeler</strong>: Tümü, Silahlar, Zırh, Teçhizat, Mühimmat, Mücevherler, Parşömenler, İksirler, Görev, Notlar (kitaplar, mektuplar, notlar ve kullanılamayan parşömenler), Diğer, Çantalar.</li>
+<li><strong>Sıralama</strong>: Oto (her sekmenin kendi sırası: silahlar gösterilen karakter için tur başına hasara, zırhlar ZS'ye, parşömenler sınıf ve seviyeye göre…), Tarih, Kalite, Tür, Fiyat, Değer/ağırlık. Ters çevirmek için sıralama düğmesine sağ tıklayın. Oto etiketi, gösterilen sekmede neye göre sıraladığını gösterir, ör. Oto (DPS).</li>
 <li><strong>İpuçları</strong>: kırmızı = gösterilen karakter kullanamaz, mavi = tanımlanmamış, + = onun için bir iyileştirme (ya da gruptaki bir büyücünün hâlâ öğrenebileceği parşömen).</li>
-<li><strong>İşaretler</strong>: bir eşyaya (sandık, sırt çantası veya kuşanılmış) <strong><span class="k">Ctrl + tıklama</span></strong> onu satış için işaretler (koyulaşır), tekrar değerli yapar (altın renkli), tekrar işareti kaldırır. İşaretlileri sat, satış için işaretli tüm eşyaları herhangi bir tüccarda bir kerede satar; toplam tutar düğmede görünür.</li>
+<li><strong>İşaretler</strong>: bir eşyaya (sandık, sırt çantası veya kuşanılmış) <strong><span class="k">Ctrl + tıklama</span></strong> onu satış için işaretler (koyulaşır), <strong><span class="k">Alt + tıklama</span></strong> değerli yapar (altın renkli); aynı tıklama tekrarlanınca işaret kalkar. İşaretlileri sat, satış için işaretli tüm eşyaları herhangi bir tüccarda bir kerede satar; toplam tutar düğmede görünür.</li>
 <li><strong>Tur başına hasar</strong>: silah ipuçları gösterilen karakter için tur başına hasarı ve THAC0'ı gösterir (güç, uzmanlıklar, tur başına saldırı, çift silahla dövüşte iki el); istatistikler tur başına saldırıyı gösterir.</li>
 <li><strong>Şarjlar</strong>: asalar ve diğer şarjlı eşyalar şarjlarını kutularının köşesinde gösterir.</li>
 <li><strong>Değerli eşyalar</strong>: asla satılmaz, Hepsini koy ve tüccarların seçimi onları atlar, ve yere bırakılamazlar. Satış için işaretlenen bir sırt çantası eşyası doğrudan sandığa gider.</li>
 <li><strong>Bırak</strong>: ağırlığın yanındaki büyük çantaya sağ tıklayın, sonra bir kap açın ve içine sırt çantasını mı yoksa gösterilen sandık sayfasını mı koyacağınızı seçin (değerli ve görev eşyaları kalır).</li>
-<li><strong>Seçenekler (ayrı bileşenler)</strong>: sandık hiçbir şey çekmez; sefer değişimlerinde grubun altınını koru (BG1'den SoD'ye, <strong>EET</strong>'de SoD'den BG2'ye); hardcore: bu değişimler sandığı da boşaltır.</li>
+<li><strong>Seçenekler (ayrı bileşenler)</strong>: sandık hiçbir şey çekmez; sefer değişimlerinde grubun altınını koru (BG1'den SoD'ye, <strong>EET</strong>'de SoD'den BG2'ye); hardcore: bu değişimler sandığı da boşaltır (görev eşyaları kalır).</li>
 <li><strong>Çantalar</strong>: sandığa konan çanta içine boşaltılır ve Çantalar sekmesinde tutulur; alabileceği sandık eşyaları hiç ağırlık yapmaz (Taşıma Çantası: tüm sandık).</li>
 <li><strong>Ağırlık</strong>: sandık, üyelerin taşıma sınırları toplamına sayılır; bunun üzerinde grup yavaşlar.</li>
+<li><strong>Görev eşyaları</strong>: BG1, SoD ve BG2'nin tüm görev eşyaları (vazgeçilmez eşyalar ve oyunun bir diyaloğunun ya da betiğinin kontrol ettiği veya aldığı her eşya) kurulumda ağırlıksız yapılır.</li>
 <li><strong>İki görünüm</strong>: her iki oyunda Baldur's Gate 1 veya Baldur's Gate II tarzı.</li>
 <li><strong>Sıralı ganimet (isteğe bağlı)</strong>: yerdeki yığınlar, kaplar ve ganimet çubuğu önce görev eşyalarını, sonra ağırlıksız eşyaları, sonra kalanı değer/ağırlığa göre gösterir.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Sandıktan eşya almak</td><td class="k"><strong>Tıklama (çift tıklama: al ve kuşan)</strong></td></tr>
 <tr><td>Sırt çantasındaki eşyayı saklamak</td><td class="k"><strong>Shift + çift tıklama veya sandık ızgarasına bırakma</strong></td></tr>
 <tr><td>Tüm sırt çantasını saklamak</td><td class="k"><strong>Hepsini koy düğmesi veya Boşluk</strong></td></tr>
-<tr><td>Satış için / değerli işaretlemek / kaldırmak</td><td class="k"><strong>Bir eşyaya Ctrl + tıklama (sandık, sırt çantası veya kuşanılmış)</strong></td></tr>
+<tr><td>Satış için işaretlemek</td><td class="k"><strong>Bir eşyaya Ctrl + tıklama (sandık, sırt çantası veya kuşanılmış); tekrar: kaldır</strong></td></tr>
+<tr><td>Değerli işaretlemek</td><td class="k"><strong>Bir eşyaya Alt + tıklama (sandık, sırt çantası veya kuşanılmış); tekrar: kaldır</strong></td></tr>
 <tr><td>Açıklama</td><td class="k"><strong>Sağ tıklama</strong></td></tr>
 <tr><td>Izgarayı, sekmeleri, zemini kaydırmak</td><td class="k"><strong>Fare tekerleği, oklar</strong></td></tr>
 <tr><td>Yardım: <strong>Party Stash</strong> bu sayfaya ne ekler</td><td class="k"><strong>Sağ üstteki altın ? düğmesi</strong></td></tr>

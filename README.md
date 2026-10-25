@@ -25,7 +25,7 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 
 ### ![Sell the junk, keep the treasure](docs/titles/en_3.png)
 
-- **Ctrl + click**: for sale → valuable → clear
+- **Ctrl + click**: for sale; **Alt + click**: valuable
 - **Sell Marked** sells all the junk at once, at any merchant
 - Valuable items are never sold or dropped
 
@@ -53,15 +53,15 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
   see the items stored in it.
 - **New inventory page**: your backpack and the stash in one scrollable grid, a ground column, and the stats shown
   as compact 2×2 blocks (attributes in 3 letters: Str, Dex, Con…).
-- **Tabs**: All, Weapons, Armor, Gear, Ammo, Gems, Scrolls, Potions, Quest, Misc, Bags.
+- **Tabs**: All, Weapons, Armor, Gear, Ammo, Gems, Scrolls, Potions, Quest, Notes (books, letters, notes and the scrolls that cannot be cast), Misc, Bags.
 - **Smart sorting**: *Auto* (each tab has its own order: weapons by damage per round for the shown character, armor
   by AC, scrolls by class and level…), plus Date, Quality, Type, Price and Value/weight. **Right-click** the sort
-  button to reverse it.
+  button to reverse it. The *Auto* label shows what it sorts by on the shown tab, e.g. *Auto (DPS)*.
 - **Colour hints**: red = unusable by the shown character, blue = unidentified, **+** = an upgrade for him (or a
   scroll a party mage can still learn).
 - **Marks**: **Ctrl + click** an item (in the stash, the backpack or equipped) to mark it **for sale** (darkened),
-  again to make it **valuable** (golden), again to clear it. **Sell Marked** sells everything marked for sale at once
-  from any merchant, straight from the stash, with the total shown on the button.
+  or **Alt + click** it to make it **valuable** (golden); the same click again clears the mark. **Sell Marked** sells
+  everything marked for sale at once from any merchant, straight from the stash, with the total shown on the button.
 - **Valuable items** are never sold, skipped by Store all and by the merchants' selection, and cannot be dropped on
   the ground. A backpack item marked for sale goes straight to the stash.
 - **Damage per round**: weapon tooltips show the damage per round and THAC0 for the shown character (strength,
@@ -73,12 +73,14 @@ A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb
 - **Bags**: put a gem bag, scroll case, potion case… in the stash. It is emptied into the stash and kept in the Bags
   tab, and the stash items it can hold weigh nothing. A Bag of Holding makes the whole stash weightless.
 - **Weight**: the stash counts against the sum of the members' weight allowances; above it, the party is slowed.
+- **Quest items weigh nothing**: every quest item of BG1, SoD and BG2 (the critical items and any item a dialog or
+  script of the game checks or takes) is made weightless at install.
 - **Two looks**: Baldur's Gate 1 or Baldur's Gate II style, on either game (the installer recommends the one
   matching your game).
 - **Sorted loot** (optional component): ground piles, containers and the quick loot bar list quest items first,
   then weightless items, then the rest by value/weight.
 - **Options** (optional components): the stash weighs nothing; keep the party gold through the campaign changes
-  (BG1 to SoD, SoD to BG2 in EET); hardcore: those changes empty the stash too.
+  (BG1 to SoD, SoD to BG2 in EET); hardcore: those changes empty the stash too (quest items stay).
 - **15 languages**: English, French, German, Spanish, Italian, Polish, Russian, Portuguese (Brazil), Czech,
   Hungarian, Turkish, Ukrainian, Simplified Chinese, Japanese, Korean.
 
@@ -122,7 +124,8 @@ Party Stash with the Baldur's Gate II look on top of **LeUI** (BG:EE):
 | Take an item from the stash | Click it (double-click: take and equip) |
 | Store a backpack item | **Shift + double-click** it, or drop it on the stash grid |
 | Store the whole backpack | **Store all** button, or **Space** |
-| Mark for sale / valuable / clear | **Ctrl + click** an item (stash, backpack or equipped) |
+| Mark for sale | **Ctrl + click** an item (stash, backpack or equipped); again to clear |
+| Mark valuable | **Alt + click** an item (stash, backpack or equipped); again to clear |
 | Item description | Right-click |
 | Scroll the grid, the tabs, the ground | Mouse wheel, arrows |
 | Help: what Party Stash adds to the page | The gold **?** button at the top right |
@@ -200,7 +203,7 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 
 #### ![Vendre le bazar, garder les trésors](docs/titles/fr_3.png)
 
-- **Ctrl + clic** : à vendre → précieux → effacer
+- **Ctrl + clic** : à vendre ; **Alt + clic** : précieux
 - **Vendre cochés** vend tout d'un coup, chez n'importe quel marchand
 - Les objets précieux ne sont jamais vendus ni jetés
 
@@ -228,15 +231,16 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
   d'inventaire. Les quêtes voient toujours les objets rangés dedans.
 - **Nouvelle page d'inventaire** : sac à dos et coffre dans une seule grille défilante, une colonne pour le sol, et
   les stats en blocs 2×2 (caractéristiques en 3 lettres : For, Dex, Con…).
-- **Onglets** : Tout, Armes, Armure, Équipement, Munitions, Gemmes, Parchemins, Potions, Quête, Divers, Sacs.
+- **Onglets** : Tout, Armes, Armure, Équipement, Munitions, Gemmes, Parchemins, Potions, Quête, Notes (livres, lettres, notes et parchemins impossibles à lancer), Divers, Sacs.
 - **Tri intelligent** : *Auto* (chaque onglet a son ordre : armes par dégâts par round pour le perso affiché,
   armures par CA, parchemins par classe et niveau…), plus Date, Qualité, Type, Prix et Valeur/poids. **Clic droit**
-  sur le bouton de tri pour l'inverser.
+  sur le bouton de tri pour l'inverser. Le libellé *Auto* indique selon quoi il trie l'onglet affiché, par exemple
+  *Auto (DPS)*.
 - **Couleurs** : rouge = inutilisable par le perso affiché, bleu = non identifié, **+** = une amélioration pour lui
   (ou un parchemin qu'un mage du groupe peut encore apprendre).
 - **Marques** : **Ctrl + clic** sur un objet (coffre, sac à dos ou équipé) pour le cocher **pour la vente**
-  (assombri), encore pour le rendre **précieux** (doré), encore pour l'effacer. **Vendre cochés** vend d'un coup tout
-  ce qui est coché chez n'importe quel marchand, directement depuis le coffre, avec le total affiché sur le bouton.
+  (assombri), **Alt + clic** pour le rendre **précieux** (doré) ; le même clic une seconde fois efface la marque.
+  **Vendre cochés** vend d'un coup tout ce qui est coché chez n'importe quel marchand, directement depuis le coffre, avec le total affiché sur le bouton.
 - **Objets précieux** : jamais vendus, ignorés par Tout ranger et par la sélection des marchands, impossibles à
   poser au sol. Un objet du sac à dos coché pour la vente part directement au coffre.
 - **Dégâts par round** : les infobulles des armes affichent les dégâts par round et le TAC0 pour le perso affiché
@@ -251,12 +255,14 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
   gardé dans l'onglet Sacs, et les objets du coffre qu'il peut contenir ne pèsent plus rien. Un Sac de contenance
   rend tout le coffre sans poids.
 - **Poids** : le coffre compte dans la somme des charges maximales des membres ; au-delà, le groupe est ralenti.
+- **Les objets de quête ne pèsent rien** : tous les objets de quête de BG1, SoD et BG2 (les objets indispensables et
+  tout objet qu'un dialogue ou un script du jeu vérifie ou reprend) deviennent sans poids dès l'installation.
 - **Deux looks** : style Baldur's Gate 1 ou Baldur's Gate II, sur les deux jeux (l'installateur recommande celui de
   votre jeu).
 - **Butin trié** (composant optionnel) : au sol, dans les contenants et dans la barre de butin, les objets de
   quête d'abord, puis les objets sans poids, puis le reste par valeur/poids.
 - **Options** (composants optionnels) : le coffre ne pèse rien ; garder l'or du groupe aux changements de campagne
-  (BG1 vers SoD, SoD vers BG2 dans EET) ; hardcore : ces changements vident aussi le coffre.
+  (BG1 vers SoD, SoD vers BG2 dans EET) ; hardcore : ces changements vident aussi le coffre (les objets de quête restent).
 - **15 langues**.
 
 </details>
@@ -285,7 +291,8 @@ Un mod WeiDU pour les Enhanced Editions, qui s'appuie sur [EEex](https://github.
 | Prendre un objet du coffre | Clic (double-clic : prendre et équiper) |
 | Ranger un objet du sac à dos | **Maj + double-clic**, ou le déposer sur la grille du coffre |
 | Tout ranger | Bouton **Tout ranger**, ou **Espace** |
-| Cocher pour la vente / précieux / effacer | **Ctrl + clic** sur un objet (coffre, sac à dos ou équipé) |
+| Cocher pour la vente | **Ctrl + clic** sur un objet (coffre, sac à dos ou équipé) ; encore pour effacer |
+| Marquer comme précieux | **Alt + clic** sur un objet (coffre, sac à dos ou équipé) ; encore pour effacer |
 | Description | Clic droit |
 | Faire défiler la grille, les onglets, le sol | Molette, flèches |
 | Aide : ce que Party Stash ajoute à la page | Le bouton **?** doré en haut à droite |

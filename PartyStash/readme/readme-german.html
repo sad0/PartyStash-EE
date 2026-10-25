@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Eine unendliche Truhe für die ganze Gruppe im Stil von <strong>Pillars of Eternity</strong>, eingebaut in eine neu gestaltete Inventarseite. Für <strong>Baldur's Gate: Enhanced Edition</strong> (mit oder ohne <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> und <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventar, Aussehen Baldur&#x27;s Gate 1"></p>
 <h2>Funktionen</h2>
@@ -17,7 +17,7 @@
 <li>Ladungen auf Zauberstäben</li>
 </ul>
 <h3>Plunder verkaufen, Schätze behalten</h3><ul>
-<li><strong><span class="k">Strg + Klick</span></strong>: zum Verkauf → wertvoll → aufheben</li>
+<li><strong><span class="k">Strg + Klick</span></strong>: zum Verkauf; <strong><span class="k">Alt + Klick</span></strong>: wertvoll</li>
 <li>Markierte verkaufen verkauft allen Plunder auf einmal, bei jedem Händler</li>
 <li>Wertvolle Gegenstände werden nie verkauft oder fallen gelassen</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Alle Details</summary><ul>
 <li><strong>Gemeinsame Truhe</strong>: Alle Gruppenmitglieder erreichen dieselbe unendliche Truhe auf der Inventarseite. Quests sehen die darin gelagerten Gegenstände weiterhin.</li>
 <li><strong>Neue Inventarseite</strong>: Rucksack und Truhe in einem scrollbaren Raster, eine Bodenspalte, kompakte 2×2-Werte (Attribute mit 3 Buchstaben).</li>
-<li><strong>Reiter</strong>: Alle, Waffen, Rüstung, Ausrüstung, Munition, Edelsteine, Schriftrollen, Tränke, Quest, Sonstiges, Beutel.</li>
-<li><strong>Sortierung</strong>: Auto (jeder Reiter mit eigener Reihenfolge: Waffen nach Schaden pro Runde für die gezeigte Figur, Rüstungen nach RK, Schriftrollen nach Klasse und Grad…), Datum, Qualität, Typ, Preis, Wert/Gewicht. Rechtsklick auf die Sortier-Schaltfläche kehrt sie um.</li>
+<li><strong>Reiter</strong>: Alle, Waffen, Rüstung, Ausrüstung, Munition, Edelsteine, Schriftrollen, Tränke, Quest, Notizen (Bücher, Briefe, Notizen und die Schriftrollen, die man nicht wirken kann), Sonstiges, Beutel.</li>
+<li><strong>Sortierung</strong>: Auto (jeder Reiter mit eigener Reihenfolge: Waffen nach Schaden pro Runde für die gezeigte Figur, Rüstungen nach RK, Schriftrollen nach Klasse und Grad…), Datum, Qualität, Typ, Preis, Wert/Gewicht. Rechtsklick auf die Sortier-Schaltfläche kehrt sie um. Die Beschriftung Auto zeigt, wonach sie auf dem gezeigten Reiter sortiert, z. B. Auto (DPS).</li>
 <li><strong>Hinweise</strong>: rot = für den gezeigten Charakter unbenutzbar, blau = nicht identifiziert, + = eine Verbesserung für ihn (oder eine Schriftrolle, die ein Magier der Gruppe noch lernen kann).</li>
-<li><strong>Markierungen</strong>: <strong><span class="k">Strg + Klick</span></strong> auf einen Gegenstand (Truhe, Rucksack oder angelegt) markiert ihn zum Verkauf (abgedunkelt), nochmals als wertvoll (golden), nochmals hebt es auf. Markierte verk. verkauft alle zum Verkauf markierten Gegenstände auf einmal bei jedem Händler, mit der Summe auf der Schaltfläche.</li>
+<li><strong>Markierungen</strong>: <strong><span class="k">Strg + Klick</span></strong> auf einen Gegenstand (Truhe, Rucksack oder angelegt) markiert ihn zum Verkauf (abgedunkelt), <strong><span class="k">Alt + Klick</span></strong> als wertvoll (golden); derselbe Klick noch einmal hebt die Markierung auf. Markierte verk. verkauft alle zum Verkauf markierten Gegenstände auf einmal bei jedem Händler, mit der Summe auf der Schaltfläche.</li>
 <li><strong>Schaden pro Runde</strong>: Waffen-Tooltips zeigen den Schaden pro Runde und die ETW0 für die gezeigte Figur (Stärke, Fertigkeiten, Angriffe pro Runde, beide Hände beim Kampf mit zwei Waffen); die Werte zeigen die Angriffe pro Runde.</li>
 <li><strong>Ladungen</strong>: Zauberstäbe und andere aufladbare Gegenstände zeigen ihre Ladungen in der Ecke ihres Feldes.</li>
 <li><strong>Wertvolle Gegenstände</strong>: nie verkauft, von Alles einl. und von der Händlerauswahl übergangen, und sie können nicht auf den Boden gelegt werden. Ein zum Verkauf markierter Rucksackgegenstand wandert direkt in die Truhe.</li>
 <li><strong>Ablegen</strong>: Rechtsklick auf den großen Beutel neben dem Gewicht, dann einen Behälter öffnen und wählen, ob der Rucksack oder die gezeigte Truhenseite hineinkommt (wertvolle und Questgegenstände bleiben).</li>
-<li><strong>Optionen (eigene Komponenten)</strong>: die Truhe wiegt nichts; das Gold der Gruppe bei Kampagnenwechseln behalten (BG1 zu SoD, SoD zu BG2 in <strong>EET</strong>); Hardcore: diese Wechsel leeren auch die Truhe.</li>
+<li><strong>Optionen (eigene Komponenten)</strong>: die Truhe wiegt nichts; das Gold der Gruppe bei Kampagnenwechseln behalten (BG1 zu SoD, SoD zu BG2 in <strong>EET</strong>); Hardcore: diese Wechsel leeren auch die Truhe (Questgegenstände bleiben).</li>
 <li><strong>Beutel</strong>: Ein in die Truhe gelegter Beutel wird in sie geleert und im Reiter Beutel behalten; die Truhengegenstände, die er aufnehmen kann, wiegen nichts (ein Nimmervoller Beutel: die ganze Truhe).</li>
 <li><strong>Gewicht</strong>: Die Truhe zählt zur Summe der Traglasten der Mitglieder; darüber wird die Gruppe verlangsamt.</li>
+<li><strong>Questgegenstände</strong>: Alle Questgegenstände von BG1, SoD und BG2 (die unverzichtbaren Gegenstände und jeder Gegenstand, den ein Dialog oder Skript des Spiels prüft oder nimmt) werden bei der Installation gewichtslos.</li>
 <li><strong>Zwei Aussehen</strong>: Stil von Baldur's Gate 1 oder Baldur's Gate II, in beiden Spielen.</li>
 <li><strong>Sortierte Beute (optional)</strong>: Bodenhaufen, Behälter und die Beuteleiste zeigen erst Questgegenstände, dann gewichtslose Gegenstände, dann den Rest nach Wert/Gewicht.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Gegenstand aus der Truhe nehmen</td><td class="k"><strong>Klick (Doppelklick: nehmen und ausrüsten)</strong></td></tr>
 <tr><td>Rucksackgegenstand einlagern</td><td class="k"><strong>Umschalt + Doppelklick oder auf das Truhenraster ziehen</strong></td></tr>
 <tr><td>Ganzen Rucksack einlagern</td><td class="k"><strong>Schaltfläche Alles einl. oder Leertaste</strong></td></tr>
-<tr><td>Zum Verkauf / wertvoll markieren / aufheben</td><td class="k"><strong>Strg + Klick auf einen Gegenstand (Truhe, Rucksack oder angelegt)</strong></td></tr>
+<tr><td>Zum Verkauf markieren</td><td class="k"><strong>Strg + Klick auf einen Gegenstand (Truhe, Rucksack oder angelegt); nochmals: aufheben</strong></td></tr>
+<tr><td>Als wertvoll markieren</td><td class="k"><strong>Alt + Klick auf einen Gegenstand (Truhe, Rucksack oder angelegt); nochmals: aufheben</strong></td></tr>
 <tr><td>Beschreibung</td><td class="k"><strong>Rechtsklick</strong></td></tr>
 <tr><td>Raster, Reiter, Boden scrollen</td><td class="k"><strong>Mausrad, Pfeile</strong></td></tr>
 <tr><td>Hilfe: was <strong>Party Stash</strong> dieser Seite hinzufügt</td><td class="k"><strong>Die goldene ?-Schaltfläche oben rechts</strong></td></tr>

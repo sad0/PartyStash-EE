@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.2 (2026-10)
+
+- Bags from mods installed after Party Stash (Tweaks Anthology's bags of holding, Neera's gem bag moved by
+  Convenient EE NPCs...) no longer vanish when stored: they stay in the Bags tab, also after a reload (issue #2).
+- Hardcore option: the campaign changes still empty the stash, but keep the quest items.
+- Quest items of BG1, SoD and BG2 weigh nothing (the critical items and every item a dialog or script checks or takes).
+- New Notes tab: books, letters, notes and the scrolls that cannot be cast.
+- Quest and Notes tabs sorted by date; the Auto sort says what it sorts by on the shown tab ("Auto (DPS)").
+- Marks: Ctrl + click marks for sale, Alt + click marks valuable (the same click again clears it).
+
 ## v1.2.1 (2026-10)
 
 - Weapon tooltips: THAC0 and damage per round no longer change with the weapon in hand (attacks per round read

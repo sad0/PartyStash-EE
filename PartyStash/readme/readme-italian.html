@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Un baule infinito condiviso da tutto il gruppo, in stile <strong>Pillars of Eternity</strong>, integrato in una pagina dell'inventario ridisegnata. Per <strong>Baldur's Gate: Enhanced Edition</strong> (con o senza <strong>Siege of Dragonspear</strong>), <strong>Baldur's Gate II: Enhanced Edition</strong> ed <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Inventario, aspetto Baldur&#x27;s Gate 1"></p>
 <h2>Caratteristiche</h2>
@@ -17,7 +17,7 @@
 <li>Cariche visibili sulle bacchette</li>
 </ul>
 <h3>Vendi la robaccia, tieni i tesori</h3><ul>
-<li><strong><span class="k">Ctrl + clic</span></strong>: da vendere → prezioso → togli</li>
+<li><strong><span class="k">Ctrl + clic</span></strong>: da vendere; <strong><span class="k">Alt + clic</span></strong>: prezioso</li>
 <li>Vendi segnati vende tutta la robaccia in una volta, da qualsiasi mercante</li>
 <li>Gli oggetti preziosi non vengono mai venduti né gettati</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Tutti i dettagli</summary><ul>
 <li><strong>Baule condiviso</strong>: tutti i membri del gruppo raggiungono lo stesso baule infinito nella pagina dell'inventario. Le missioni continuano a vedere gli oggetti riposti.</li>
 <li><strong>Nuova pagina dell'inventario</strong>: zaino e baule in un'unica griglia scorrevole, una colonna per il terreno, statistiche compatte 2×2 (caratteristiche in 3 lettere).</li>
-<li><strong>Schede</strong>: Tutto, Armi, Armatura, Equipaggiamento, Munizioni, Gemme, Pergamene, Pozioni, Missione, Varie, Borse.</li>
-<li><strong>Ordinamento</strong>: Auto (ogni scheda il suo ordine: armi per danni per round per il personaggio mostrato, armature per CA, pergamene per classe e livello…), Data, Qualità, Tipo, Prezzo, Valore/peso. Clic destro sul pulsante di ordinamento per invertirlo.</li>
+<li><strong>Schede</strong>: Tutto, Armi, Armatura, Equipaggiamento, Munizioni, Gemme, Pergamene, Pozioni, Missione, Note (libri, lettere, note e le pergamene che non si possono lanciare), Varie, Borse.</li>
+<li><strong>Ordinamento</strong>: Auto (ogni scheda il suo ordine: armi per danni per round per il personaggio mostrato, armature per CA, pergamene per classe e livello…), Data, Qualità, Tipo, Prezzo, Valore/peso. Clic destro sul pulsante di ordinamento per invertirlo. L'etichetta Auto indica in base a cosa ordina la scheda mostrata, es. Auto (DPS).</li>
 <li><strong>Indicazioni</strong>: rosso = inutilizzabile dal personaggio mostrato, blu = non identificato, + = un miglioramento per lui (o una pergamena che un mago del gruppo può ancora imparare).</li>
-<li><strong>Segni</strong>: <strong><span class="k">Ctrl + clic</span></strong> su un oggetto (baule, zaino o equipaggiato) lo segna per la vendita (scurito), ancora lo rende prezioso (dorato), ancora lo toglie. Vendi segnati vende in una volta tutti gli oggetti segnati per la vendita da qualsiasi mercante, con il totale sul pulsante.</li>
+<li><strong>Segni</strong>: <strong><span class="k">Ctrl + clic</span></strong> su un oggetto (baule, zaino o equipaggiato) lo segna per la vendita (scurito), <strong><span class="k">Alt + clic</span></strong> lo rende prezioso (dorato); lo stesso clic di nuovo toglie il segno. Vendi segnati vende in una volta tutti gli oggetti segnati per la vendita da qualsiasi mercante, con il totale sul pulsante.</li>
 <li><strong>Danni per round</strong>: i tooltip delle armi mostrano i danni per round e il THAC0 per il personaggio mostrato (forza, competenze, attacchi per round, entrambe le mani combattendo con due armi); le statistiche mostrano gli attacchi per round.</li>
 <li><strong>Cariche</strong>: bacchette e altri oggetti a cariche mostrano le cariche nell'angolo della loro casella.</li>
 <li><strong>Oggetti preziosi</strong>: mai venduti, ignorati da Riponi tutto e dalla selezione dei mercanti, e non possono essere lasciati a terra. Un oggetto dello zaino segnato per la vendita va dritto nel baule.</li>
 <li><strong>Deposito</strong>: clic destro sulla grande borsa accanto al peso, poi aprite un contenitore e scegliete di metterci lo zaino o la pagina del baule mostrata (gli oggetti preziosi e di missione restano).</li>
-<li><strong>Opzioni (componenti separati)</strong>: il baule non pesa nulla; conserva l'oro del gruppo ai cambi di campagna (BG1 a SoD, SoD a BG2 in <strong>EET</strong>); hardcore: quei cambi svuotano anche il baule.</li>
+<li><strong>Opzioni (componenti separati)</strong>: il baule non pesa nulla; conserva l'oro del gruppo ai cambi di campagna (BG1 a SoD, SoD a BG2 in <strong>EET</strong>); hardcore: quei cambi svuotano anche il baule (gli oggetti delle missioni restano).</li>
 <li><strong>Borse</strong>: una borsa riposta nel baule viene svuotata al suo interno e conservata nella scheda Borse; gli oggetti del baule che può contenere non pesano nulla (una Borsa conservante: tutto il baule).</li>
 <li><strong>Peso</strong>: il baule conta nella somma dei carichi massimi dei membri; oltre, il gruppo è rallentato.</li>
+<li><strong>Oggetti delle missioni</strong>: tutti gli oggetti delle missioni di BG1, SoD e BG2 (gli oggetti indispensabili e ogni oggetto che un dialogo o uno script del gioco controlla o prende) diventano senza peso all'installazione.</li>
 <li><strong>Due aspetti</strong>: stile Baldur's Gate 1 o Baldur's Gate II, in entrambi i giochi.</li>
 <li><strong>Bottino ordinato (facoltativo)</strong>: mucchi a terra, contenitori e barra del bottino mostrano prima gli oggetti di missione, poi quelli senza peso, poi il resto per valore/peso.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Prendere un oggetto dal baule</td><td class="k"><strong>Clic (doppio clic: prendere ed equipaggiare)</strong></td></tr>
 <tr><td>Riporre un oggetto dello zaino</td><td class="k"><strong>Maiusc + doppio clic, o rilasciarlo sulla griglia del baule</strong></td></tr>
 <tr><td>Riporre tutto lo zaino</td><td class="k"><strong>Pulsante Riponi tutto, o Spazio</strong></td></tr>
-<tr><td>Segnare per la vendita / prezioso / togliere</td><td class="k"><strong>Ctrl + clic su un oggetto (baule, zaino o equipaggiato)</strong></td></tr>
+<tr><td>Segnare per la vendita</td><td class="k"><strong>Ctrl + clic su un oggetto (baule, zaino o equipaggiato); di nuovo: togliere</strong></td></tr>
+<tr><td>Segnare come prezioso</td><td class="k"><strong>Alt + clic su un oggetto (baule, zaino o equipaggiato); di nuovo: togliere</strong></td></tr>
 <tr><td>Descrizione</td><td class="k"><strong>Clic destro</strong></td></tr>
 <tr><td>Scorrere griglia, schede, terreno</td><td class="k"><strong>Rotellina, frecce</strong></td></tr>
 <tr><td>Aiuto: cosa aggiunge <strong>Party Stash</strong> a questa pagina</td><td class="k"><strong>Il pulsante ? dorato in alto a destra</strong></td></tr>

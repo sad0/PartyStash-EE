@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pl"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>Nieskończona skrzynia wspólna dla całej drużyny, w stylu <strong>Pillars of Eternity</strong>, wbudowana w przeprojektowaną stronę ekwipunku. Dla <strong>Baldur's Gate: Enhanced Edition</strong> (z <strong>Siege of Dragonspear</strong> lub bez), <strong>Baldur's Gate II: Enhanced Edition</strong> i <strong>EET</strong>.</p>
 <p><img src="inventory_bg1.png" alt="Ekwipunek, wygląd Baldur&#x27;s Gate 1"></p>
 <h2>Funkcje</h2>
@@ -17,7 +17,7 @@
 <li>Ładunki widoczne na różdżkach</li>
 </ul>
 <h3>Sprzedaj śmieci, zachowaj skarby</h3><ul>
-<li><strong><span class="k">Ctrl + kliknięcie</span></strong>: do sprzedaży → cenny → usuń</li>
+<li><strong><span class="k">Ctrl + kliknięcie</span></strong>: do sprzedaży; <strong><span class="k">Alt + kliknięcie</span></strong>: cenny</li>
 <li>Sprzedaj zaznaczone sprzedaje wszystko naraz u każdego kupca</li>
 <li>Cenne przedmioty nigdy nie są sprzedawane ani wyrzucane</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>Wszystkie szczegóły</summary><ul>
 <li><strong>Wspólna skrzynia</strong>: każdy członek drużyny ma dostęp do tej samej nieskończonej skrzyni na stronie ekwipunku. Zadania nadal widzą przedmioty w niej schowane.</li>
 <li><strong>Nowa strona ekwipunku</strong>: plecak i skrzynia w jednej przewijanej siatce, kolumna ziemi i zwięzłe statystyki 2×2 (atrybuty skrócone do 3 liter).</li>
-<li><strong>Karty</strong>: Wszystko, Broń, Pancerz, Ekwipunek, Amunicja, Klejnoty, Zwoje, Mikstury, Zadania, Inne, Torby.</li>
-<li><strong>Sortowanie</strong>: Auto (każda karta ma własną kolejność: broń według obrażeń na rundę dla pokazanej postaci, pancerze według KP, zwoje według klasy i poziomu…), Data, Jakość, Typ, Cena, Wartość/waga. Prawy przycisk na przycisku sortowania odwraca je.</li>
+<li><strong>Karty</strong>: Wszystko, Broń, Pancerz, Ekwipunek, Amunicja, Klejnoty, Zwoje, Mikstury, Zadania, Notatki (książki, listy, notatki i zwoje, których nie da się rzucić), Inne, Torby.</li>
+<li><strong>Sortowanie</strong>: Auto (każda karta ma własną kolejność: broń według obrażeń na rundę dla pokazanej postaci, pancerze według KP, zwoje według klasy i poziomu…), Data, Jakość, Typ, Cena, Wartość/waga. Prawy przycisk na przycisku sortowania odwraca je. Etykieta Auto pokazuje, według czego sortuje na pokazanej karcie, np. Auto (DPS).</li>
 <li><strong>Oznaczenia</strong>: czerwony = bezużyteczne dla wybranej postaci, niebieski = niezidentyfikowane, + = ulepszenie dla niej (lub zwój, którego mag z drużyny może się jeszcze nauczyć).</li>
-<li><strong>Znaczniki</strong>: <strong><span class="k">Ctrl + kliknięcie</span></strong> przedmiotu (skrzynia, plecak lub założony) zaznacza go do sprzedaży (przyciemniony), ponownie czyni go cennym (złoty), ponownie usuwa znacznik. Sprzedaj zaznaczone sprzedaje naraz wszystkie przedmioty zaznaczone do sprzedaży u dowolnego kupca, z sumą na przycisku.</li>
+<li><strong>Znaczniki</strong>: <strong><span class="k">Ctrl + kliknięcie</span></strong> przedmiotu (skrzynia, plecak lub założony) zaznacza go do sprzedaży (przyciemniony), <strong><span class="k">Alt + kliknięcie</span></strong> czyni go cennym (złoty); to samo kliknięcie ponownie usuwa znacznik. Sprzedaj zaznaczone sprzedaje naraz wszystkie przedmioty zaznaczone do sprzedaży u dowolnego kupca, z sumą na przycisku.</li>
 <li><strong>Obrażenia na rundę</strong>: podpowiedzi broni pokazują obrażenia na rundę i THAC0 dla pokazanej postaci (siła, biegłości, ataki na rundę, obie ręce przy walce dwiema brońmi); statystyki pokazują ataki na rundę.</li>
 <li><strong>Ładunki</strong>: różdżki i inne przedmioty z ładunkami pokazują ładunki w rogu swojego pola.</li>
 <li><strong>Cenne przedmioty</strong>: nigdy nie są sprzedawane, Schowaj wszystko i wybór u kupców je pomijają, i nie można ich położyć na ziemi. Przedmiot z plecaka zaznaczony do sprzedaży trafia prosto do skrzyni.</li>
 <li><strong>Odkładanie</strong>: prawy przycisk na dużej torbie obok wagi, potem otwórz pojemnik i wybierz, czy włożyć do niego plecak, czy pokazaną stronę skrzyni (cenne i questowe przedmioty zostają).</li>
-<li><strong>Opcje (osobne komponenty)</strong>: skrzynia nic nie waży; zachowaj złoto drużyny przy zmianach kampanii (BG1 do SoD, SoD do BG2 w <strong>EET</strong>); hardcore: te zmiany opróżniają też skrzynię.</li>
+<li><strong>Opcje (osobne komponenty)</strong>: skrzynia nic nie waży; zachowaj złoto drużyny przy zmianach kampanii (BG1 do SoD, SoD do BG2 w <strong>EET</strong>); hardcore: te zmiany opróżniają też skrzynię (przedmioty z zadań zostają).</li>
 <li><strong>Torby</strong>: torba schowana w skrzyni zostaje do niej opróżniona i zachowana w karcie Torby; przedmioty ze skrzyni, które może pomieścić, nic nie ważą (Torba przechowywania: cała skrzynia).</li>
 <li><strong>Waga</strong>: skrzynia liczy się do sumy udźwigów członków; powyżej drużyna zwalnia.</li>
+<li><strong>Przedmioty z zadań</strong>: wszystkie przedmioty z zadań z BG1, SoD i BG2 (przedmioty kluczowe i każdy przedmiot, który dialog lub skrypt gry sprawdza albo zabiera) przy instalacji przestają cokolwiek ważyć.</li>
 <li><strong>Dwa wyglądy</strong>: styl Baldur's Gate 1 lub Baldur's Gate II, w obu grach.</li>
 <li><strong>Posortowane łupy (opcja)</strong>: stosy na ziemi, pojemniki i pasek łupów pokazują najpierw przedmioty fabularne, potem nieważące nic, a potem resztę według wartości/wagi.</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>Wyjąć przedmiot ze skrzyni</td><td class="k"><strong>Kliknięcie (podwójne: wyjąć i założyć)</strong></td></tr>
 <tr><td>Schować przedmiot z plecaka</td><td class="k"><strong>Shift + podwójne kliknięcie lub upuszczenie na siatkę skrzyni</strong></td></tr>
 <tr><td>Schować cały plecak</td><td class="k"><strong>Przycisk Schowaj wszystko lub Spacja</strong></td></tr>
-<tr><td>Zaznaczyć do sprzedaży / cenny / usunąć</td><td class="k"><strong>Ctrl + kliknięcie przedmiotu (skrzynia, plecak lub założony)</strong></td></tr>
+<tr><td>Zaznaczyć do sprzedaży</td><td class="k"><strong>Ctrl + kliknięcie przedmiotu (skrzynia, plecak lub założony); ponownie: usunąć</strong></td></tr>
+<tr><td>Zaznaczyć jako cenny</td><td class="k"><strong>Alt + kliknięcie przedmiotu (skrzynia, plecak lub założony); ponownie: usunąć</strong></td></tr>
 <tr><td>Opis</td><td class="k"><strong>Prawy przycisk</strong></td></tr>
 <tr><td>Przewijanie siatki, kart, ziemi</td><td class="k"><strong>Kółko myszy, strzałki</strong></td></tr>
 <tr><td>Pomoc: co <strong>Party Stash</strong> dodaje do tej strony</td><td class="k"><strong>Złoty przycisk ? w prawym górnym rogu</strong></td></tr>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja"><head><meta charset="utf-8">
-<title>Party Stash v1.2.1</title>
+<title>Party Stash v1.2.2</title>
 <style>body{font-family:Segoe UI,Arial,sans-serif;max-width:900px;margin:2em auto;padding:0 1em;background:#1b1712;color:#e8dcc4;line-height:1.5}h1,h2{color:#e6c35c}a{color:#e6c35c}table{border-collapse:collapse;width:100%}td,th{border:1px solid #5a4a32;padding:.4em .6em;text-align:left}th{background:#2a2219}img{max-width:100%;border:1px solid #5a4a32;margin:.5em 0}.v{color:#a89878}h3{color:#e6c35c;margin:1.2em 0 .3em}summary{cursor:pointer;color:#e6c35c;margin:1em 0}.k,.k strong{color:#5fd35f}</style></head><body>
-<h1>Party Stash <span class="v">v1.2.1</span></h1>
+<h1>Party Stash <span class="v">v1.2.2</span></h1>
 <p>パーティ全員で共有する無限の収納箱を、<strong>Pillars of Eternity</strong> 風に、作り直したインベントリ画面に組み込みます。<strong>Baldur's Gate: Enhanced Edition</strong>（<strong>Siege of Dragonspear</strong> の有無を問わず）、<strong>Baldur's Gate II: Enhanced Edition</strong>、<strong>EET</strong> 用。</p>
 <p><img src="inventory_bg1.png" alt="インベントリ、バルダーズ・ゲート 1 の外観"></p>
 <h2>機能</h2>
@@ -17,7 +17,7 @@
 <li>ワンドに残りチャージを表示</li>
 </ul>
 <h3>ガラクタは売り、お宝は残す</h3><ul>
-<li><strong><span class="k">Ctrl＋クリック</span></strong>：売却 → 貴重品 → 解除</li>
+<li><strong><span class="k">Ctrl＋クリック</span></strong>：売却、<strong><span class="k">Alt＋クリック</span></strong>：貴重品</li>
 <li>印を売る でどの商人でもガラクタを一括売却</li>
 <li>貴重品は売られず、捨てられない</li>
 </ul>
@@ -38,17 +38,18 @@
 <details><summary>すべての詳細</summary><ul>
 <li><strong>共有の収納箱</strong>：パーティの全員がインベントリ画面で同じ無限の収納箱を使えます。クエストは収納箱の中のアイテムも認識します。</li>
 <li><strong>新しいインベントリ画面</strong>：バックパックと収納箱を一つのスクロール式グリッドに、地面の列、コンパクトな 2×2 の能力値（能力名は 3 文字）。</li>
-<li><strong>タブ</strong>：全て、武器、鎧、装備、矢弾、宝石、巻物、薬、クエスト、その他、袋。</li>
-<li><strong>並べ替え</strong>：自動（タブごとの順序：武器は表示中のキャラクターの 1 ラウンドあたりのダメージ、鎧は AC、巻物はクラスとレベル…）、日付、品質、種類、価格、価値/重さ。並べ替えボタンを右クリックすると逆順になります。</li>
+<li><strong>タブ</strong>：全て、武器、鎧、装備、矢弾、宝石、巻物、薬、クエスト、メモ（本、手紙、メモ、使用できない巻物）、その他、袋。</li>
+<li><strong>並べ替え</strong>：自動（タブごとの順序：武器は表示中のキャラクターの 1 ラウンドあたりのダメージ、鎧は AC、巻物はクラスとレベル…）、日付、品質、種類、価格、価値/重さ。並べ替えボタンを右クリックすると逆順になります。「自動」の表示には、表示中のタブで何を基準に並べているかが出ます（例：自動（DPS））。</li>
 <li><strong>表示</strong>：赤 = 表示中のキャラクターは使用不可、青 = 未鑑定、+ = そのキャラクターにとっての上位品（またはパーティの魔法使いがまだ覚えられる巻物）。</li>
-<li><strong>印</strong>：アイテム（収納箱、バックパック、装備中）を <strong><span class="k">Ctrl＋クリックすると売却の印</span></strong>（暗く表示）、もう一度で貴重品（金色）、もう一度で解除。「印を売る」で売却の印が付いたアイテムをどの商人でもまとめて売却。合計額がボタンに表示されます。</li>
+<li><strong>印</strong>：アイテム（収納箱、バックパック、装備中）を <strong><span class="k">Ctrl＋クリックすると売却の印</span></strong>（暗く表示）、<strong><span class="k">Alt＋クリックすると貴重品</span></strong>（金色）。同じクリックをもう一度で解除。「印を売る」で売却の印が付いたアイテムをどの商人でもまとめて売却。合計額がボタンに表示されます。</li>
 <li><strong>1 ラウンドあたりのダメージ</strong>：武器のツールチップに、表示中のキャラクターの 1 ラウンドあたりのダメージと THAC0 を表示（筋力、熟練、攻撃回数、二刀流では両手）。ステータスには 1 ラウンドの攻撃回数を表示。</li>
 <li><strong>チャージ</strong>：ワンドなどチャージのあるアイテムは、マスの隅に残りチャージを表示。</li>
 <li><strong>貴重品</strong>：売却されず、「全て収納」と商人での選択から除外され、地面に置けません。売却の印を付けたバックパックのアイテムはそのまま収納箱へ。</li>
 <li><strong>容器にしまう</strong>：重量の横の大きな袋を右クリックしてから容器を開き、バックパックか表示中の収納箱ページのどちらを入れるか選択（貴重品とクエストアイテムは残ります）。</li>
-<li><strong>オプション（別コンポーネント）</strong>：収納箱の重さはゼロ。キャンペーン移行時にパーティーの所持金を保持（BG1→SoD、<strong>EET</strong> の SoD→BG2）。ハードコア：移行時に収納箱も空になる。</li>
+<li><strong>オプション（別コンポーネント）</strong>：収納箱の重さはゼロ。キャンペーン移行時にパーティーの所持金を保持（BG1→SoD、<strong>EET</strong> の SoD→BG2）。ハードコア：移行時に収納箱も空になる（クエストアイテムは残る）。</li>
 <li><strong>袋</strong>：収納箱に入れた袋は中身が収納箱に移され、袋タブに残ります。その袋に入る収納箱のアイテムは重さ0（ホールディングの袋なら収納箱全体）。</li>
 <li><strong>重量</strong>：収納箱はメンバーの最大積載量の合計に数えられ、超えるとパーティが遅くなります。</li>
+<li><strong>クエストアイテム</strong>：BG1、SoD、BG2 のすべてのクエストアイテム（必須アイテムと、ゲームの会話やスクリプトが確認・回収するアイテム）は、インストール時に重さがゼロになります。</li>
 <li><strong>二つの外観</strong>：バルダーズ・ゲート 1 風かバルダーズ・ゲート II 風。どちらのゲームでも使えます。</li>
 <li><strong>整理された戦利品（任意）</strong>：地面の山、コンテナ、戦利品バーでクエストアイテム、重さ0のアイテム、残りを価値/重さ順に表示。</li>
 </ul></details>
@@ -66,7 +67,8 @@
 <tr><td>収納箱からアイテムを取り出す</td><td class="k"><strong>クリック（ダブルクリック：取り出して装備）</strong></td></tr>
 <tr><td>バックパックのアイテムを収納</td><td class="k"><strong>Shift＋ダブルクリック、または収納箱のグリッドにドロップ</strong></td></tr>
 <tr><td>バックパックを全て収納</td><td class="k"><strong>「全て収納」ボタン、またはスペース</strong></td></tr>
-<tr><td>売却の印/貴重品/解除</td><td class="k"><strong>アイテムを Ctrl＋クリック（収納箱、バックパック、装備中）</strong></td></tr>
+<tr><td>売却の印</td><td class="k"><strong>アイテムを Ctrl＋クリック（収納箱、バックパック、装備中）、もう一度で解除</strong></td></tr>
+<tr><td>貴重品の印</td><td class="k"><strong>アイテムを Alt＋クリック（収納箱、バックパック、装備中）、もう一度で解除</strong></td></tr>
 <tr><td>説明</td><td class="k"><strong>右クリック</strong></td></tr>
 <tr><td>グリッド、タブ、地面のスクロール</td><td class="k"><strong>マウスホイール、矢印</strong></td></tr>
 <tr><td>ヘルプ：<strong>Party Stash</strong> がこのページに追加するもの</td><td class="k"><strong>右上の金色の ? ボタン</strong></td></tr>
