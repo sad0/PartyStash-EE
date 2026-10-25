@@ -206,7 +206,7 @@ COPY_EXISTING ~UI.MENU~ ~override~
 	REPLACE_TEXTUALLY EXACT_MATCH ~if(store.groupItems[storeGroupItemsVar].item.isBag == 1) then~ ~~~~~if(store.groupItems[storeGroupItemsVar].item.isBag == 1 and string.upper(store.groupItems[storeGroupItemsVar].item.res or '') ~= 'PSTASH') then~~~~~
 	REPLACE_TEXTUALLY EXACT_MATCH ~		storeScreen:OpenBag(itemDesc.item.res)~ ~~~~~		if string.upper(itemDesc.item.res or '') ~= 'PSTASH' then storeScreen:OpenBag(itemDesc.item.res) end~~~~~
 	// ... and selecting it (a simple click froze the game): every sell-list click skips it, and the items the player
-	// marked valuable (Ctrl + click twice, never sold; John 2026-10-22).
+	// marked valuable (Alt + click, never sold; John 2026-10-24).
 	REPLACE_TEXTUALLY EXACT_MATCH ~~~~~if store.groupItems[storeGroupItemsVar].valid ~= 0 then~~~~~ ~~~~~if string.upper(store.groupItems[storeGroupItemsVar].item.res or '') ~= 'PSTASH' and not (PStash_IsValuable and PStash_IsValuable(string.upper(store.groupItems[storeGroupItemsVar].item.res or ''))) and store.groupItems[storeGroupItemsVar].valid ~= 0 then~~~~~
 	// ... and its row is greyed like an unsellable item (the game never greys bags); valuable items too.
 	REPLACE_TEXTUALLY EXACT_MATCH ~~~~~enabled "store.groupItems[rowNumber].valid == 0  and store.groupItems[rowNumber].item.isBag ~= 1"~~~~~ ~~~~~enabled "(store.groupItems[rowNumber].valid == 0  and (store.groupItems[rowNumber].item.isBag ~= 1 or string.upper(store.groupItems[rowNumber].item.res or '') == 'PSTASH')) or (PStash_IsValuable and PStash_IsValuable(string.upper(store.groupItems[rowNumber].item.res or '')))"~~~~~

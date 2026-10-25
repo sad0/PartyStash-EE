@@ -186,7 +186,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('weapon0') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('weapon0') ~= nil"
 		area 26 243 52 52
 		action "PStash_SlotToggle('weapon0')"
 	}
@@ -198,7 +198,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('weapon1') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('weapon1') ~= nil"
 		area 78 243 52 52
 		action "PStash_SlotToggle('weapon1')"
 	}
@@ -210,7 +210,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('weapon2') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('weapon2') ~= nil"
 		area 130 243 52 52
 		action "PStash_SlotToggle('weapon2')"
 	}
@@ -222,7 +222,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('weapon3') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('weapon3') ~= nil"
 		area 182 243 52 52
 		action "PStash_SlotToggle('weapon3')"
 	}
@@ -234,7 +234,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('personal0') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('personal0') ~= nil"
 		area 26 347 52 52
 		action "PStash_SlotToggle('personal0')"
 	}
@@ -246,7 +246,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('personal1') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('personal1') ~= nil"
 		area 78 347 52 52
 		action "PStash_SlotToggle('personal1')"
 	}
@@ -258,7 +258,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('personal2') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('personal2') ~= nil"
 		area 130 347 52 52
 		action "PStash_SlotToggle('personal2')"
 	}
@@ -270,7 +270,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('armor') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('armor') ~= nil"
 		area 242 98 52 52
 		action "PStash_SlotToggle('armor')"
 	}
@@ -282,7 +282,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('gauntlets') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('gauntlets') ~= nil"
 		area 294 98 52 52
 		action "PStash_SlotToggle('gauntlets')"
 	}
@@ -294,7 +294,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('helmet') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('helmet') ~= nil"
 		area 346 98 52 52
 		action "PStash_SlotToggle('helmet')"
 	}
@@ -306,7 +306,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('amulet') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('amulet') ~= nil"
 		area 398 98 52 52
 		action "PStash_SlotToggle('amulet')"
 	}
@@ -318,7 +318,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('quiver0') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('quiver0') ~= nil"
 		area 78 138 52 52
 		action "PStash_SlotToggle('quiver0')"
 	}
@@ -330,7 +330,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('quiver1') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('quiver1') ~= nil"
 		area 130 138 52 52
 		action "PStash_SlotToggle('quiver1')"
 	}
@@ -342,7 +342,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('quiver2') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('quiver2') ~= nil"
 		area 182 138 52 52
 		action "PStash_SlotToggle('quiver2')"
 	}
@@ -354,7 +354,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('belt') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('belt') ~= nil"
 		area 393 361 52 52
 		action "PStash_SlotToggle('belt')"
 	}
@@ -366,7 +366,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('ringleft') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('ringleft') ~= nil"
 		area 218 302 52 52
 		action "PStash_SlotToggle('ringleft')"
 	}
@@ -378,7 +378,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('ringright') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('ringright') ~= nil"
 		area 462 302 52 52
 		action "PStash_SlotToggle('ringright')"
 	}
@@ -390,7 +390,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('cloak') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('cloak') ~= nil"
 		area 282 361 52 52
 		action "PStash_SlotToggle('cloak')"
 	}
@@ -402,7 +402,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('boots') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('boots') ~= nil"
 		area 338 361 52 52
 		action "PStash_SlotToggle('boots')"
 	}
@@ -414,7 +414,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('shield') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('shield') ~= nil"
 		area 461 244 52 52
 		action "PStash_SlotToggle('shield')"
 	}
@@ -426,7 +426,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group0') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group0') ~= nil"
 		area 540 130 52 52
 		action "PStash_SlotToggle('group0')"
 	}
@@ -438,7 +438,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group1') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group1') ~= nil"
 		area 594 130 52 52
 		action "PStash_SlotToggle('group1')"
 	}
@@ -450,7 +450,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group2') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group2') ~= nil"
 		area 648 130 52 52
 		action "PStash_SlotToggle('group2')"
 	}
@@ -462,7 +462,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group3') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group3') ~= nil"
 		area 702 130 52 52
 		action "PStash_SlotToggle('group3')"
 	}
@@ -474,7 +474,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group4') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group4') ~= nil"
 		area 756 130 52 52
 		action "PStash_SlotToggle('group4')"
 	}
@@ -486,7 +486,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group5') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group5') ~= nil"
 		area 810 130 52 52
 		action "PStash_SlotToggle('group5')"
 	}
@@ -498,7 +498,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group6') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group6') ~= nil"
 		area 864 130 52 52
 		action "PStash_SlotToggle('group6')"
 	}
@@ -510,7 +510,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group7') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group7') ~= nil"
 		area 918 130 52 52
 		action "PStash_SlotToggle('group7')"
 	}
@@ -522,7 +522,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group8') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group8') ~= nil"
 		area 540 184 52 52
 		action "PStash_SlotToggle('group8')"
 	}
@@ -534,7 +534,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group9') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group9') ~= nil"
 		area 594 184 52 52
 		action "PStash_SlotToggle('group9')"
 	}
@@ -546,7 +546,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group10') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group10') ~= nil"
 		area 648 184 52 52
 		action "PStash_SlotToggle('group10')"
 	}
@@ -558,7 +558,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group11') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group11') ~= nil"
 		area 702 184 52 52
 		action "PStash_SlotToggle('group11')"
 	}
@@ -570,7 +570,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group12') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group12') ~= nil"
 		area 756 184 52 52
 		action "PStash_SlotToggle('group12')"
 	}
@@ -582,7 +582,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group13') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group13') ~= nil"
 		area 810 184 52 52
 		action "PStash_SlotToggle('group13')"
 	}
@@ -594,7 +594,7 @@ menu
 	}
 	button
 	{
-		enabled "PStash_CtrlDown() and not PStash_Holding() and PStash_SlotRes('group14') ~= nil"
+		enabled "PStash_MarkKeyDown() and not PStash_Holding() and PStash_SlotRes('group14') ~= nil"
 		area 864 184 52 52
 		action "PStash_SlotToggle('group14')"
 	}
