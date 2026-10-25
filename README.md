@@ -1,5 +1,7 @@
 # Party Stash (BG:EE / SoD / BG2:EE)
 
+> **Party Stash is now part of [SadoEE](https://github.com/sad0/SadoEE)**: the same stash plus a bigger party (7-32 members, banters work), a rest camp and many QoL options, every part optional. Coming from Party Stash: uninstall it, then install SadoEE; your saves and stash contents are kept. Party Stash stays available here.
+
 *[Version française plus bas](#français)*
 
 One infinite stash shared by the whole party, **Pillars of Eternity** style, built into a redesigned inventory page.
