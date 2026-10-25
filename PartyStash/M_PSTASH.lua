@@ -245,6 +245,22 @@ end
 -- Bags the install-time list (P.BAG_RES) does not know: a mod installed after this one added them (issue #2: Tweaks
 -- Anthology bags, an NPC mod's gem bag). Collecting one records it in the save, string globals PSTBX_1..PSTBX_<n>
 -- (count PSTBX_N), and bagList() merges them in, so they stay in the Bags tab after a reload too.
+-- Each one is also kept as two integer globals PSTBX_<n>A / PSTBX_<n>B (4 letters each): integer globals are always
+-- saved, the string ones were not checked in a save yet.
+local function packRes(res, from)
+	local v = 0
+	for k = from + 3, from, -1 do v = v * 256 + (string.byte(res, k) or 0) end
+	return v
+end
+local function unpackRes(v)
+	local out = {}
+	for _ = 1, 4 do
+		local c = v % 256
+		if c > 0 then out[#out + 1] = string.char(c) end
+		v = math.floor(v / 256)
+	end
+	return table.concat(out)
+end
 local function knownBag(res)
 	for _, r in ipairs(P.BAG_RES or {}) do if r == res then return true end end
 	return false
@@ -253,6 +269,9 @@ local function bagList()
 	P.BAG_RES = P.BAG_RES or {}
 	for i = 1, EEex_GameState_GetGlobalInt('PSTBX_N') do
 		local r = string.upper(EEex_GameState_GetGlobalString('PSTBX_' .. i) or '')
+		if r == '' then
+			r = unpackRes(EEex_GameState_GetGlobalInt('PSTBX_' .. i .. 'A')) .. unpackRes(EEex_GameState_GetGlobalInt('PSTBX_' .. i .. 'B'))
+		end
 		if r ~= '' and not knownBag(r) then P.BAG_RES[#P.BAG_RES + 1] = r end
 	end
 	return P.BAG_RES
@@ -262,6 +281,8 @@ local function recordBag(res)
 	if knownBag(res) then return end
 	local n = EEex_GameState_GetGlobalInt('PSTBX_N') + 1
 	EEex_GameState_SetGlobalString('PSTBX_' .. n, res)
+	EEex_GameState_SetGlobalInt('PSTBX_' .. n .. 'A', packRes(res, 1))
+	EEex_GameState_SetGlobalInt('PSTBX_' .. n .. 'B', packRes(res, 5))
 	EEex_GameState_SetGlobalInt('PSTBX_N', n)
 	P.BAG_RES[#P.BAG_RES + 1] = res
 end
