@@ -1,5 +1,7 @@
 # Party Stash (BG:EE / SoD / BG2:EE)
 
+[![Discord](https://img.shields.io/badge/Discord-Sado%20Mods-5865F2?logo=discord&logoColor=white)](https://discord.gg/3XzeQv7HeS) Questions, bug reports and test builds: [Sado Mods Discord](https://discord.gg/3XzeQv7HeS).
+
 > **Party Stash is now part of [SadoEE](https://github.com/sad0/SadoEE)**: the same stash plus a bigger party (7-32 members, banters work), a rest camp and many QoL options, every part optional. Coming from Party Stash: uninstall it, then install SadoEE; your saves and stash contents are kept. Party Stash stays available here.
 
 *[Version française plus bas](#français)*
