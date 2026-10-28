@@ -7,6 +7,8 @@
 One infinite stash shared by the whole party, **Pillars of Eternity** style, built into a redesigned inventory page.
 A WeiDU mod for the Enhanced Editions, powered by [EEex](https://github.com/Bubb13/EEex).
 
+> Party Stash is also part of [SadoEE](https://github.com/sad0/SadoEE), together with a rest camp, a bigger party and many quality-of-life components. New features land in SadoEE first.
+
 ![Inventory, Baldur's Gate 1 look](docs/inventory_bg1.png)
 
 ![Click on the gold ? for the help overlay](docs/help.png)
